@@ -69,4 +69,9 @@ public class Player {
     }
     
     
+    @Override
+    public String toString(){
+        return "Usuario: "+username+"\nContrasena: "+password+"\n";
+    }
+    
 }
