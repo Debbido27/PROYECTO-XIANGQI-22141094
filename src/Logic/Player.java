@@ -60,7 +60,13 @@ public class Player {
         this.CuentaLog = CuentaLog;
     }
     
-    
+    public void agregarLog(String log){
+        for (int i = logs.length-1; i >0; i++) {
+            logs[i]=logs[i-1];
+        }
+        logs[0]=log;
+        if(CuentaLog<10)CuentaLog++;
+    }
     
     
 }
