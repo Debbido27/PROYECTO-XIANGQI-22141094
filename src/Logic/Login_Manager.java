@@ -19,7 +19,16 @@ public class Login_Manager {
         CurrentUser=null;
     }
     
+    public boolean usuarioExiste(String username){
+        for(Player p: players){
+            if(p !=null && p.getUsername().equals(username)){
+                return true;
+            }
+        }
+        return false;
+    }
     
+   
     
     
 }
