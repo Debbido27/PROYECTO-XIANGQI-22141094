@@ -71,6 +71,10 @@ public class Login_Manager {
          }
          
          
+         public void logout(){
+            CurrentUser=null;
+         }
+         
          
          
  
