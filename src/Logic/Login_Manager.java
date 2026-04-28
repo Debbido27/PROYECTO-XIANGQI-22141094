@@ -77,6 +77,21 @@ public class Login_Manager {
          
          
          
+         public String verDatos(){
+            if (CurrentUser==null){
+                return "Error, no hay usuario";
+            }
+            return "Tus Datos "+CurrentUser.toString();
+        } 
+         
+         
+         
+         
+         
+         
+         
+         
+         
  
         //COPIAS PARA EVITAR LOS NULL Y SE CREA CON LA POCISION CABAL DE JUGADORES
         public Player [] getPlayers(){
