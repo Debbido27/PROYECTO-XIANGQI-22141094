@@ -36,7 +36,7 @@ public class Login_Manager {
         //FOR EACH
          public Player buscarPlayer(String username){
              for (Player p: getPlayers()) {
-                 if(p.getUsername().equals(username)){
+                 if(p != null && p.getUsername().equals(username)){
                      return p;
                  }
              }
@@ -52,7 +52,10 @@ public class Login_Manager {
              if(totalPlayers>=MAX_PLAYERS){
               return false;   
              }
-             
+             if(password.length() != 5){
+                return false;
+            }
+
              Player nuevo = new Player(username,password);
              players[totalPlayers]=nuevo;
              totalPlayers++;
