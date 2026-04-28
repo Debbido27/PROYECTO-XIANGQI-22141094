@@ -1,6 +1,8 @@
 
 package Logic;
 
+import static java.awt.PageAttributes.ColorType.COLOR;
+
 public class Login_Manager {
    
     //Statica para no declararse en cada metodo con capacidad para 50 jugadores
@@ -141,6 +143,43 @@ public class Login_Manager {
             return CurrentUser.getLogs();
         }
    
+          
+          
+          
+          
+         public String eliminarCuenta(){
+            if(CurrentUser==null){
+                return "Error, no hay usuario logueado";
+            }
+            //guardar username
+            String usernameEliminar=CurrentUser.getUsername();
+            //bandera
+             int pocision =-1;
+             for (int i = 0; i < totalPlayers; i++) {
+                if(players[i].getUsername().equals(usernameEliminar)){
+                    //cambio bandear
+                    pocision=i;
+                    break;
+                }
+            }
+
+
+             if(pocision==-1){
+                 return "Error, usuario No encontrado";    
+                 }
+
+                    for (int i = pocision; i < totalPlayers-1; i++) {
+                        //cambio de pocision a siguiente pocision
+                     players[i]=players[i+1];
+                    }
+
+                 players[totalPlayers-1]=null;
+                 totalPlayers--;
+
+                 CurrentUser=null;
+                 return("Cuenta elinada exitosamente"+" El usuario"+usernameEliminar+"Ya no existe");
+        }
+ 
             
             
             
