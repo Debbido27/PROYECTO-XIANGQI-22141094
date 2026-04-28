@@ -43,6 +43,27 @@ public class Login_Manager {
 
          
          
+         public boolean crearPlayer (String username, String password){
+             if(buscarPlayer(username)!=null){
+                 return false;
+             }
+             if(totalPlayers>=MAX_PLAYERS){
+              return false;   
+             }
+             
+             Player nuevo = new Player(username,password);
+             players[totalPlayers]=nuevo;
+             totalPlayers++;
+             
+             CurrentUser=nuevo;
+             return true;
+             
+         }
+         
+         
+         
+         
+         
  
         //COPIAS PARA EVITAR LOS NULL Y SE CREA CON LA POCISION CABAL DE JUGADORES
         public Player [] getPlayers(){
