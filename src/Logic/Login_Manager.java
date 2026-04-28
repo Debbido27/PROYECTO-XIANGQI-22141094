@@ -134,7 +134,19 @@ public class Login_Manager {
          
          
          
-         
+          public String[] getMisUltimosJuegos() {
+            if (CurrentUser == null) {
+                return new String[]{"No hay usuario logueado"};
+            }
+            return CurrentUser.getLogs();
+        }
+   
+            
+            
+            
+            
+            
+            
          
  
         //COPIAS PARA EVITAR LOS NULL Y SE CREA CON LA POCISION CABAL DE JUGADORES
