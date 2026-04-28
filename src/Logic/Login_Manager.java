@@ -61,6 +61,15 @@ public class Login_Manager {
          }
          
          
+         public boolean login(String username, String password){
+             Player p = buscarPlayer(username);
+             if(p != null && p.getPassword().equals(password)){
+                 CurrentUser=p;
+                 return true;
+             }
+             return false;
+         }
+         
          
          
          
