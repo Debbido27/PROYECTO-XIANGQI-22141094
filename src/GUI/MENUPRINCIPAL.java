@@ -3,6 +3,7 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import javax.swing.JFrame;
 
 /**
@@ -32,5 +33,18 @@ public class MENUPRINCIPAL extends JFrame {
     
     private String usernameActual;
     
-    
+    public MENUPRINCIPAL(String username){
+        this.usernameActual=username;
+        
+        setTitle("Xiangqi - Menu Principal");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(400, 480);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        getContentPane().setBackground(FONDO);
+        setLayout(new GridBagLayout());
+
+        add(crearPanel());
+        setVisible(true);
+    }
 }
