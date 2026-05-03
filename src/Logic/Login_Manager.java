@@ -1,10 +1,9 @@
 
 package Logic;
 
-import static java.awt.PageAttributes.ColorType.COLOR;
 
-public class Login_Manager {
-   
+public class Login_Manager implements DataManager {
+    
     //Statica para no declararse en cada metodo con capacidad para 50 jugadores
     private static final int MAX_PLAYERS=50;
     
@@ -92,6 +91,9 @@ public class Login_Manager {
             public String modificarDatos(String newUsername, String newPassword){
             if(CurrentUser==null){
                 return "Error, no hay usuario";
+            }
+            if(newPassword.length() != 5){
+                return "Error: la contraseña debe tener 5 caracteres";
             }
 
             if(newUsername.isEmpty()||newPassword.isEmpty()){
