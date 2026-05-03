@@ -9,10 +9,12 @@ import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
@@ -41,14 +43,14 @@ public class Login extends JFrame {
 
     
     private JTextField campoUsuario;
-    private JPasswordField camposuauario;
+    private JPasswordField campoPassword;
     
     public Login(){
         setTitle("Xiangqi - 22141094");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(400,400);
+        setSize(900,600);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setResizable(true);
         getContentPane().setBackground(FONDO);
         setLayout(new GridBagLayout());
         
@@ -84,12 +86,42 @@ public class Login extends JFrame {
       campoUsuario = crearCampoTexto();
       
       JLabel lblPass = crearLabel("Contrasena (5 CARACTERES)");
-      campoPassword = crearCampoPassword;
+      campoPassword = crearCampoPassword();
       
       JButton btnLogin = crearBoton ("Iniciar Sesion",BTN_PRIMARIO, Color.WHITE);
       JButton btnCrear = crearBoton ("Crear Jugador", BTN_SECUNDARIO, ACENTO);
       JButton btnSalir = crearBoton ("Salir", BTN_SALIR, Color.WHITE);
       
+      
+      
+        btnLogin.addActionListener(e ->
+            JOptionPane.showMessageDialog(this, "Login — lógica pendiente"));
+        btnCrear.addActionListener(e ->
+            JOptionPane.showMessageDialog(this, "Crear jugador — lógica pendiente"));
+        btnSalir.addActionListener(e -> System.exit(0));
+
+        // ── Armar panel ──
+        panel.add(titulo);
+        panel.add(Box.createVerticalStrut(4));
+        panel.add(subtitulo);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(sep);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(lblUser);
+        panel.add(Box.createVerticalStrut(6));
+        panel.add(campoUsuario);
+        panel.add(Box.createVerticalStrut(14));
+        panel.add(lblPass);
+        panel.add(Box.createVerticalStrut(6));
+        panel.add(campoPassword);
+        panel.add(Box.createVerticalStrut(24));
+        panel.add(btnLogin);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(btnCrear);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(btnSalir);
+
+
       
       return panel;
       
