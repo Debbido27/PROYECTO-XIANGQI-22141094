@@ -65,7 +65,7 @@ public class Login_Manager implements DataManager {
          }
          
          
-         public boolean login(String username, String password){
+         public  boolean login(String username, String password){
              Player p = buscarPlayer(username);
              if(p != null && p.getPassword().equals(password)){
                  CurrentUser=p;

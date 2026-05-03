@@ -1,6 +1,7 @@
 
 package GUI;
 
+import Logic.Login_Manager;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -41,7 +42,8 @@ public class Login extends JFrame {
     static final Font FUENTE_CAMPO  = new Font("SansSerif", Font.PLAIN, 13);
     static final Font FUENTE_BOTON  = new Font("SansSerif", Font.BOLD,  13);
 
-    
+    private JLabel lblMensaje;
+    private Login_Manager manager;
     private JTextField campoUsuario;
     private JPasswordField campoPassword;
     
@@ -53,7 +55,7 @@ public class Login extends JFrame {
         setResizable(true);
         getContentPane().setBackground(FONDO);
         setLayout(new GridBagLayout());
-        
+        manager = new Login_Manager();
         add(crearPanel());
         setVisible(true);
     }
@@ -67,7 +69,11 @@ public class Login extends JFrame {
       BorderFactory.createLineBorder(ACENTO,1),
       BorderFactory.createEmptyBorder(30,40,30,40)
       ));
-      
+      lblMensaje = new JLabel(" ");
+      lblMensaje.setFont(FUENTE_LABEL);
+      lblMensaje.setAlignmentX(CENTER_ALIGNMENT);
+      panel.add(Box.createVerticalStrut(8));
+      panel.add(lblMensaje);
       JLabel titulo = new JLabel("XIANGQI");
       titulo.setFont(FUENTE_TITULO);
       titulo.setForeground(ACENTO);
@@ -94,10 +100,24 @@ public class Login extends JFrame {
       
       
       
-        btnLogin.addActionListener(e ->
-            JOptionPane.showMessageDialog(this, "Login — lógica pendiente"));
-        btnCrear.addActionListener(e ->
-            JOptionPane.showMessageDialog(this, "Crear jugador — lógica pendiente"));
+        btnLogin.addActionListener(e ->{
+         String user = campoUsuario.getText();
+         String pass = new String(campoPassword.getPassword());
+         if(manager.login(user,pass)){
+             JOptionPane.showMessageDialog(this,"Bienvenido"+user);
+         }else{
+             JOptionPane.showMessageDialog(this, "Usuario incorrecto");
+         }
+        });
+        btnCrear.addActionListener(e -> {
+        String user = campoUsuario.getText();
+        String pass = new String(campoPassword.getPassword());
+        if (manager.crearPlayer(user, pass)) {
+        JOptionPane.showMessageDialog(this, "Jugador creado exitosamente!");
+        } else {
+        JOptionPane.showMessageDialog(this, "Error: usuario ya existe, contraseña no tiene 5 caracteres, o limite alcanzado.", "Error", JOptionPane.ERROR_MESSAGE);
+        } 
+        });
         btnSalir.addActionListener(e -> System.exit(0));
 
         // ── Armar panel ──
@@ -187,6 +207,11 @@ public class Login extends JFrame {
         });
         return btn;
     }
+    
+    private void mostrarMensaje(String texto, Color color) {
+    lblMensaje.setText(texto);
+    lblMensaje.setForeground(color);
+}
     
     
     
