@@ -92,4 +92,14 @@ public class Login extends JFrame {
       
       
     }
+    
+    private JLabel crearLabel(String texto){
+        JLabel lbl = new JLabel (texto);
+        lbl.setFont(FUENTE_LABEL);
+        lbl.setForeground(TEXTO_TENUE);
+        lbl.setAlignmentX(LEFT_ALIGNMENT);
+        return lbl;
+    }
+    
+    
 }
