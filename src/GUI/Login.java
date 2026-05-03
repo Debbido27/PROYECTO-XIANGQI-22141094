@@ -102,4 +102,20 @@ public class Login extends JFrame {
     }
     
     
+    private JTextField crearCampoTexto(){
+        JTextField campo = new JTextField();
+        campo.setFont(FUENTE_CAMPO);
+        campo.setForeground(TEXTO);
+        campo.setBackground(CAMPO_FONDO);
+        campo.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(CAMPO_BORDE),
+            BorderFactory.createEmptyBorder(8, 10, 8, 10)
+        ));
+        
+        campo.setMaximumSize(new Dimension(Integer.MAX_VALUE,40));
+        campo.setAlignmentX(LEFT_ALIGNMENT);
+        return campo;
+    }
+    
+    
 }
