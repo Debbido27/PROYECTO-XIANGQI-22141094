@@ -2,9 +2,12 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -133,7 +136,25 @@ public class Login extends JFrame {
         
     }
     
-    
+    private JButton crearBoton(String texto, Color fondo, Color colorTexto) {
+        JButton btn = new JButton(texto);
+        btn.setFont(FUENTE_BOTON);
+        btn.setForeground(colorTexto);
+        btn.setBackground(fondo);
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        btn.setAlignmentX(LEFT_ALIGNMENT);
+
+        // Hover
+        Color hover = fondo.brighter();
+        btn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) { btn.setBackground(hover); }
+            public void mouseExited(MouseEvent e)  { btn.setBackground(fondo); }
+        });
+        return btn;
+    }
     
     
     
