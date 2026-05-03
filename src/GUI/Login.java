@@ -2,10 +2,17 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
 
@@ -47,4 +54,42 @@ public class Login extends JFrame {
     }
 
     
+    private JPanel crearPanel(){
+      JPanel panel = new JPanel();
+      panel.setBackground(PANEL);
+      panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+      panel.setBorder(BorderFactory.createCompoundBorder(
+      BorderFactory.createLineBorder(ACENTO,1),
+      BorderFactory.createEmptyBorder(30,40,30,40)
+      ));
+      
+      JLabel titulo = new JLabel("XIANGQI");
+      titulo.setFont(FUENTE_TITULO);
+      titulo.setForeground(ACENTO);
+      titulo.setAlignmentX(CENTER_ALIGNMENT);
+      
+      JLabel subtitulo = new JLabel ("AJEDREZ CHINO");
+      subtitulo.setFont(FUENTE_LABEL);
+      subtitulo.setForeground(TEXTO_TENUE);
+      subtitulo.setAlignmentX(CENTER_ALIGNMENT);
+      
+      JSeparator sep = new JSeparator();
+      sep.setForeground(CAMPO_BORDE);
+      sep.setMaximumSize(new Dimension(Integer.MAX_VALUE,1));
+      
+      JLabel lblUser = crearLabel("Usuario");
+      campoUsuario = crearCampoTexto();
+      
+      JLabel lblPass = crearLabel("Contrasena (5 CARACTERES)");
+      campoPassword = crearCampoPassword;
+      
+      JButton btnLogin = crearBoton ("Iniciar Sesion",BTN_PRIMARIO, Color.WHITE);
+      JButton btnCrear = crearBoton ("Crear Jugador", BTN_SECUNDARIO, ACENTO);
+      JButton btnSalir = crearBoton ("Salir", BTN_SALIR, Color.WHITE);
+      
+      
+      return panel;
+      
+      
+    }
 }
