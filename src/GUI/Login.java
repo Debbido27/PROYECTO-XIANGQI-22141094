@@ -117,5 +117,25 @@ public class Login extends JFrame {
         return campo;
     }
     
+    private JPasswordField crearCampoPassword(){
+        JPasswordField campo = new JPasswordField();
+        campo.setFont(FUENTE_CAMPO);
+        campo.setForeground(CAMPO_FONDO);
+        campo.setCaretColor(ACENTO);
+        campo.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(CAMPO_BORDE),
+            BorderFactory.createEmptyBorder(8, 10, 8, 10)
+        ));
+        
+        campo.setMaximumSize(new Dimension(Integer.MAX_VALUE,40));
+        campo.setAlignmentX(LEFT_ALIGNMENT);
+        return campo;
+        
+    }
+    
+    
+    
+    
+    
     
 }
