@@ -3,6 +3,7 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import javax.swing.JFrame;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -34,7 +35,15 @@ public class Login extends JFrame {
     
     public Login(){
         setTitle("Xiangqi - 22141094");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(400,400);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        getContentPane().setBackground(FONDO);
+        setLayout(new GridBagLayout());
         
+        add(crearPanel());
+        setVisible(true);
     }
 
     
