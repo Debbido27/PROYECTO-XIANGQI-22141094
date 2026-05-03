@@ -104,18 +104,18 @@ public class Login extends JFrame {
          String user = campoUsuario.getText();
          String pass = new String(campoPassword.getPassword());
          if(manager.login(user,pass)){
-             JOptionPane.showMessageDialog(this,"Bienvenido"+user);
+        mostrarMensaje("Bienvenido " + user + "!", new Color(80, 180, 80));
          }else{
-             JOptionPane.showMessageDialog(this, "Usuario incorrecto");
+        mostrarMensaje("Usuario o contraseña incorrectos.", new Color(200, 60, 60));
          }
         });
         btnCrear.addActionListener(e -> {
         String user = campoUsuario.getText();
         String pass = new String(campoPassword.getPassword());
         if (manager.crearPlayer(user, pass)) {
-        JOptionPane.showMessageDialog(this, "Jugador creado exitosamente!");
+        mostrarMensaje("Jugador creado exitosamente!", new Color(80, 180, 80));
         } else {
-        JOptionPane.showMessageDialog(this, "Error: usuario ya existe, contraseña no tiene 5 caracteres, o limite alcanzado.", "Error", JOptionPane.ERROR_MESSAGE);
+        mostrarMensaje("Error: usuario ya existe o contraseña no es de 5 caracteres.", new Color(200, 60, 60));
         } 
         });
         btnSalir.addActionListener(e -> System.exit(0));
@@ -140,7 +140,7 @@ public class Login extends JFrame {
         panel.add(btnCrear);
         panel.add(Box.createVerticalStrut(8));
         panel.add(btnSalir);
-
+        panel.add(lblMensaje);
 
       
       return panel;
