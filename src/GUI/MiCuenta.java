@@ -7,6 +7,7 @@ package GUI;
 import Logic.Login_Manager;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import javax.swing.JFrame;
 
 /**
@@ -41,4 +42,26 @@ public class MiCuenta extends JFrame {
     // ══════════════════════════════════════════
     private Login_Manager loginManager;
     private MENUPRINCIPAL menuPrincipal;
+    
+    
+    public MiCuenta(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal){
+        this.loginManager = loginManager;
+        this.menuPrincipal=menuPrincipal;
+        
+        setTitle("Mi cuenta");
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setSize(800,600);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        getContentPane().setBackground(FONDO);
+        setLayout(new GridBagLayout());
+        
+        
+        add(crearPanel());
+        setVisible(true);
+        
+    }
+    
+    
+    
 }
