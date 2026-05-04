@@ -234,4 +234,56 @@ public class MiCuenta extends JFrame {
         dialog.add(panel);
         dialog.setVisible(true);
      }
+     
+     
+      private void abrirCambiarPassword() {
+        JDialog dialog = crearDialog("Cambiar Password", 360, 320);
+        JPanel panel   = crearPanelDialog();
+
+        JLabel titulo = new JLabel("Cambiar Password");
+        titulo.setFont(FUENTE_TITULO);
+        titulo.setForeground(ACENTO);
+        titulo.setAlignmentX(CENTER_ALIGNMENT);
+
+        JLabel lblNuevo = crearLabel("Nuevo password (exactamente 5 caracteres)");
+        JPasswordField campoNuevo = crearCampoPassword();
+
+        JLabel lblMensaje = new JLabel(" ");
+        lblMensaje.setFont(FUENTE_LABEL);
+        lblMensaje.setAlignmentX(CENTER_ALIGNMENT);
+
+        JButton btnGuardar  = crearBoton("Guardar",   BTN_PRIMARIO,   Color.WHITE);
+        JButton btnCancelar = crearBoton("Cancelar",  BTN_SECUNDARIO, ACENTO);
+
+        btnGuardar.addActionListener(e -> {
+            String nuevoPass = new String(campoNuevo.getPassword());
+            String username  = loginManager.getCurrentUser().getUsername();
+            String resultado = loginManager.modificarDatos(username, nuevoPass);
+            if (resultado.startsWith("Datos modificados")) {
+                lblMensaje.setForeground(new Color(80, 180, 80));
+                lblMensaje.setText("Password cambiado exitosamente.");
+            } else {
+                lblMensaje.setForeground(new Color(200, 60, 60));
+                lblMensaje.setText(resultado);
+            }
+        });
+
+        btnCancelar.addActionListener(e -> dialog.dispose());
+
+        panel.add(titulo);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(lblNuevo);
+        panel.add(Box.createVerticalStrut(6));
+        panel.add(campoNuevo);
+        panel.add(Box.createVerticalStrut(14));
+        panel.add(lblMensaje);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(btnGuardar);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(btnCancelar);
+
+        dialog.add(panel);
+        dialog.setVisible(true);
+    }
+
 }
