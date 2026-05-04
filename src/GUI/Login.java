@@ -104,7 +104,10 @@ public class Login extends JFrame {
          String user = campoUsuario.getText();
          String pass = new String(campoPassword.getPassword());
          if(manager.login(user,pass)){
-        mostrarMensaje("Bienvenido " + user + "!", new Color(80, 180, 80));
+      dispose(); // cambiar por:
+        setVisible(false);
+        new MENUPRINCIPAL(user, manager, this);
+             
          }else{
         mostrarMensaje("Usuario o contraseña incorrectos.", new Color(200, 60, 60));
          }

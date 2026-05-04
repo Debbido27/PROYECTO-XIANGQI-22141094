@@ -1,10 +1,14 @@
 
 package GUI;
 
+import Logic.Login_Manager;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import javax.swing.Box;
@@ -40,15 +44,17 @@ public class MENUPRINCIPAL extends JFrame {
     static final Font FUENTE_CAMPO  = new Font("SansSerif", Font.PLAIN, 13);
     static final Font FUENTE_BOTON  = new Font("SansSerif", Font.BOLD,  13);
    
-    
+    private Login_Manager loginManager;
+    private Login loginWindow;
     private String usernameActual;
     
-    public MENUPRINCIPAL(String username){
-        this.usernameActual=username;
-        
+public MENUPRINCIPAL (String username, Login_Manager loginManager, Login loginWindow) {
+    this.usernameActual=username;
+        this.loginManager = loginManager;
+    this.loginWindow = loginWindow;
         setTitle("Xiangqi - Menu Principal");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(400, 480);
+        setSize(900, 600);
         setLocationRelativeTo(null);
         setResizable(false);
         getContentPane().setBackground(FONDO);
@@ -77,7 +83,7 @@ public class MENUPRINCIPAL extends JFrame {
         
         JSeparator sep = new JSeparator();
         sep.setForeground(new Color(60,60,80));
-        sep.setMaximusSize(new Dimension(Integer.MAX_VALUE,1));
+        sep.setMaximumSize(new Dimension(Integer.MAX_VALUE,1));
         
         JButton btnJugar    = crearBoton("Jugar Xiangqi", BTN_PRIMARIO,   Color.WHITE);
         JButton btnCuenta   = crearBoton("Mi Cuenta",     BTN_SECUNDARIO, ACENTO);
@@ -92,9 +98,10 @@ public class MENUPRINCIPAL extends JFrame {
         btnReportes.addActionListener(e ->
             JOptionPane.showMessageDialog(this, "Reportes — lógica pendiente"));
         btnLogout.addActionListener(e -> {
-            dispose();
-            new XiangqiLogin();
-        });
+        loginManager.logout();
+        dispose();
+        loginWindow.setVisible(true);
+    });
 
         // ── Armar panel ──
         panel.add(titulo);
@@ -114,5 +121,24 @@ public class MENUPRINCIPAL extends JFrame {
         return panel;
     }
         
+    
+
+ private JButton crearBoton(String texto, Color fondo, Color colorTexto) {
+        JButton btn = new JButton(texto);
+        btn.setFont(FUENTE_BOTON);
+        btn.setForeground(colorTexto);
+        btn.setBackground(fondo);
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
+        btn.setAlignmentX(LEFT_ALIGNMENT);
+
+        Color hover = fondo.brighter();
+        btn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) { btn.setBackground(hover); }
+            public void mouseExited(MouseEvent e)  { btn.setBackground(fondo); }
+        });
+        return btn;
     }
 }
