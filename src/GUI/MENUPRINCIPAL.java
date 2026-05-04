@@ -2,9 +2,19 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import javax.swing.BorderFactory;
+import static javax.swing.BorderFactory.createEmptyBorder;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
 
 /**
  *
@@ -46,5 +56,63 @@ public class MENUPRINCIPAL extends JFrame {
 
         add(crearPanel());
         setVisible(true);
+    }
+    
+    private JPanel crearPanel(){
+        JPanel panel = new JPanel();
+        panel.setBackground(PANEL);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(ACENTO,1),BorderFactory.createEmptyBorder(30,40,30,40)));
+        
+        JLabel titulo = new JLabel("XIANGQI");
+        titulo.setFont(FUENTE_TITULO);
+        titulo.setForeground(ACENTO);
+        titulo.setAlignmentX(CENTER_ALIGNMENT);
+        
+        JLabel bienvenido = new JLabel("Bienvenido. "+usernameActual);
+        bienvenido.setFont(FUENTE_LABEL);
+        bienvenido.setForeground(TEXTO_TENUE);
+        bienvenido.setAlignmentX(CENTER_ALIGNMENT);
+        
+        JSeparator sep = new JSeparator();
+        sep.setForeground(new Color(60,60,80));
+        sep.setMaximusSize(new Dimension(Integer.MAX_VALUE,1));
+        
+        JButton btnJugar    = crearBoton("Jugar Xiangqi", BTN_PRIMARIO,   Color.WHITE);
+        JButton btnCuenta   = crearBoton("Mi Cuenta",     BTN_SECUNDARIO, ACENTO);
+        JButton btnReportes = crearBoton("Reportes",      BTN_SECUNDARIO, ACENTO);
+        JButton btnLogout   = crearBoton("Log Out",       BTN_SALIR,      Color.WHITE);
+
+        // ── Acciones temporales (lógica se conecta después) ──
+        btnJugar.addActionListener(e ->
+            JOptionPane.showMessageDialog(this, "Jugar — lógica pendiente"));
+        btnCuenta.addActionListener(e ->
+            JOptionPane.showMessageDialog(this, "Mi Cuenta — lógica pendiente"));
+        btnReportes.addActionListener(e ->
+            JOptionPane.showMessageDialog(this, "Reportes — lógica pendiente"));
+        btnLogout.addActionListener(e -> {
+            dispose();
+            new XiangqiLogin();
+        });
+
+        // ── Armar panel ──
+        panel.add(titulo);
+        panel.add(Box.createVerticalStrut(6));
+        panel.add(bienvenido);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(sep);
+        panel.add(Box.createVerticalStrut(30));
+        panel.add(btnJugar);
+        panel.add(Box.createVerticalStrut(12));
+        panel.add(btnCuenta);
+        panel.add(Box.createVerticalStrut(12));
+        panel.add(btnReportes);
+        panel.add(Box.createVerticalStrut(12));
+        panel.add(btnLogout);
+
+        return panel;
+    }
+        
     }
 }
