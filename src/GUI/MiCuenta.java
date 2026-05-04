@@ -285,5 +285,66 @@ public class MiCuenta extends JFrame {
         dialog.add(panel);
         dialog.setVisible(true);
     }
+      
+        private void abrirEliminarCuenta() {
+        JDialog dialog = crearDialog("Eliminar Cuenta", 360, 310);
+        JPanel panel   = crearPanelDialog();
+
+        JLabel titulo = new JLabel("Eliminar Cuenta");
+        titulo.setFont(FUENTE_TITULO);
+        titulo.setForeground(BTN_PELIGRO);
+        titulo.setAlignmentX(CENTER_ALIGNMENT);
+
+        JLabel advertencia = new JLabel("Esta acción no se puede deshacer.");
+        advertencia.setFont(FUENTE_LABEL);
+        advertencia.setForeground(TEXTO_TENUE);
+        advertencia.setAlignmentX(CENTER_ALIGNMENT);
+
+        JLabel lblPass = crearLabel("Ingresa tu password para confirmar");
+        JPasswordField campoConfirm = crearCampoPassword();
+
+        JLabel lblMensaje = new JLabel(" ");
+        lblMensaje.setFont(FUENTE_LABEL);
+        lblMensaje.setAlignmentX(CENTER_ALIGNMENT);
+
+        JButton btnConfirmar = crearBoton("Eliminar mi Cuenta", BTN_PELIGRO,    Color.WHITE);
+        JButton btnCancelar  = crearBoton("Cancelar",           BTN_SECUNDARIO, ACENTO);
+
+        btnConfirmar.addActionListener(e -> {
+            String passIngresado = new String(campoConfirm.getPassword());
+            String passReal      = loginManager.getCurrentUser().getPassword();
+
+            if (!passIngresado.equals(passReal)) {
+                lblMensaje.setForeground(new Color(200, 60, 60));
+                lblMensaje.setText("Password incorrecto.");
+                return;
+            }
+
+            loginManager.eliminarCuenta();
+            dialog.dispose();
+            dispose();
+            menuPrincipal.dispose();
+            menuPrincipal.volverAlLogin();
+        });
+
+        btnCancelar.addActionListener(e -> dialog.dispose());
+
+        panel.add(titulo);
+        panel.add(Box.createVerticalStrut(6));
+        panel.add(advertencia);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(lblPass);
+        panel.add(Box.createVerticalStrut(6));
+        panel.add(campoConfirm);
+        panel.add(Box.createVerticalStrut(14));
+        panel.add(lblMensaje);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(btnConfirmar);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(btnCancelar);
+
+        dialog.add(panel);
+        dialog.setVisible(true);
+    }
 
 }

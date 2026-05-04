@@ -93,9 +93,8 @@ public MENUPRINCIPAL (String username, Login_Manager loginManager, Login loginWi
         // ── Acciones temporales (lógica se conecta después) ──
         btnJugar.addActionListener(e ->
             JOptionPane.showMessageDialog(this, "Jugar — lógica pendiente"));
-        btnCuenta.addActionListener(e ->
-            JOptionPane.showMessageDialog(this, "Mi Cuenta — lógica pendiente"));
-        btnReportes.addActionListener(e ->
+        btnCuenta.addActionListener(e -> new MiCuenta(loginManager, this));
+    btnReportes.addActionListener(e ->
             JOptionPane.showMessageDialog(this, "Reportes — lógica pendiente"));
         btnLogout.addActionListener(e -> {
         loginManager.logout();
@@ -141,4 +140,8 @@ public MENUPRINCIPAL (String username, Login_Manager loginManager, Login loginWi
         });
         return btn;
     }
+ 
+ public void volverAlLogin() {
+    loginWindow.setVisible(true);
+}
 }
