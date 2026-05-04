@@ -13,6 +13,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -125,4 +126,19 @@ public class MiCuenta extends JFrame {
         
         
     }
+    
+    
+    private JDialog crearDialog(String titulo, int ancho, int alto){
+        JDialog dialog = new JDialog(this,titulo, true);
+        dialog.setSize(ancho,alto);
+        dialog.setLocationRelativeTo(this);
+        dialog.setResizable(false);
+        dialog.getContentPane().setBackground(FONDO);
+        dialog.setLayout(new GridBagLayout());
+        return dialog;
+    }
+    
+    
+    
+    
 }
