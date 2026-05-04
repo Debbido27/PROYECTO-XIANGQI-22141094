@@ -42,4 +42,24 @@ public class JUGAR extends JFrame {
     private MENUPRINCIPAL menuPrincipal;
     private String jugador1;
     private String jugador2;
+    
+    
+    public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal){
+        this.loginManager=loginManager;
+        this.menuPrincipal=menuPrincipal;
+        this.jugador1=loginManager.getCurrentUser().getUsername();
+        
+        setTitle("XIANGQI");
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setSize(800,600);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        getContentPane().setBackground(FONDO);
+        
+        
+        
+        
+    }
+    
+    
 }
