@@ -17,6 +17,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 
 /**
@@ -138,7 +139,40 @@ public class MiCuenta extends JFrame {
         return dialog;
     }
     
+     private JLabel crearLabel(String texto) {
+        JLabel lbl = new JLabel(texto);
+        lbl.setFont(FUENTE_LABEL);
+        lbl.setForeground(TEXTO_TENUE);
+        lbl.setAlignmentX(LEFT_ALIGNMENT);
+        return lbl;
+    }
+
+    private JLabel crearLabelInfo(String texto) {
+        JLabel lbl = new JLabel(texto);
+        lbl.setFont(FUENTE_CAMPO);
+        lbl.setForeground(TEXTO);
+        lbl.setAlignmentX(LEFT_ALIGNMENT);
+        return lbl;
+    }
+
+    private JPasswordField crearCampoPassword() {
+        JPasswordField campo = new JPasswordField();
+        campo.setFont(FUENTE_CAMPO);
+        campo.setForeground(TEXTO);
+        campo.setBackground(CAMPO_FONDO);
+        campo.setCaretColor(ACENTO);
+        campo.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(CAMPO_BORDE),
+            BorderFactory.createEmptyBorder(8, 10, 8, 10)
+        ));
+        campo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        campo.setAlignmentX(LEFT_ALIGNMENT);
+        return campo;
+    }
+ 
     
+    
+
     
     
 }
