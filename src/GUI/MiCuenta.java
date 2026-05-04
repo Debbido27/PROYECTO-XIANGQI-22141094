@@ -6,9 +6,17 @@ package GUI;
 
 import Logic.Login_Manager;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
 
 /**
  *
@@ -63,5 +71,58 @@ public class MiCuenta extends JFrame {
     }
     
     
-    
+    private JPanel crearPanel(){
+        JPanel panel = new JPanel();
+        panel.setBackground(PANEL);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+       
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(ACENTO, 1),
+            BorderFactory.createEmptyBorder(30, 40, 30, 40)
+        ));
+        
+        JLabel titulo = new JLabel ("Mi cuenta");
+        titulo.setFont(FUENTE_TITULO);
+        titulo.setForeground(ACENTO);
+        titulo.setAlignmentX(CENTER_ALIGNMENT);
+        
+        JLabel sub = new JLabel (loginManager.getCurrentUser().getUsername());
+        sub.setFont(FUENTE_LABEL);
+        sub.setForeground(ACENTO);
+        sub.setAlignmentX(CENTER_ALIGNMENT);
+        
+        JSeparator sep = new JSeparator();
+        sep.setForeground(CAMPO_BORDE);
+        sep.setMaximumSize(new Dimension(Integer.MAX_VALUE,1));
+        
+        JButton btnVerInfo     = crearBoton("Ver mi Información", BTN_SECUNDARIO, ACENTO);
+        JButton btnCambiarPass = crearBoton("Cambiar Password",   BTN_PRIMARIO,   Color.WHITE);
+        JButton btnEliminar    = crearBoton("Eliminar mi Cuenta", BTN_PELIGRO,    Color.WHITE);
+        JButton btnVolver      = crearBoton("Volver al Menú",     BTN_SECUNDARIO, TEXTO_TENUE);
+
+        btnVerInfo.addActionListener(e     -> abrirVerInfo());
+        btnCambiarPass.addActionListener(e -> abrirCambiarPassword());
+        btnEliminar.addActionListener(e    -> abrirEliminarCuenta());
+        btnVolver.addActionListener(e      -> dispose());
+
+        panel.add(titulo);
+        panel.add(Box.createVerticalStrut(4));
+        panel.add(sub);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(sep);
+        panel.add(Box.createVerticalStrut(25));
+        panel.add(btnVerInfo);
+        panel.add(Box.createVerticalStrut(12));
+        panel.add(btnCambiarPass);
+        panel.add(Box.createVerticalStrut(12));
+        panel.add(btnEliminar);
+        panel.add(Box.createVerticalStrut(12));
+        panel.add(btnVolver);
+
+        return panel;
+        
+        
+        
+        
+    }
 }
