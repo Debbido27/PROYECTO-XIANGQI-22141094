@@ -5,6 +5,7 @@
 package GUI;
 
 import Logic.Login_Manager;
+import Logic.Player;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -131,6 +132,18 @@ public class MiCuenta extends JFrame {
     }
     
     
+    
+     private JPanel crearPanelDialog() {
+        JPanel panel = new JPanel();
+        panel.setBackground(PANEL);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(ACENTO, 1),
+            BorderFactory.createEmptyBorder(25, 35, 25, 35)
+        ));
+        return panel;
+    }
+    
     private JDialog crearDialog(String titulo, int ancho, int alto){
         JDialog dialog = new JDialog(this,titulo, true);
         dialog.setSize(ancho,alto);
@@ -193,5 +206,32 @@ public class MiCuenta extends JFrame {
     }
      
      
-     
+     private void abrirVerInfo(){
+         JDialog dialog = crearDialog("Mi informacion",320,320);
+         JPanel panel = crearPanelDialog();
+         
+         Player p = loginManager.getCurrentUser();
+         
+        JLabel titulo = new JLabel("Mi Información");
+        titulo.setFont(FUENTE_TITULO);
+        titulo.setForeground(ACENTO);
+        titulo.setAlignmentX(CENTER_ALIGNMENT);
+
+        JLabel lblUser   = crearLabelInfo("Usuario: " + p.getUsername());
+        JLabel lblPuntos = crearLabelInfo("Puntos:  " + p.getPuntos());
+
+        JButton btnCerrar = crearBoton("Cerrar", BTN_SECUNDARIO, ACENTO);
+        btnCerrar.addActionListener(e -> dialog.dispose());
+
+        panel.add(titulo);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(lblUser);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(lblPuntos);
+        panel.add(Box.createVerticalStrut(25));
+        panel.add(btnCerrar);
+
+        dialog.add(panel);
+        dialog.setVisible(true);
+     }
 }
