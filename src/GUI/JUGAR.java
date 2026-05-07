@@ -1,13 +1,20 @@
 
 package GUI;
-
 import Logic.Login_Manager;
 import Logic.Player;
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -17,10 +24,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
 /**
  *
- * @author Dell
+ * @athor Dell
  */
 public class JUGAR extends JFrame {
     //PALETA DE COLORES
@@ -36,20 +42,16 @@ public class JUGAR extends JFrame {
     static final Color TABLERO_FONDO   = new Color(180, 130, 60);   // madera
     static final Color TABLERO_LINEA   = new Color(80, 50, 20);     // líneas
     static final Color RIO_COLOR       = new Color(40, 80, 140, 80); // río semitransparente
-    static final Color PALACIO_COLOR   = new Color(200, 150, 50, 60);// palacio
+    static final Color PALACIO_COLOR   = new Color(200, 150, 50, 180);// palacio
 
-    // ══════════════════════════════════════════
-    //  FUENTES
-    // ══════════════════════════════════════════
+   
     static final Font FUENTE_TITULO = new Font("Serif",     Font.BOLD,  18);
     static final Font FUENTE_LABEL  = new Font("SansSerif", Font.PLAIN, 12);
     static final Font FUENTE_CAMPO  = new Font("SansSerif", Font.PLAIN, 13);
     static final Font FUENTE_BOTON  = new Font("SansSerif", Font.BOLD,  13);
     static final Font FUENTE_RIO    = new Font("Serif",     Font.BOLD,  14);
 
-    // ══════════════════════════════════════════
-    //  ATRIBUTOS
-    // ══════════════════════════════════════════
+    
     private Login_Manager loginManager;
     private MENUPRINCIPAL menuPrincipal;
     private String jugador1;
@@ -63,12 +65,12 @@ public class JUGAR extends JFrame {
         
         setTitle("XIANGQI");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(800,600);
+        setSize(900,600);
         setLocationRelativeTo(null);
         setResizable(false);
         getContentPane().setBackground(FONDO);
         
-        
+        pedirOponente();
         
         
     }
@@ -76,13 +78,14 @@ public class JUGAR extends JFrame {
     
     private void pedirOponente(){
         JDialog dialog = new JDialog(this, "Seleccionar oponente",true);
-        dialog.setSize(360,280);
+        dialog.setSize(900,600);
         dialog.setLocationRelativeTo(null);
         dialog.setResizable(false);
         dialog.getContentPane().setBackground(FONDO);
         dialog.setLayout(new GridBagLayout());
         
         JPanel panel = new JPanel();
+        panel.setPreferredSize(new Dimension(420, 420));
         panel.setBackground(PANEL);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createCompoundBorder(
@@ -178,6 +181,7 @@ public class JUGAR extends JFrame {
         
         JPanel panelTop = new JPanel();
         panelTop.setBackground(PANEL);
+        panelTop.setPreferredSize(new Dimension(420, 420));
         panelTop.setLayout(new BoxLayout(panelTop, BoxLayout.X_AXIS));
         panelTop.setBorder(BorderFactory.createEmptyBorder(10,20,10,20));
         
@@ -201,6 +205,7 @@ public class JUGAR extends JFrame {
 
         // Panel inferior — botón retirar y volver
         JPanel panelBot = new JPanel();
+        panelBot.setPreferredSize(new Dimension(420, 420));
         panelBot.setBackground(PANEL);
         panelBot.setLayout(new BoxLayout(panelBot, BoxLayout.X_AXIS));
         panelBot.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -230,12 +235,124 @@ public class JUGAR extends JFrame {
         add(panelTablero,  BorderLayout.CENTER);
         add(panelBot,      BorderLayout.SOUTH);
 
-        setVisible(true);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);    }
+    
+    
+    
+class PanelTablero extends JPanel {
+
+    static final int COLS   = 9;
+    static final int FILAS  = 10;
+    static final int CELDA  = 62;
+    static final int MARGEN = 45;
+
+    public PanelTablero() {
+        setBackground(TABLERO_FONDO);
+        setPreferredSize(new Dimension(
+            MARGEN * 2 + CELDA * (COLS - 1),
+            MARGEN * 2 + CELDA * (FILAS - 1)
+        ));
     }
-    
-    
-    
-    
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        dibujarLineas(g2);
+        dibujarRio(g2);
+        dibujarPalacios(g2);
+    }
+
+    private void dibujarLineas(Graphics2D g2) {
+        g2.setColor(TABLERO_LINEA);
+        g2.setStroke(new BasicStroke(2.5f));
+
+        for (int f = 0; f < FILAS; f++) {
+            int y = MARGEN + f * CELDA;
+            g2.drawLine(MARGEN, y, MARGEN + (COLS - 1) * CELDA, y);
+        }
+
+        for (int c = 0; c < COLS; c++) {
+            int x = MARGEN + c * CELDA;
+            g2.drawLine(x, MARGEN,          x, MARGEN + 4 * CELDA);
+            g2.drawLine(x, MARGEN + 5 * CELDA, x, MARGEN + 9 * CELDA);
+        }
+    }
+
+    private void dibujarRio(Graphics2D g2) {
+        int x = MARGEN;
+        int y = MARGEN + 4 * CELDA;
+        int w = (COLS - 1) * CELDA;
+        int h = CELDA;
+
+        g2.setColor(RIO_COLOR);
+        g2.fillRect(x, y, w, h);
+
+        g2.setColor(new Color(180, 210, 255, 200));
+        g2.setFont(FUENTE_RIO);
+        int mitad = w / 2;
+        g2.drawString("", x + mitad / 2 - 28,        y + h / 2 + 6);
+        g2.drawString("", x + mitad + mitad / 2 - 28, y + h / 2 + 6);
+    }
+
+    private void dibujarPalacios(Graphics2D g2) {
+    g2.setColor(TABLERO_LINEA);
+    g2.setStroke(new BasicStroke(2.5f));
+
+    // ── Palacio superior (columnas 3-5, filas 0-2) ──
+    int px1 = MARGEN + 3 * CELDA;
+    int py1 = MARGEN;
+    int pw  = 2 * CELDA;  // 3 columnas = 2 espacios
+    int ph  = 2 * CELDA;  // 3 filas = 2 espacios
+
+    // cuadrado exterior
+    g2.drawRect(px1, py1, pw, ph);
+    // diagonales de esquina a esquina
+    g2.drawLine(px1,      py1,      px1 + pw, py1 + ph);
+    g2.drawLine(px1 + pw, py1,      px1,      py1 + ph);
+    // línea horizontal del medio
+    g2.drawLine(px1,      py1 + CELDA, px1 + pw, py1 + CELDA);
+    // línea vertical del medio
+    g2.drawLine(px1 + CELDA, py1, px1 + CELDA, py1 + ph);
+
+    // ── Palacio inferior (columnas 3-5, filas 7-9) ──
+    int px2 = MARGEN + 3 * CELDA;
+    int py2 = MARGEN + 7 * CELDA;
+
+    // cuadrado exterior
+    g2.drawRect(px2, py2, pw, ph);
+    // diagonales
+    g2.drawLine(px2,      py2,      px2 + pw, py2 + ph);
+    g2.drawLine(px2 + pw, py2,      px2,      py2 + ph);
+    // línea horizontal del medio
+    g2.drawLine(px2,      py2 + CELDA, px2 + pw, py2 + CELDA);
+    // línea vertical del medio
+    g2.drawLine(px2 + CELDA, py2, px2 + CELDA, py2 + ph);
+}
+}
+
+    // ── Helper botón ─────────────────────────────────────────────────────────
+    private JButton crearBoton(String texto, Color fondo, Color colorTexto) {
+        JButton btn = new JButton(texto);
+        btn.setFont(FUENTE_BOTON);
+        btn.setForeground(colorTexto);
+        btn.setBackground(fondo);
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        btn.setAlignmentX(LEFT_ALIGNMENT);
+
+        Color hover = fondo.brighter();
+        btn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) { btn.setBackground(hover); }
+            public void mouseExited(MouseEvent e)  { btn.setBackground(fondo); }
+        });
+        return btn;
+    }
     
     
 }

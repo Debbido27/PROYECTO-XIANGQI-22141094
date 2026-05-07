@@ -63,7 +63,7 @@ public class MiCuenta extends JFrame {
         
         setTitle("Mi cuenta");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(800,600);
+        setSize(900,600);
         setLocationRelativeTo(null);
         setResizable(false);
         getContentPane().setBackground(FONDO);

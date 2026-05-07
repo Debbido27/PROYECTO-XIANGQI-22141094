@@ -23,7 +23,7 @@ import javax.swing.JTextField;
 
 
 public class Login extends JFrame {
-    
+
     //Paleta de colores
     static final Color FONDO          = new Color(18, 18, 24);
     static final Color PANEL          = new Color(28, 28, 38);
@@ -63,6 +63,7 @@ public class Login extends JFrame {
     
     private JPanel crearPanel(){
       JPanel panel = new JPanel();
+      panel.setPreferredSize(new Dimension(420, 420));
       panel.setBackground(PANEL);
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
       panel.setBorder(BorderFactory.createCompoundBorder(

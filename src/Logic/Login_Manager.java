@@ -214,6 +214,30 @@ public class Login_Manager implements DataManager {
             return totalPlayers;
         }
   
+        
+        @Override
+        public boolean guardarPartida(String log){
+          try {
+        if (CurrentUser == null) return false;
+        CurrentUser.agregarLog(log);
+        return true;
+       } catch (Exception e) {
+        return false;
+    }
+        }
+        
+        @Override
+        public String [] cargarPartidas(){
+            
+        }
+        
+        
+        @Override
+        public boolean eliminarPartidas(){
+            
+        }
+        
+        
     
     
 }

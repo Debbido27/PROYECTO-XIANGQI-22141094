@@ -67,6 +67,7 @@ public MENUPRINCIPAL (String username, Login_Manager loginManager, Login loginWi
     private JPanel crearPanel(){
         JPanel panel = new JPanel();
         panel.setBackground(PANEL);
+        panel.setPreferredSize(new Dimension(420, 420));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createCompoundBorder(
         BorderFactory.createLineBorder(ACENTO,1),BorderFactory.createEmptyBorder(30,40,30,40)));
@@ -91,11 +92,9 @@ public MENUPRINCIPAL (String username, Login_Manager loginManager, Login loginWi
         JButton btnLogout   = crearBoton("Log Out",       BTN_SALIR,      Color.WHITE);
 
         // ── Acciones temporales (lógica se conecta después) ──
-        btnJugar.addActionListener(e ->
-            JOptionPane.showMessageDialog(this, "Jugar — lógica pendiente"));
+        btnJugar.addActionListener(e -> new JUGAR(loginManager, this));
         btnCuenta.addActionListener(e -> new MiCuenta(loginManager, this));
-    btnReportes.addActionListener(e ->
-            JOptionPane.showMessageDialog(this, "Reportes — lógica pendiente"));
+  
         btnLogout.addActionListener(e -> {
         loginManager.logout();
         dispose();
