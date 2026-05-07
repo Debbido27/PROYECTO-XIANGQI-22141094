@@ -228,7 +228,12 @@ public class Login_Manager implements DataManager {
         
         @Override
         public String [] cargarPartidas(){
-            
+             try {
+        if (CurrentUser == null) return new String[]{"No hay usuario logueado"};
+        return CurrentUser.getLogs();
+        } catch (Exception e) {
+            return new String[]{"Error al cargar partidas"};
+        }
         }
         
         
