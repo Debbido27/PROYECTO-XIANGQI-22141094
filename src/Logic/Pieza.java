@@ -49,7 +49,15 @@ public abstract class Pieza {
     }
     
    
+    protected boolean enTablero(int f, int c){
+       return f >= 0 && f < 10 && c >= 0 && c < 9;
+    }
     
+    protected boolean puedeMoverA(int f, int c, Pieza[][] tablero){
+      if (!enTablero(f, c)) return false;
+        Pieza destino = tablero[f][c];
+        return destino == null || destino.isR != this.isR;
+    }
     
     
     
