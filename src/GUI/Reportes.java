@@ -93,6 +93,10 @@ public class Reportes extends JFrame {
 
         return panel;
     }
+    
+    private void abrirRanking(){
+        
+    }
 
    
 }
