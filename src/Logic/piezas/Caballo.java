@@ -8,7 +8,7 @@ package Logic.piezas;
 public class Caballo extends Pieza {
     
     public Caballo(int fila, int columna, boolean isR){
-        super(fila, columan, isR);
+        super(fila, columna, isR);
     }
     
     
@@ -43,4 +43,4 @@ public class Caballo extends Pieza {
         
     }
     
-}
+
