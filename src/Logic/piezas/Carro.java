@@ -25,4 +25,18 @@ public class Carro extends Pieza{
         
     }
     
+    private void buscarMovimientos(Pieza[][] tablero, boolean[][] movimientos, int f, int c, int df, int dc){
+        if (!enTablero(f, c)) return;
+
+        Pieza destino = tablero[f][c];
+
+        if (destino == null) {
+            movimientos[f][c] = true;
+            buscarMovimientos(tablero, movimientos, f + df, c + dc, df, dc);
+        } else if (destino.isR != this.isR) {
+            movimientos[f][c] = true;
+        }
+        
+    }
+    
 }
