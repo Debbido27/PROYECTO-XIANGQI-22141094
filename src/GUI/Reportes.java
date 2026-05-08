@@ -115,9 +115,13 @@ public class Reportes extends JFrame {
         panel.add(titulo);
         panel.add(Box.createVerticalStrut(15));
 
+        try{
+            
         Player[] ranking = loginManager.getRankingJugadores();
 
         if (ranking.length == 0) {
+            
+            
             JLabel lblVacio = new JLabel("No hay jugadores registrados.");
             lblVacio.setFont(FUENTE_LABEL);
             lblVacio.setForeground(TEXTO_TENUE);
@@ -137,6 +141,12 @@ public class Reportes extends JFrame {
                     panel.add(Box.createVerticalStrut(8));
                 }
             }
+        }
+        }catch(Exception ex){
+            JLabel lblError = new JLabel("Error al cargar el ranking");
+            lblError.setForeground(new Color(200,60,60));
+            lblError.setAlignmentX(CENTER_ALIGNMENT);
+            panel.add(lblError);
         }
 
         panel.add(Box.createVerticalStrut(10));

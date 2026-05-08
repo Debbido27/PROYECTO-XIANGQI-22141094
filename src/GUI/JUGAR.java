@@ -283,7 +283,9 @@ btnRetirar.addActionListener(e -> {
         pGanador.setPuntos(pGanador.getPuntos() + 3);
     }
 
-    String log = retirado + " se retiró. " + ganador + " ganó la partida.";
+    
+    
+String log = retirado + " SE HA RETIRADO, FELICIDADES " + ganador + ", HAS GANADO 3 PUNTOS";
     loginManager.guardarPartida(log);
 
     JDialog dialogo = new JDialog(JUGAR.this, "Retiro", true);
@@ -301,17 +303,24 @@ btnRetirar.addActionListener(e -> {
         BorderFactory.createEmptyBorder(20, 30, 20, 30)
     ));
 
-    JLabel lblMsg = new JLabel(retirado + " SE RETIRÓ");
-    lblMsg.setFont(FUENTE_TITULO);
+    JLabel lblMsg = new JLabel(retirado + " SE HA RETIRADO, FELICIDADES " + ganador + ", HAS GANADO 3 PUNTOS");    lblMsg.setFont(FUENTE_TITULO);
     lblMsg.setForeground(BTN_PELIGRO);
     lblMsg.setAlignmentX(CENTER_ALIGNMENT);
 
-    JLabel lblGanador = new JLabel("Felicidades " + ganador + "! +3 puntos");
+    JLabel lblGanador = new JLabel( ganador + "! +3 puntos");
     lblGanador.setFont(FUENTE_LABEL);
     lblGanador.setForeground(ACENTO);
     lblGanador.setAlignmentX(CENTER_ALIGNMENT);
 
-    JButton btnOk = crearBoton("Volver al Menu", ACENTO, Color.WHITE);
+    JButton btnOtra = crearBoton("Jugar Otra Partida", BTN_SECUNDARIO, ACENTO);
+    JButton btnOk   = crearBoton("Volver al Menu",     ACENTO,         Color.WHITE);
+
+    btnOtra.addActionListener(ev -> {
+        dialogo.dispose();
+        turnoRojo = true;
+        jugador2 = null;
+        pedirOponente();
+    });
     btnOk.addActionListener(ev -> {
         dialogo.dispose();
         dispose();
@@ -321,6 +330,8 @@ btnRetirar.addActionListener(e -> {
     p2.add(Box.createVerticalStrut(10));
     p2.add(lblGanador);
     p2.add(Box.createVerticalStrut(20));
+    p2.add(btnOtra);
+    p2.add(Box.createVerticalStrut(8));
     p2.add(btnOk);
 
     dialogo.add(p2);
@@ -365,6 +376,12 @@ private int colSeleccionada  = -1;
 
 addMouseListener(new MouseAdapter() {
     public void mouseClicked(MouseEvent e) {
+        
+        
+        //try
+        try{
+            
+        
         int c = (e.getX() - MARGEN + CELDA / 2) / CELDA;
         int f = (e.getY() - MARGEN + CELDA / 2) / CELDA;
 
@@ -415,18 +432,27 @@ addMouseListener(new MouseAdapter() {
                 lblPuntos.setForeground(TEXTO_TENUE);
                 lblPuntos.setAlignmentX(CENTER_ALIGNMENT);
 
-                JButton btnOk = crearBoton("Volver al Menu", ACENTO, Color.WHITE);
-                btnOk.addActionListener(ev -> {
-                    dialogo.dispose();
-                    dispose();
-                });
+                JButton btnOtra = crearBoton("Jugar Otra Partida", BTN_SECUNDARIO, ACENTO);
+            JButton btnOk   = crearBoton("Volver al Menu",     ACENTO,         Color.WHITE);
 
-                p2.add(lblGanador);
-                p2.add(Box.createVerticalStrut(10));
-                p2.add(lblPuntos);
-                p2.add(Box.createVerticalStrut(20));
-                p2.add(btnOk);
+            btnOtra.addActionListener(ev -> {
+                dialogo.dispose();
+                turnoRojo = true;
+                jugador2 = null;
+                pedirOponente();
+            });
+            btnOk.addActionListener(ev -> {
+                dialogo.dispose();
+                dispose();
+            });
 
+            p2.add(lblGanador);
+            p2.add(Box.createVerticalStrut(10));
+            p2.add(lblPuntos);
+            p2.add(Box.createVerticalStrut(20));
+            p2.add(btnOtra);
+            p2.add(Box.createVerticalStrut(8));
+            p2.add(btnOk);
                 dialogo.add(p2);
                 dialogo.setVisible(true);
                 return;
@@ -455,6 +481,9 @@ addMouseListener(new MouseAdapter() {
             colSeleccionada  = c;
         }
         repaint();
+        }catch(Exception ex){
+            
+        }
     }
 });
     }
