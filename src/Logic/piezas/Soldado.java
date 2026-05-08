@@ -13,4 +13,38 @@ public class Soldado extends Pieza {
         return isR ? "兵" : "卒";
     }
     
+    
+     @Override
+    public boolean[][] getMoveValido(Pieza[][] tablero) {
+        boolean[][] movimientos = new boolean[10][9];
+
+        if (isR) {
+            if (enTablero(fila - 1, columna) && puedeMoverA(fila - 1, columna, tablero)) {
+                movimientos[fila - 1][columna] = true;
+            }
+            if (cruzoRio()) {
+                if (enTablero(fila, columna - 1) && puedeMoverA(fila, columna - 1, tablero))
+                    movimientos[fila][columna - 1] = true;
+                if (enTablero(fila, columna + 1) && puedeMoverA(fila, columna + 1, tablero))
+                    movimientos[fila][columna + 1] = true;
+            }
+        } else {
+            if (enTablero(fila + 1, columna) && puedeMoverA(fila + 1, columna, tablero)) {
+                movimientos[fila + 1][columna] = true;
+            }
+            if (cruzoRio()) {
+                if (enTablero(fila, columna - 1) && puedeMoverA(fila, columna - 1, tablero))
+                    movimientos[fila][columna - 1] = true;
+                if (enTablero(fila, columna + 1) && puedeMoverA(fila, columna + 1, tablero))
+                    movimientos[fila][columna + 1] = true;
+            }
+        }
+        return movimientos;
+    }
+
+    private boolean cruzoRio() {
+        if (isR) return fila <= 4;
+        else     return fila >= 5;
+    }
+    
 }
