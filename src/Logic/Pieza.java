@@ -18,7 +18,7 @@ public abstract class Pieza {
     
     
     //metodos abstractos
-    public abstract boolean[][] getMoveValido(Pieza [][] tablero);
+    public abstract boolean[][] getMovimientosValidos(Pieza [][] tablero);
     
     public abstract String getSimbolo();
     

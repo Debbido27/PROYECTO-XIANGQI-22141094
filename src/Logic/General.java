@@ -34,6 +34,10 @@ public final class General extends Pieza {
         }
     
     
+    public final boolean estaEnPalacio(){
+        return enPalacio(fila,columna);
+    }
+    
     
     
      private boolean enPalacio(int f, int c) {
