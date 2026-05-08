@@ -1,13 +1,24 @@
 
 package GUI;
+import static GUI.JUGAR.PanelTablero.CELDA;
+import static GUI.JUGAR.PanelTablero.MARGEN;
 import Logic.Login_Manager;
 import Logic.Player;
+import Logic.piezas.Caballo;
+import Logic.piezas.Canon;
+import Logic.piezas.Carro;
+import Logic.piezas.Consejero;
+import Logic.piezas.Elefante;
+import Logic.piezas.General;
+import Logic.piezas.Pieza;
+import Logic.piezas.Soldado;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagLayout;
@@ -56,7 +67,7 @@ public class JUGAR extends JFrame {
     private MENUPRINCIPAL menuPrincipal;
     private String jugador1;
     private String jugador2;
-    
+    private Pieza[][] tablero;
     
     public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal){
         this.loginManager=loginManager;
@@ -77,6 +88,8 @@ public class JUGAR extends JFrame {
     
     
     private void pedirOponente(){
+        
+        
         JDialog dialog = new JDialog(this, "Seleccionar oponente",true);
         dialog.setSize(900,600);
         dialog.setLocationRelativeTo(null);
@@ -176,68 +189,105 @@ public class JUGAR extends JFrame {
         dialog.setVisible(true);
     }
     
-    private void mostrarTablero(){
-        setLayout(new BorderLayout());
-        
-        JPanel panelTop = new JPanel();
-        panelTop.setBackground(PANEL);
-        panelTop.setPreferredSize(new Dimension(420, 420));
-        panelTop.setLayout(new BoxLayout(panelTop, BoxLayout.X_AXIS));
-        panelTop.setBorder(BorderFactory.createEmptyBorder(10,20,10,20));
-        
-        
-        JLabel lblJ1 = new JLabel(jugador1+"(NEGRAS)");
-        lblJ1.setFont(FUENTE_TITULO);
-        lblJ1.setForeground(TEXTO);
-        
-         JLabel lblVs = new JLabel("  VS  ");
-        lblVs.setFont(FUENTE_TITULO);
-        lblVs.setForeground(ACENTO);
+    
+    private void inicializarTablero() {
+    tablero = new Pieza[10][9];
 
-        JLabel lblJ2 = new JLabel( jugador2 + "  (Rojas)");
-        lblJ2.setFont(FUENTE_TITULO);
-        lblJ2.setForeground(new Color(200, 80, 80));
+    // ── Piezas negras (arriba, isR = false) ──
+    tablero[0][0] = new Carro(0, 0, false);
+    tablero[0][1] = new Caballo(0, 1, false);
+    tablero[0][2] = new Elefante(0, 2, false);
+    tablero[0][3] = new Consejero(0, 3, false);
+    tablero[0][4] = new General(0, 4, false);
+    tablero[0][5] = new Consejero(0, 5, false);
+    tablero[0][6] = new Elefante(0, 6, false);
+    tablero[0][7] = new Caballo(0, 7, false);
+    tablero[0][8] = new Carro(0, 8, false);
+    tablero[2][1] = new Canon(2, 1, false);
+    tablero[2][7] = new Canon(2, 7, false);
+    tablero[3][0] = new Soldado(3, 0, false);
+    tablero[3][2] = new Soldado(3, 2, false);
+    tablero[3][4] = new Soldado(3, 4, false);
+    tablero[3][6] = new Soldado(3, 6, false);
+    tablero[3][8] = new Soldado(3, 8, false);
 
-        panelTop.add(lblJ1);
-        panelTop.add(lblVs);
-        panelTop.add(lblJ2);
-        panelTop.add(Box.createHorizontalGlue());
+    // ── Piezas rojas (abajo, isR = true) ──
+    tablero[9][0] = new Carro(9, 0, true);
+    tablero[9][1] = new Caballo(9, 1, true);
+    tablero[9][2] = new Elefante(9, 2, true);
+    tablero[9][3] = new Consejero(9, 3, true);
+    tablero[9][4] = new General(9, 4, true);
+    tablero[9][5] = new Consejero(9, 5, true);
+    tablero[9][6] = new Elefante(9, 6, true);
+    tablero[9][7] = new Caballo(9, 7, true);
+    tablero[9][8] = new Carro(9, 8, true);
+    tablero[7][1] = new Canon(7, 1, true);
+    tablero[7][7] = new Canon(7, 7, true);
+    tablero[6][0] = new Soldado(6, 0, true);
+    tablero[6][2] = new Soldado(6, 2, true);
+    tablero[6][4] = new Soldado(6, 4, true);
+    tablero[6][6] = new Soldado(6, 6, true);
+    tablero[6][8] = new Soldado(6, 8, true);
+}
+   
+    
+    
+   private void mostrarTablero(){
+    getContentPane().removeAll();
+    getContentPane().setLayout(new BorderLayout());
+    inicializarTablero();
 
-        // Panel inferior — botón retirar y volver
-        JPanel panelBot = new JPanel();
-        panelBot.setPreferredSize(new Dimension(420, 420));
-        panelBot.setBackground(PANEL);
-        panelBot.setLayout(new BoxLayout(panelBot, BoxLayout.X_AXIS));
-        panelBot.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+    JPanel panelTop = new JPanel();
+    panelTop.setBackground(PANEL);
+    panelTop.setLayout(new BoxLayout(panelTop, BoxLayout.X_AXIS));
+    panelTop.setBorder(BorderFactory.createEmptyBorder(10,20,10,20));
 
-        JButton btnRetirar = crearBoton("Retirarme", BTN_PELIGRO,    Color.WHITE);
-        JButton btnVolver  = crearBoton("Volver",    BTN_SECUNDARIO, ACENTO);
+    JLabel lblJ1 = new JLabel(jugador1+"(NEGRAS)");
+    lblJ1.setFont(FUENTE_TITULO);
+    lblJ1.setForeground(TEXTO);
 
-        // Acciones temporales — lógica se conecta después
-        btnRetirar.setMaximumSize(new Dimension(150, 38));
-        btnVolver.setMaximumSize(new Dimension(150, 38));
+    JLabel lblVs = new JLabel("  VS  ");
+    lblVs.setFont(FUENTE_TITULO);
+    lblVs.setForeground(ACENTO);
 
-        btnRetirar.addActionListener(e -> {
-            // lógica de retiro pendiente
-        });
-        btnVolver.addActionListener(e -> {
-            dispose();
-        });
+    JLabel lblJ2 = new JLabel(jugador2 + "  (Rojas)");
+    lblJ2.setFont(FUENTE_TITULO);
+    lblJ2.setForeground(new Color(200, 80, 80));
 
-        panelBot.add(btnRetirar);
-        panelBot.add(Box.createHorizontalStrut(12));
-        panelBot.add(btnVolver);
+    panelTop.add(lblJ1);
+    panelTop.add(lblVs);
+    panelTop.add(lblJ2);
+    panelTop.add(Box.createHorizontalGlue());
 
-        // Tablero central
-        PanelTablero panelTablero = new PanelTablero();
+    JPanel panelBot = new JPanel();
+    panelBot.setBackground(PANEL);
+    panelBot.setLayout(new BoxLayout(panelBot, BoxLayout.X_AXIS));
+    panelBot.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        add(panelTop,      BorderLayout.NORTH);
-        add(panelTablero,  BorderLayout.CENTER);
-        add(panelBot,      BorderLayout.SOUTH);
+    JButton btnRetirar = crearBoton("Retirarme", BTN_PELIGRO, Color.WHITE);
+    JButton btnVolver  = crearBoton("Volver", BTN_SECUNDARIO, ACENTO);
+    btnRetirar.setMaximumSize(new Dimension(150, 38));
+    btnVolver.setMaximumSize(new Dimension(150, 38));
 
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);    }
+    btnRetirar.addActionListener(e -> {});
+    btnVolver.addActionListener(e -> dispose());
+
+    panelBot.add(btnRetirar);
+    panelBot.add(Box.createHorizontalStrut(12));
+    panelBot.add(btnVolver);
+
+    PanelTablero panelTablero = new PanelTablero();
+
+    getContentPane().add(panelTop,     BorderLayout.NORTH);
+    getContentPane().add(panelTablero, BorderLayout.CENTER);
+    getContentPane().add(panelBot,     BorderLayout.SOUTH);
+
+    revalidate();
+    repaint();
+    pack();
+    setLocationRelativeTo(null);
+    setVisible(true);
+}
     
     
     
@@ -263,6 +313,7 @@ class PanelTablero extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         dibujarLineas(g2);
         dibujarRio(g2);
+        dibujarPiezas(g2);
         dibujarPalacios(g2);
     }
 
@@ -332,7 +383,43 @@ class PanelTablero extends JPanel {
     // línea vertical del medio
     g2.drawLine(px2 + CELDA, py2, px2 + CELDA, py2 + ph);
 }
+    
+    private void dibujarPiezas(Graphics2D g2) {
+    for (int f = 0; f < 10; f++) {
+        for (int c = 0; c < 9; c++) {
+            Pieza p = tablero[f][c];
+            if (p != null) {
+                int x = MARGEN + c * CELDA;
+                int y = MARGEN + f * CELDA;
+                int radio = CELDA / 2 - 5;
+
+                // círculo
+                if (p.isIsR()) {
+                    g2.setColor(new Color(200, 50, 50));
+                } else {
+                    g2.setColor(new Color(30, 30, 30));
+                }
+                g2.fillOval(x - radio, y - radio, radio * 2, radio * 2);
+
+                // borde
+                g2.setColor(new Color(200, 150, 50));
+                g2.setStroke(new BasicStroke(1.5f));
+                g2.drawOval(x - radio, y - radio, radio * 2, radio * 2);
+
+                // símbolo
+                g2.setColor(Color.WHITE);
+                g2.setFont(new Font("Serif", Font.BOLD, 16));
+                FontMetrics fm = g2.getFontMetrics();
+                String s = p.getSimbolo();
+                g2.drawString(s, x - fm.stringWidth(s) / 2, y + fm.getAscent() / 2 - 2);
+            }
+        }
+    }
 }
+    
+}
+
+
 
     // ── Helper botón ─────────────────────────────────────────────────────────
     private JButton crearBoton(String texto, Color fondo, Color colorTexto) {
@@ -353,6 +440,8 @@ class PanelTablero extends JPanel {
         });
         return btn;
     }
+    
+    
     
     
 }

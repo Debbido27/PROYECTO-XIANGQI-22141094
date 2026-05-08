@@ -42,7 +42,7 @@ public class Login extends JFrame {
     static final Font FUENTE_CAMPO  = new Font("SansSerif", Font.PLAIN, 13);
     static final Font FUENTE_BOTON  = new Font("SansSerif", Font.BOLD,  13);
 
-    private JLabel lblMensaje;
+    private JTextField mensajeField;
     private Login_Manager manager;
     private JTextField campoUsuario;
     private JPasswordField campoPassword;
@@ -70,11 +70,16 @@ public class Login extends JFrame {
       BorderFactory.createLineBorder(ACENTO,1),
       BorderFactory.createEmptyBorder(30,40,30,40)
       ));
-      lblMensaje = new JLabel(" ");
-      lblMensaje.setFont(FUENTE_LABEL);
-      lblMensaje.setAlignmentX(CENTER_ALIGNMENT);
-      panel.add(Box.createVerticalStrut(8));
-      panel.add(lblMensaje);
+      mensajeField = new JTextField(" "); 
+        mensajeField.setEditable(false);
+        mensajeField.setFont(FUENTE_LABEL);
+        mensajeField.setForeground(PANEL);  // invisible al inicio
+        mensajeField.setBackground(PANEL);  // mismo color que el fondo
+        mensajeField.setBorder(BorderFactory.createEmptyBorder(4, 0, 4, 0));
+        mensajeField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 26));
+        mensajeField.setAlignmentX(CENTER_ALIGNMENT);
+        mensajeField.setHorizontalAlignment(JTextField.CENTER);
+      
       JLabel titulo = new JLabel("XIANGQI");
       titulo.setFont(FUENTE_TITULO);
       titulo.setForeground(ACENTO);
@@ -139,12 +144,13 @@ public class Login extends JFrame {
         panel.add(Box.createVerticalStrut(6));
         panel.add(campoPassword);
         panel.add(Box.createVerticalStrut(24));
+        panel.add(mensajeField);      
         panel.add(btnLogin);
         panel.add(Box.createVerticalStrut(8));
         panel.add(btnCrear);
         panel.add(Box.createVerticalStrut(8));
         panel.add(btnSalir);
-        panel.add(lblMensaje);
+        
 
       
       return panel;
@@ -212,9 +218,9 @@ public class Login extends JFrame {
         return btn;
     }
     
-    private void mostrarMensaje(String texto, Color color) {
-    lblMensaje.setText(texto);
-    lblMensaje.setForeground(color);
+private void mostrarMensaje(String texto, Color color) {
+    mensajeField.setText(texto);
+    mensajeField.setForeground(color);
 }
     
     
