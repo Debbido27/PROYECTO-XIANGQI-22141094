@@ -1,5 +1,5 @@
 
-package Logic;
+package Logic.piezas;
 
 
 public final class General extends Pieza {
