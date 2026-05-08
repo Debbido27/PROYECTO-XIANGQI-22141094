@@ -274,8 +274,58 @@ public class JUGAR extends JFrame {
     btnRetirar.setMaximumSize(new Dimension(150, 38));
     btnVolver.setMaximumSize(new Dimension(150, 38));
 
-    btnRetirar.addActionListener(e -> {});
-    btnVolver.addActionListener(e -> dispose());
+btnRetirar.addActionListener(e -> {
+    String ganador  = turnoRojo ? jugador1 : jugador2;
+    String retirado = turnoRojo ? jugador2 : jugador1;
+
+    Player pGanador = loginManager.buscarPlayer(ganador);
+    if (pGanador != null) {
+        pGanador.setPuntos(pGanador.getPuntos() + 3);
+    }
+
+    String log = retirado + " se retiró. " + ganador + " ganó la partida.";
+    loginManager.guardarPartida(log);
+
+    JDialog dialogo = new JDialog(JUGAR.this, "Retiro", true);
+    dialogo.setSize(360, 200);
+    dialogo.setLocationRelativeTo(JUGAR.this);
+    dialogo.setResizable(false);
+    dialogo.getContentPane().setBackground(FONDO);
+    dialogo.setLayout(new GridBagLayout());
+
+    JPanel p2 = new JPanel();
+    p2.setBackground(PANEL);
+    p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
+    p2.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(ACENTO, 1),
+        BorderFactory.createEmptyBorder(20, 30, 20, 30)
+    ));
+
+    JLabel lblMsg = new JLabel(retirado + " SE RETIRÓ");
+    lblMsg.setFont(FUENTE_TITULO);
+    lblMsg.setForeground(BTN_PELIGRO);
+    lblMsg.setAlignmentX(CENTER_ALIGNMENT);
+
+    JLabel lblGanador = new JLabel("Felicidades " + ganador + "! +3 puntos");
+    lblGanador.setFont(FUENTE_LABEL);
+    lblGanador.setForeground(ACENTO);
+    lblGanador.setAlignmentX(CENTER_ALIGNMENT);
+
+    JButton btnOk = crearBoton("Volver al Menu", ACENTO, Color.WHITE);
+    btnOk.addActionListener(ev -> {
+        dialogo.dispose();
+        dispose();
+    });
+
+    p2.add(lblMsg);
+    p2.add(Box.createVerticalStrut(10));
+    p2.add(lblGanador);
+    p2.add(Box.createVerticalStrut(20));
+    p2.add(btnOk);
+
+    dialogo.add(p2);
+    dialogo.setVisible(true);
+});    btnVolver.addActionListener(e -> dispose());
 
     panelBot.add(btnRetirar);
     panelBot.add(Box.createHorizontalStrut(12));
