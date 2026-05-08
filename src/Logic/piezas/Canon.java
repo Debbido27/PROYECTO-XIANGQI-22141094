@@ -14,4 +14,16 @@ public class Canon extends Pieza{
 
     }
     
+    @Override
+    public boolean [][] getMoveValido(Pieza[][] tablero){
+        boolean [][] movimientos = new boolean [10][9];
+        
+        buscarMovimientos(tablero, movimientos, fila - 1, columna,  -1,  0, false);
+        buscarMovimientos(tablero, movimientos, fila + 1, columna,   1,  0, false);
+        buscarMovimientos(tablero, movimientos, fila,     columna - 1, 0, -1, false);
+        buscarMovimientos(tablero, movimientos, fila,     columna + 1, 0,  1, false);
+
+        return movimientos;
+    }
+    
 }
