@@ -35,5 +35,11 @@ public class Consejero extends Pieza {
         return movimientos;
     }
     
+      private boolean enPalacio(int f, int c) {
+        if (c < 3 || c > 5) return false;
+        if (isR) return f >= 7 && f <= 9;
+        else     return f >= 0 && f <= 2;
+    }
+    
     
 }
