@@ -4,9 +4,11 @@ package GUI;
 import Logic.Login_Manager;
 import Logic.Player;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -17,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-
+import java.awt.event.MouseAdapter;
 /**
  *
  * @author Dell
@@ -207,6 +209,35 @@ public class Reportes extends JFrame {
         dialog.setVisible(true);
 
     }
+    
+    //helpers
+    
+ private JDialog crearDialog(String titulo, int ancho, int alto) {
+        JDialog dialog = new JDialog(this, titulo, true);
+        dialog.setSize(ancho, alto);
+        dialog.setLocationRelativeTo(this);
+        dialog.setResizable(false);
+        dialog.getContentPane().setBackground(FONDO);
+        return dialog;
+    }
 
+    private JButton crearBoton(String texto, Color fondo, Color colorTexto) {
+        JButton btn = new JButton(texto);
+        btn.setFont(FUENTE_BOTON);
+        btn.setForeground(colorTexto);
+        btn.setBackground(fondo);
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        btn.setAlignmentX(LEFT_ALIGNMENT);
+
+        Color hover = fondo.brighter();
+        btn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) { btn.setBackground(hover); }
+            public void mouseExited(MouseEvent e)  { btn.setBackground(fondo); }
+        });
+        return btn;
+    }
    
 }
