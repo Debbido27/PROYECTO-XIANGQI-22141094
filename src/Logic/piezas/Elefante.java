@@ -11,6 +11,12 @@ public class Elefante extends Pieza{
         super(fila,columna,isR);
     }
     
+    
+    @Override
+    public String getSimbolo(){
+       return isR ? "相" : "象";
+
+    }
    
     @Override
     public boolean[][] getMoveValido(Pieza[][] tablero){
@@ -34,6 +40,13 @@ public class Elefante extends Pieza{
             }
         }
         return movimientos;
+    }
+    
+    
+    private boolean cruzaRio(int f) {
+        // rojas en filas 5-9, negras en filas 0-4
+        if (isR) return f < 5;
+        else     return f > 4;
     }
     
 }
