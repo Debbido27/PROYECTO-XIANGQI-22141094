@@ -8,6 +8,10 @@ public class Canon extends Pieza{
         super(fila, columna, isR);
     }
     
-    
+    @Override
+    public String getSimbolo(){
+      return isR ? "炮" : "砲";
+
+    }
     
 }
