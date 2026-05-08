@@ -54,15 +54,15 @@ public class JUGAR extends JFrame {
     static final Color TABLERO_LINEA   = new Color(80, 50, 20);     // líneas
     static final Color RIO_COLOR       = new Color(40, 80, 140, 80); // río semitransparente
     static final Color PALACIO_COLOR   = new Color(200, 150, 50, 180);// palacio
-
    
     static final Font FUENTE_TITULO = new Font("Serif",     Font.BOLD,  18);
     static final Font FUENTE_LABEL  = new Font("SansSerif", Font.PLAIN, 12);
     static final Font FUENTE_CAMPO  = new Font("SansSerif", Font.PLAIN, 13);
     static final Font FUENTE_BOTON  = new Font("SansSerif", Font.BOLD,  13);
     static final Font FUENTE_RIO    = new Font("Serif",     Font.BOLD,  14);
+    private boolean turnoRojo = true;
 
-    
+    private JLabel lblTurno;
     private Login_Manager loginManager;
     private MENUPRINCIPAL menuPrincipal;
     private String jugador1;
@@ -233,6 +233,8 @@ public class JUGAR extends JFrame {
     
     
    private void mostrarTablero(){
+       
+       
     getContentPane().removeAll();
     getContentPane().setLayout(new BorderLayout());
     inicializarTablero();
@@ -263,7 +265,10 @@ public class JUGAR extends JFrame {
     panelBot.setBackground(PANEL);
     panelBot.setLayout(new BoxLayout(panelBot, BoxLayout.X_AXIS));
     panelBot.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-
+    lblTurno = new JLabel("Turno: " + jugador2 + " (Rojas)");
+    lblTurno.setFont(FUENTE_LABEL);
+    lblTurno.setForeground(new Color(200, 80, 80));
+    panelTop.add(lblTurno);
     JButton btnRetirar = crearBoton("Retirarme", BTN_PELIGRO, Color.WHITE);
     JButton btnVolver  = crearBoton("Volver", BTN_SECUNDARIO, ACENTO);
     btnRetirar.setMaximumSize(new Dimension(150, 38));
@@ -308,7 +313,6 @@ private int colSeleccionada  = -1;
                 
         ));
 
-
 addMouseListener(new MouseAdapter() {
     public void mouseClicked(MouseEvent e) {
         int c = (e.getX() - MARGEN + CELDA / 2) / CELDA;
@@ -317,18 +321,86 @@ addMouseListener(new MouseAdapter() {
         if (!enTablero(f, c)) return;
 
         if (filaSeleccionada != -1) {
-            // ya hay pieza seleccionada — mover
+             Pieza comida = tablero[f][c];
             boolean[][] moves = tablero[filaSeleccionada][colSeleccionada].getMoveValido(tablero);
             if (moves[f][c]) {
                 tablero[f][c] = tablero[filaSeleccionada][colSeleccionada];
                 tablero[filaSeleccionada][colSeleccionada] = null;
+                
+               
+            if (comida instanceof General) {
+                String ganador = turnoRojo ? jugador2 : jugador1;
+                String perdedor = turnoRojo ? jugador1 : jugador2;
+
+                Player pGanador = loginManager.buscarPlayer(ganador);
+                if (pGanador != null) {
+                    pGanador.setPuntos(pGanador.getPuntos() + 3);
+                }
+
+                String log = ganador + " venció a " + perdedor;
+                loginManager.guardarPartida(log);
+
+                JDialog dialogo = new JDialog(JUGAR.this, "Fin del Juego", true);
+                dialogo.setSize(360, 200);
+                dialogo.setLocationRelativeTo(JUGAR.this);
+                dialogo.setResizable(false);
+                dialogo.getContentPane().setBackground(FONDO);
+                dialogo.setLayout(new GridBagLayout());
+
+                JPanel p2 = new JPanel();
+                p2.setBackground(PANEL);
+                p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
+                p2.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(ACENTO, 1),
+                    BorderFactory.createEmptyBorder(20, 30, 20, 30)
+                ));
+
+                JLabel lblGanador = new JLabel(ganador + " VENCIÓ A " + perdedor);
+                lblGanador.setFont(FUENTE_TITULO);
+                lblGanador.setForeground(ACENTO);
+                lblGanador.setAlignmentX(CENTER_ALIGNMENT);
+
+                JLabel lblPuntos = new JLabel("Has ganado 3 puntos!");
+                lblPuntos.setFont(FUENTE_LABEL);
+                lblPuntos.setForeground(TEXTO_TENUE);
+                lblPuntos.setAlignmentX(CENTER_ALIGNMENT);
+
+                JButton btnOk = crearBoton("Volver al Menu", ACENTO, Color.WHITE);
+                btnOk.addActionListener(ev -> {
+                    dialogo.dispose();
+                    dispose();
+                });
+
+                p2.add(lblGanador);
+                p2.add(Box.createVerticalStrut(10));
+                p2.add(lblPuntos);
+                p2.add(Box.createVerticalStrut(20));
+                p2.add(btnOk);
+
+                dialogo.add(p2);
+                dialogo.setVisible(true);
+                return;
+            }
+
+
+                
+                
+                
                 tablero[f][c].setFila(f);
                 tablero[f][c].setColumna(c);
+                // cambiar turno
+                turnoRojo = !turnoRojo;
+                if (turnoRojo) {
+                    lblTurno.setText("Turno: " + jugador2 + " (Rojas)");
+                    lblTurno.setForeground(new Color(200, 80, 80));
+                } else {
+                    lblTurno.setText("Turno: " + jugador1 + " (Negras)");
+                    lblTurno.setForeground(TEXTO);
+                }
             }
             filaSeleccionada = -1;
             colSeleccionada  = -1;
-        } else if (tablero[f][c] != null) {
-            // seleccionar pieza
+        } else if (tablero[f][c] != null && tablero[f][c].isIsR() == turnoRojo) {
             filaSeleccionada = f;
             colSeleccionada  = c;
         }
