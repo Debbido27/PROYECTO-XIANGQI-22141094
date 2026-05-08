@@ -17,4 +17,23 @@ public class Consejero extends Pieza {
 
     }
     
+    @Override
+    public boolean[][] getMoveValido(Pieza[][] tablero){
+        boolean[][] movimientos = new boolean[10][9];
+        
+        int[] dFila = {-1, -1, 1,  1};
+        int[] dCol  = {-1,  1, -1, 1};
+
+        for (int i = 0; i < 4; i++) {
+            int nf = fila    + dFila[i];
+            int nc = columna + dCol[i];
+
+            if (enPalacio(nf, nc) && puedeMoverA(nf, nc, tablero)) {
+                movimientos[nf][nc] = true;
+            }
+        }
+        return movimientos;
+    }
+    
+    
 }

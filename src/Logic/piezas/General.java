@@ -14,7 +14,7 @@ public final class General extends Pieza {
     }
     
     @Override
-    public boolean[][] getMovimientosValidos(Pieza[][] tablero){
+    public boolean[][] getMoveValido(Pieza[][] tablero){
         boolean [][] movimientos = new boolean[10][9];
         
         int[] dFila={-1,1,0,0};
