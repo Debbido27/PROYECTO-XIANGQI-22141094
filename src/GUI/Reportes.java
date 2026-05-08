@@ -152,6 +152,10 @@ public class Reportes extends JFrame {
         dialog.setVisible(true);
 
     }
+    
+    private void abrirLogs(){
+        
+    }
 
    
 }
