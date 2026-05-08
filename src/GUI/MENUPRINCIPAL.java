@@ -94,7 +94,7 @@ public MENUPRINCIPAL (String username, Login_Manager loginManager, Login loginWi
         // ── Acciones temporales (lógica se conecta después) ──
         btnJugar.addActionListener(e -> new JUGAR(loginManager, this));
         btnCuenta.addActionListener(e -> new MiCuenta(loginManager, this));
-  
+        btnReportes.addActionListener(e -> new Reportes(loginManager));
         btnLogout.addActionListener(e -> {
         loginManager.logout();
         dispose();
