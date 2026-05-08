@@ -154,7 +154,58 @@ public class Reportes extends JFrame {
     }
     
     private void abrirLogs(){
-        
+         JDialog dialog = crearDialog("Mis Últimos Juegos", 400, 420);
+
+        JPanel panel = new JPanel();
+        panel.setBackground(PANEL);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+
+        JLabel titulo = new JLabel("Mis Últimos Juegos");
+        titulo.setFont(FUENTE_TITULO);
+        titulo.setForeground(ACENTO);
+        titulo.setAlignmentX(CENTER_ALIGNMENT);
+
+        panel.add(titulo);
+        panel.add(Box.createVerticalStrut(15));
+
+        String[] logs = loginManager.cargarPartidas();
+
+        boolean hayLogs = false;
+        for (String log : logs) {
+            if (log != null && !log.isEmpty()) {
+                JLabel lblLog = new JLabel(log);
+                lblLog.setFont(FUENTE_ITEM);
+                lblLog.setForeground(TEXTO);
+                lblLog.setAlignmentX(LEFT_ALIGNMENT);
+                panel.add(lblLog);
+                panel.add(Box.createVerticalStrut(8));
+                hayLogs = true;
+            }
+        }
+
+        if (!hayLogs) {
+            JLabel lblVacio = new JLabel("No hay juegos registrados.");
+            lblVacio.setFont(FUENTE_LABEL);
+            lblVacio.setForeground(TEXTO_TENUE);
+            lblVacio.setAlignmentX(CENTER_ALIGNMENT);
+            panel.add(lblVacio);
+        }
+
+        panel.add(Box.createVerticalStrut(10));
+        JButton btnCerrar = crearBoton("Cerrar", BTN_SECUNDARIO, ACENTO);
+        btnCerrar.addActionListener(e -> dialog.dispose());
+        panel.add(btnCerrar);
+
+        JScrollPane scroll = new JScrollPane(panel);
+        scroll.setBorder(BorderFactory.createLineBorder(ACENTO, 1));
+        scroll.getViewport().setBackground(PANEL);
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        dialog.setLayout(new java.awt.BorderLayout());
+        dialog.add(scroll);
+        dialog.setVisible(true);
+
     }
 
    
