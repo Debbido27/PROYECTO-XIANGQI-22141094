@@ -3,9 +3,17 @@ package GUI;
 
 import Logic.Login_Manager;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
 
 /**
  *
@@ -45,5 +53,46 @@ public class Reportes extends JFrame {
         add(crearPanel());
         setVisible(true);
     }
+    
+    
+    private JPanel crearPanel() {
+        JPanel panel = new JPanel();
+        panel.setBackground(PANEL);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(ACENTO, 1),
+            BorderFactory.createEmptyBorder(30, 40, 30, 40)
+        ));
+
+        JLabel titulo = new JLabel("Reportes");
+        titulo.setFont(FUENTE_TITULO);
+        titulo.setForeground(ACENTO);
+        titulo.setAlignmentX(CENTER_ALIGNMENT);
+
+        JSeparator sep = new JSeparator();
+        sep.setForeground(CAMPO_BORDE);
+        sep.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
+
+        JButton btnRanking = crearBoton("Ranking de Jugadores", BTN_PRIMARIO,   Color.WHITE);
+        JButton btnLogs    = crearBoton("Mis Últimos Juegos",   BTN_SECUNDARIO, ACENTO);
+        JButton btnVolver  = crearBoton("Volver",               BTN_SECUNDARIO, TEXTO_TENUE);
+
+        btnRanking.addActionListener(e -> abrirRanking());
+        btnLogs.addActionListener(e    -> abrirLogs());
+        btnVolver.addActionListener(e  -> dispose());
+
+        panel.add(titulo);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(sep);
+        panel.add(Box.createVerticalStrut(30));
+        panel.add(btnRanking);
+        panel.add(Box.createVerticalStrut(12));
+        panel.add(btnLogs);
+        panel.add(Box.createVerticalStrut(12));
+        panel.add(btnVolver);
+
+        return panel;
+    }
+
    
 }
