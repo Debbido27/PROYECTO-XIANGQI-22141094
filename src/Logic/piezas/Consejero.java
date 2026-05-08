@@ -11,6 +11,10 @@ public class Consejero extends Pieza {
         super(fila, columna, isR);
     }
     
-    
+    @Override
+    public String getSimbolo(){
+      return isR ? "仕" : "士";
+
+    }
     
 }
