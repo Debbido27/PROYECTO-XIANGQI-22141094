@@ -297,15 +297,49 @@ class PanelTablero extends JPanel {
     static final int FILAS  = 10;
     static final int CELDA  = 62;
     static final int MARGEN = 45;
-
+private int filaSeleccionada = -1;
+private int colSeleccionada  = -1;
     public PanelTablero() {
         setBackground(TABLERO_FONDO);
         setPreferredSize(new Dimension(
             MARGEN * 2 + CELDA * (COLS - 1),
             MARGEN * 2 + CELDA * (FILAS - 1)
+                
+                
         ));
+
+
+addMouseListener(new MouseAdapter() {
+    public void mouseClicked(MouseEvent e) {
+        int c = (e.getX() - MARGEN + CELDA / 2) / CELDA;
+        int f = (e.getY() - MARGEN + CELDA / 2) / CELDA;
+
+        if (!enTablero(f, c)) return;
+
+        if (filaSeleccionada != -1) {
+            // ya hay pieza seleccionada — mover
+            boolean[][] moves = tablero[filaSeleccionada][colSeleccionada].getMoveValido(tablero);
+            if (moves[f][c]) {
+                tablero[f][c] = tablero[filaSeleccionada][colSeleccionada];
+                tablero[filaSeleccionada][colSeleccionada] = null;
+                tablero[f][c].setFila(f);
+                tablero[f][c].setColumna(c);
+            }
+            filaSeleccionada = -1;
+            colSeleccionada  = -1;
+        } else if (tablero[f][c] != null) {
+            // seleccionar pieza
+            filaSeleccionada = f;
+            colSeleccionada  = c;
+        }
+        repaint();
+    }
+});
     }
 
+    private boolean enTablero(int f, int c) {
+    return f >= 0 && f < 10 && c >= 0 && c < 9;
+}
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
