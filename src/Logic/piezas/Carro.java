@@ -12,6 +12,12 @@ public class Carro extends Pieza{
     }
     
     @Override
+    public String getSimbolo() {
+        return isR ? "俥" : "車";
+    }
+            
+            
+    @Override
     public boolean[][] getMoveValido(Pieza[][] tablero){
         boolean[][] movimientos = new boolean[10][9];
         
