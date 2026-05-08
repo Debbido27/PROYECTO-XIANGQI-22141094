@@ -2,6 +2,7 @@
 package GUI;
 
 import Logic.Login_Manager;
+import Logic.Player;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -10,9 +11,11 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
 /**
@@ -95,7 +98,59 @@ public class Reportes extends JFrame {
     }
     
     private void abrirRanking(){
-        
+        JDialog dialog = crearDialog("Ranking de Jugadores", 400, 420);
+
+        JPanel panel = new JPanel();
+        panel.setBackground(PANEL);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+
+        JLabel titulo = new JLabel("Ranking de Jugadores");
+        titulo.setFont(FUENTE_TITULO);
+        titulo.setForeground(ACENTO);
+        titulo.setAlignmentX(CENTER_ALIGNMENT);
+
+        panel.add(titulo);
+        panel.add(Box.createVerticalStrut(15));
+
+        Player[] ranking = loginManager.getRankingJugadores();
+
+        if (ranking.length == 0) {
+            JLabel lblVacio = new JLabel("No hay jugadores registrados.");
+            lblVacio.setFont(FUENTE_LABEL);
+            lblVacio.setForeground(TEXTO_TENUE);
+            lblVacio.setAlignmentX(CENTER_ALIGNMENT);
+            panel.add(lblVacio);
+        } else {
+            for (int i = 0; i < ranking.length; i++) {
+                Player p = ranking[i];
+                if (p != null) {
+                    JLabel fila = new JLabel(
+                        (i + 1) + ".  " + p.getUsername() + "  —  " + p.getPuntos() + " pts"
+                    );
+                    fila.setFont(FUENTE_ITEM);
+                    fila.setForeground(i == 0 ? ACENTO : TEXTO);
+                    fila.setAlignmentX(LEFT_ALIGNMENT);
+                    panel.add(fila);
+                    panel.add(Box.createVerticalStrut(8));
+                }
+            }
+        }
+
+        panel.add(Box.createVerticalStrut(10));
+        JButton btnCerrar = crearBoton("Cerrar", BTN_SECUNDARIO, ACENTO);
+        btnCerrar.addActionListener(e -> dialog.dispose());
+        panel.add(btnCerrar);
+
+        JScrollPane scroll = new JScrollPane(panel);
+        scroll.setBorder(BorderFactory.createLineBorder(ACENTO, 1));
+        scroll.getViewport().setBackground(PANEL);
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        dialog.setLayout(new java.awt.BorderLayout());
+        dialog.add(scroll);
+        dialog.setVisible(true);
+
     }
 
    
