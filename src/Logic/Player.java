@@ -1,7 +1,7 @@
 
 package Logic;
 
-
+import java.util.Date;
 public class Player {
     //Atributos
     
@@ -10,6 +10,8 @@ public class Player {
     private int puntos;
     private String [] logs;
     private int CuentaLog;
+    private Date fechaIngreso;
+    public boolean activo;
     
     
     public Player(String username, String password){
@@ -18,6 +20,24 @@ public class Player {
         this.puntos=0;
         this.logs= new String [10];
         this.CuentaLog=0;
+        this.fechaIngreso=new Date();
+        this.activo=true;
+    }
+
+    public Date getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(Date fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 
     public String getUsername() {
@@ -61,7 +81,7 @@ public class Player {
     }
     
     public void agregarLog(String log){
-        for (int i = logs.length-1; i >0; i++) {
+        for (int i = logs.length-1; i >0; i--) {
             logs[i]=logs[i-1];
         }
         logs[0]=log;
