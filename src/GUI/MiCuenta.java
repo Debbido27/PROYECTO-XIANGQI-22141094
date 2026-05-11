@@ -44,10 +44,10 @@ public class MiCuenta extends JPanel {
     // ══════════════════════════════════════════
     //  FUENTES
     // ══════════════════════════════════════════
-    static final Font FUENTE_TITULO = new Font("Serif",     Font.BOLD,  22);
-    static final Font FUENTE_LABEL  = new Font("SansSerif", Font.PLAIN, 12);
-    static final Font FUENTE_CAMPO  = new Font("SansSerif", Font.PLAIN, 13);
-    static final Font FUENTE_BOTON  = new Font("SansSerif", Font.BOLD,  13);
+    static final Font FUENTE_TITULO = new Font("Serif",     Font.BOLD,  28);
+    static final Font FUENTE_LABEL  = new Font("SansSerif", Font.PLAIN, 16);
+    static final Font FUENTE_CAMPO  = new Font("SansSerif", Font.PLAIN, 16);
+    static final Font FUENTE_BOTON  = new Font("SansSerif", Font.BOLD,  15);
 
     // ══════════════════════════════════════════
     //  ATRIBUTOS
@@ -94,10 +94,14 @@ public class MiCuenta extends JPanel {
         sep.setMaximumSize(new Dimension(Integer.MAX_VALUE,1));
         
         JButton btnVerInfo     = crearBoton("Ver mi Información", BTN_SECUNDARIO, ACENTO);
+        btnVerInfo.setAlignmentX(CENTER_ALIGNMENT);
         JButton btnCambiarPass = crearBoton("Cambiar Password",   BTN_PRIMARIO,   Color.WHITE);
+        btnCambiarPass.setAlignmentX(CENTER_ALIGNMENT);
         JButton btnEliminar    = crearBoton("Eliminar mi Cuenta", BTN_PELIGRO,    Color.WHITE);
+        btnEliminar.setAlignmentX(CENTER_ALIGNMENT);
         JButton btnVolver      = crearBoton("Volver al Menú",     BTN_SECUNDARIO, TEXTO_TENUE);
-
+        btnVolver.setAlignmentX(CENTER_ALIGNMENT);
+        
         btnVerInfo.addActionListener(e     -> abrirVerInfo());
         btnCambiarPass.addActionListener(e -> abrirCambiarPassword());
         btnEliminar.addActionListener(e    -> abrirEliminarCuenta());
@@ -217,11 +221,15 @@ public class MiCuenta extends JPanel {
         titulo.setAlignmentX(CENTER_ALIGNMENT);
 
         JLabel lblUser   = crearLabelInfo("Usuario: " + p.getUsername());
+        lblUser.setAlignmentX(CENTER_ALIGNMENT);
         JLabel lblPuntos = crearLabelInfo("Puntos:  " + p.getPuntos());
+        lblPuntos.setAlignmentX(CENTER_ALIGNMENT);
         JLabel lblFecha = crearLabelInfo("Miembro desde: "+p.getFechaIngreso());
+        lblFecha.setAlignmentX(CENTER_ALIGNMENT);
         JLabel lblActivo = crearLabelInfo("Activo: "+p.isActivo());
-        
+        lblActivo.setAlignmentX(CENTER_ALIGNMENT);
         JButton btnCerrar = crearBoton("Cerrar", BTN_SECUNDARIO, ACENTO);
+        btnCerrar.setAlignmentX(CENTER_ALIGNMENT);
         
  btnCerrar.addActionListener(e -> {
         removeAll();
@@ -260,14 +268,15 @@ public class MiCuenta extends JPanel {
         titulo.setAlignmentX(CENTER_ALIGNMENT);
 
         JLabel lblNuevo = crearLabel("Nuevo password (exactamente 5 caracteres)");
+        lblNuevo.setAlignmentX(CENTER_ALIGNMENT);
         JPasswordField campoNuevo = crearCampoPassword();
-
+        campoNuevo.setAlignmentX(CENTER_ALIGNMENT);
         JLabel lblMensaje = new JLabel(" ");
         lblMensaje.setFont(FUENTE_LABEL);
         lblMensaje.setAlignmentX(CENTER_ALIGNMENT);
 
         JButton btnGuardar  = crearBoton("Guardar",   BTN_PRIMARIO,   Color.WHITE);
-
+        btnGuardar.setAlignmentX(CENTER_ALIGNMENT);
         btnGuardar.addActionListener(e -> {
             String nuevoPass = new String(campoNuevo.getPassword());
             String username  = loginManager.getCurrentUser().getUsername();
@@ -282,6 +291,7 @@ public class MiCuenta extends JPanel {
         });
 
         JButton btnCancelar = crearBoton("Cerrar", BTN_SECUNDARIO, ACENTO);
+        btnCancelar.setAlignmentX(CENTER_ALIGNMENT);
             btnCancelar.addActionListener(e -> {
                 removeAll();
                 add(crearPanel(), BorderLayout.CENTER);
@@ -317,20 +327,21 @@ public class MiCuenta extends JPanel {
         titulo.setForeground(BTN_PELIGRO);
         titulo.setAlignmentX(CENTER_ALIGNMENT);
 
-        JLabel advertencia = new JLabel("Esta acción no se puede deshacer.");
+        JLabel advertencia = new JLabel("ESTA ACCION NO SE PUEDE DESHACER.");
         advertencia.setFont(FUENTE_LABEL);
         advertencia.setForeground(TEXTO_TENUE);
         advertencia.setAlignmentX(CENTER_ALIGNMENT);
 
         JLabel lblPass = crearLabel("Ingresa tu password para confirmar");
+        lblPass.setAlignmentX(CENTER_ALIGNMENT);
         JPasswordField campoConfirm = crearCampoPassword();
-
+        campoConfirm.setAlignmentX(CENTER_ALIGNMENT);
         JLabel lblMensaje = new JLabel(" ");
         lblMensaje.setFont(FUENTE_LABEL);
         lblMensaje.setAlignmentX(CENTER_ALIGNMENT);
 
         JButton btnConfirmar = crearBoton("Eliminar mi Cuenta", BTN_PELIGRO,    Color.WHITE);
-
+        btnConfirmar.setAlignmentX(CENTER_ALIGNMENT);
         btnConfirmar.addActionListener(e -> {
             String passIngresado = new String(campoConfirm.getPassword());
             String passReal      = loginManager.getCurrentUser().getPassword();
@@ -347,6 +358,7 @@ public class MiCuenta extends JPanel {
         });
 
         JButton btnCancelar = crearBoton("Cerrar", BTN_SECUNDARIO, ACENTO);
+        btnCancelar.setAlignmentX(CENTER_ALIGNMENT);
             btnCancelar.addActionListener(e -> {
                 removeAll();
                 add(crearPanel(), BorderLayout.CENTER);

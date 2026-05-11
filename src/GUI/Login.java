@@ -95,6 +95,7 @@ public class Login extends JFrame {
       sep.setMaximumSize(new Dimension(Integer.MAX_VALUE,1));
       
       JLabel lblUser = crearLabel("Usuario");
+      
       campoUsuario = crearCampoTexto();
       
       JLabel lblPass = crearLabel("Contrasena (5 CARACTERES)");

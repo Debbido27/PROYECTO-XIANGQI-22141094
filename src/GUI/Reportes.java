@@ -38,10 +38,10 @@ public class Reportes extends JPanel {
     static final Color BTN_SECUNDARIO = new Color(40, 40, 58);
 
    
-    static final Font FUENTE_TITULO = new Font("Serif",     Font.BOLD,  22);
-    static final Font FUENTE_LABEL  = new Font("SansSerif", Font.PLAIN, 12);
-    static final Font FUENTE_BOTON  = new Font("SansSerif", Font.BOLD,  13);
-    static final Font FUENTE_ITEM   = new Font("SansSerif", Font.PLAIN, 13);
+    static final Font FUENTE_TITULO = new Font("Serif",     Font.BOLD,  28);
+    static final Font FUENTE_LABEL  = new Font("SansSerif", Font.PLAIN, 16);
+    static final Font FUENTE_BOTON  = new Font("SansSerif", Font.BOLD,  16);
+    static final Font FUENTE_ITEM   = new Font("SansSerif", Font.PLAIN, 15);
     
    
     private Login_Manager loginManager;
@@ -81,9 +81,12 @@ public class Reportes extends JPanel {
         sep.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
 
         JButton btnRanking = crearBoton("Ranking de Jugadores", BTN_PRIMARIO,   Color.WHITE);
+        btnRanking.setAlignmentX(CENTER_ALIGNMENT);
         JButton btnLogs    = crearBoton("Mis Últimos Juegos",   BTN_SECUNDARIO, ACENTO);
+        btnLogs.setAlignmentX(CENTER_ALIGNMENT);
         JButton btnVolver  = crearBoton("Volver",               BTN_SECUNDARIO, TEXTO_TENUE);
-
+        btnVolver.setAlignmentX(CENTER_ALIGNMENT);
+        
         btnRanking.addActionListener(e -> abrirRanking());
         btnLogs.addActionListener(e    -> abrirLogs());
         btnVolver.addActionListener(e -> cardLayout.show(cardPanel, "menu"));
@@ -141,7 +144,7 @@ public class Reportes extends JPanel {
                     );
                     fila.setFont(FUENTE_ITEM);
                     fila.setForeground(i == 0 ? ACENTO : TEXTO);
-                    fila.setAlignmentX(LEFT_ALIGNMENT);
+                    fila.setAlignmentX(CENTER_ALIGNMENT);
                     panel.add(fila);
                     panel.add(Box.createVerticalStrut(8));
                 }
@@ -156,7 +159,8 @@ public class Reportes extends JPanel {
 
         panel.add(Box.createVerticalStrut(10));
         JButton btnCerrar = crearBoton("Volver", BTN_SECUNDARIO, ACENTO);
-        
+        btnCerrar.setAlignmentX(CENTER_ALIGNMENT);
+        btnCerrar.setMaximumSize(new Dimension(200,45));
     btnCerrar.addActionListener(e -> {
         removeAll();
         add(crearPanel(), BorderLayout.CENTER);
@@ -219,6 +223,8 @@ public class Reportes extends JPanel {
 
         panel.add(Box.createVerticalStrut(10));
         JButton btnCerrar = crearBoton("Volver", BTN_SECUNDARIO, ACENTO);
+        btnCerrar.setAlignmentX(CENTER_ALIGNMENT);
+        btnCerrar.setMaximumSize(new Dimension(200,45));
     btnCerrar.addActionListener(e -> {
         removeAll();
         add(crearPanel(), BorderLayout.CENTER);

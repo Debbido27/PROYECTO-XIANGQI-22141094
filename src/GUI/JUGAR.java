@@ -34,6 +34,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -92,18 +93,9 @@ public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal, java.awt.C
     
     private void pedirOponente(){
         
-
-        JDialog dialog = new JDialog(
-            (JFrame) javax.swing.SwingUtilities.getWindowAncestor(this),
-            "Seleccionar oponente",
-            true
-        );        
-
-        dialog.setSize(900,600);
-        dialog.setLocationRelativeTo(null);
-        dialog.setResizable(false);
-        dialog.getContentPane().setBackground(FONDO);
-        dialog.setLayout(new GridBagLayout());
+    removeAll();
+    setLayout(new BorderLayout());
+          
         
         JPanel panel = new JPanel();
         panel.setPreferredSize(new Dimension(420, 420));
@@ -111,7 +103,7 @@ public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal, java.awt.C
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(ACENTO, 1),
-            BorderFactory.createEmptyBorder(25, 35, 25, 35)
+            BorderFactory.createEmptyBorder(40, 80, 40, 80)
         ));
 
         JLabel titulo = new JLabel("Nueva Partida");
@@ -172,19 +164,16 @@ public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal, java.awt.C
             }
 
             jugador2 = oponente;
-            dialog.dispose();
             mostrarTablero();
         });
 
    
-                btnCancelar.addActionListener(e -> {
-    dialog.dispose();
-    SwingUtilities.invokeLater(() -> {
-        cardLayout.show(cardPanel, "menu");
-        cardPanel.revalidate();
-        cardPanel.repaint();
-    });
-});
+             btnCancelar.addActionListener(e -> {
+            cardLayout.show(cardPanel, "menu");
+            cardPanel.revalidate();
+            cardPanel.repaint();
+        });
+
                 
                 
                 
@@ -203,8 +192,9 @@ public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal, java.awt.C
         panel.add(Box.createVerticalStrut(8));
         panel.add(btnCancelar);
 
-        dialog.add(panel);
-        dialog.setVisible(true);
+        add(panel, BorderLayout.CENTER);
+        revalidate();
+        repaint();
     }
     
     
@@ -286,12 +276,12 @@ public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal, java.awt.C
     lblTurno.setFont(FUENTE_LABEL);
     lblTurno.setForeground(new Color(200, 80, 80));
     panelTop.add(lblTurno);
+    
     JButton btnRetirar = crearBoton("Retirarme", BTN_PELIGRO, Color.WHITE);
-    JButton btnVolver  = crearBoton("Volver", BTN_SECUNDARIO, ACENTO);
     btnRetirar.setMaximumSize(new Dimension(150, 38));
-    btnVolver.setMaximumSize(new Dimension(150, 38));
 
 btnRetirar.addActionListener(e -> {
+     int confirm = JOptionPane.showConfirmDialog(JUGAR.this, "¿Seguro que quieres retirarte? Perderás la partida.", "Confirmar retiro", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
     String ganador  = turnoRojo ? jugador1 : jugador2;
     String retirado = turnoRojo ? jugador2 : jugador1;
 
@@ -305,75 +295,61 @@ btnRetirar.addActionListener(e -> {
 String log = retirado + " SE HA RETIRADO, FELICIDADES " + ganador + ", HAS GANADO 3 PUNTOS";
     loginManager.guardarPartida(log);
 
-    JDialog dialogo = new JDialog(
-        (JFrame) javax.swing.SwingUtilities.getWindowAncestor(JUGAR.this),
-        "Retiro",
-        true
-    );    
+    removeAll();
+setLayout(new BorderLayout());
 
-    dialogo.setSize(360, 200);
-    dialogo.setLocationRelativeTo(JUGAR.this);
-    dialogo.setResizable(false);
-    dialogo.getContentPane().setBackground(FONDO);
-    dialogo.setLayout(new GridBagLayout());
+JPanel panel = new JPanel();
+panel.setBackground(PANEL);
+panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+panel.setBorder(BorderFactory.createCompoundBorder(
+    BorderFactory.createLineBorder(ACENTO, 1),
+    BorderFactory.createEmptyBorder(40, 80, 40, 80)
+));
 
-    JPanel p2 = new JPanel();
-    p2.setBackground(PANEL);
-    p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
-    p2.setBorder(BorderFactory.createCompoundBorder(
-        BorderFactory.createLineBorder(ACENTO, 1),
-        BorderFactory.createEmptyBorder(20, 30, 20, 30)
-    ));
+JLabel lblMsg = new JLabel(retirado + " SE HA RETIRADO");
+lblMsg.setFont(FUENTE_TITULO);
+lblMsg.setForeground(BTN_PELIGRO);
+lblMsg.setAlignmentX(CENTER_ALIGNMENT);
 
-    JLabel lblMsg = new JLabel(retirado + " SE HA RETIRADO, FELICIDADES " + ganador + ", HAS GANADO 3 PUNTOS");    lblMsg.setFont(FUENTE_TITULO);
-    lblMsg.setForeground(BTN_PELIGRO);
-    lblMsg.setAlignmentX(CENTER_ALIGNMENT);
+JLabel lblGanador = new JLabel(ganador + "! +3 puntos");
+lblGanador.setFont(FUENTE_LABEL);
+lblGanador.setForeground(ACENTO);
+lblGanador.setAlignmentX(CENTER_ALIGNMENT);
 
-    JLabel lblGanador = new JLabel( ganador + "! +3 puntos");
-    lblGanador.setFont(FUENTE_LABEL);
-    lblGanador.setForeground(ACENTO);
-    lblGanador.setAlignmentX(CENTER_ALIGNMENT);
+JButton btnOtra = crearBoton("Jugar Otra Partida", BTN_SECUNDARIO, ACENTO);
+JButton btnOk = crearBoton("Volver al Menu", ACENTO, Color.WHITE);
 
-    JButton btnOtra = crearBoton("Jugar Otra Partida", BTN_SECUNDARIO, ACENTO);
-    JButton btnOk   = crearBoton("Volver al Menu",     ACENTO,         Color.WHITE);
+btnOtra.addActionListener(ev -> {
+    turnoRojo = true;
+    jugador2 = null;
+    pedirOponente();
+});
 
-    btnOtra.addActionListener(ev -> {
-        dialogo.dispose();
-        turnoRojo = true;
-        jugador2 = null;
-        pedirOponente();
-    });
-    btnOk.addActionListener(ev -> {
-        dialogo.dispose();
-    cardLayout.show(cardPanel, "menu");        
-    });
+btnOk.addActionListener(ev -> {
+    cardLayout.show(cardPanel, "menu");
+    cardPanel.revalidate();
+    cardPanel.repaint();
+});
 
-    p2.add(lblMsg);
-    p2.add(Box.createVerticalStrut(10));
-    p2.add(lblGanador);
-    p2.add(Box.createVerticalStrut(20));
-    p2.add(btnOtra);
-    p2.add(Box.createVerticalStrut(8));
-    p2.add(btnOk);
+panel.add(lblMsg);
+panel.add(Box.createVerticalStrut(10));
+panel.add(lblGanador);
+panel.add(Box.createVerticalStrut(20));
+panel.add(btnOtra);
+panel.add(Box.createVerticalStrut(8));
+panel.add(btnOk);
 
-    dialogo.add(p2);
-    dialogo.setVisible(true);
-    
+add(panel, BorderLayout.CENTER);
+revalidate();
+repaint();    
     
     
 });  
 
-        btnVolver.addActionListener(e -> {
-            cardLayout.show(cardPanel, "menu");
-            cardPanel.setMinimumSize(null);  // ← añade esto
-    cardPanel.setPreferredSize(null); 
-            cardPanel.revalidate();
-            cardPanel.repaint();
-        });
+      
 
     panelBot.add(btnRetirar);
     panelBot.add(Box.createHorizontalStrut(12));
-    panelBot.add(btnVolver);
 
     PanelTablero panelTablero = new PanelTablero();
 JPanel centro = new JPanel(new GridBagLayout());

@@ -99,10 +99,14 @@ public MENUPRINCIPAL (String username, Login_Manager loginManager, Login loginWi
     sep.setMaximumSize(new Dimension(Integer.MAX_VALUE,1));
     
     JButton btnJugar    = crearBoton("Jugar Xiangqi", BTN_PRIMARIO,   Color.WHITE);
+    btnJugar.setAlignmentX(CENTER_ALIGNMENT);
     JButton btnCuenta   = crearBoton("Mi Cuenta",     BTN_SECUNDARIO, ACENTO);
+    btnCuenta.setAlignmentX(CENTER_ALIGNMENT);
     JButton btnReportes = crearBoton("Reportes",      BTN_SECUNDARIO, ACENTO);
+    btnReportes.setAlignmentX(CENTER_ALIGNMENT);
     JButton btnLogout   = crearBoton("Log Out",       BTN_SALIR,      Color.WHITE);
-
+    btnLogout.setAlignmentX(CENTER_ALIGNMENT);
+    
     btnJugar.addActionListener(e -> {
         cardPanel.add(new JUGAR(loginManager, this, cardLayout, cardPanel), "jugar");
         cardLayout.show(cardPanel, "jugar");
