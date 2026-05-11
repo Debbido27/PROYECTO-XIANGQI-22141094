@@ -2,6 +2,8 @@
 package GUI;
 
 import Logic.Login_Manager;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -29,7 +31,7 @@ public class MENUPRINCIPAL extends JFrame {
  //paleta colores
     static final Color FONDO          = new Color(18, 18, 24);
     static final Color PANEL          = new Color(28, 28, 38);
-    static final Color ACENTO         = new Color(200, 150, 50);   // dorado
+    static final Color ACENTO         = new Color(200, 150, 50);   
     static final Color TEXTO          = new Color(220, 220, 230);
     static final Color TEXTO_TENUE    = new Color(120, 120, 140);
     static final Color CAMPO_FONDO    = new Color(12, 12, 18);
@@ -39,14 +41,19 @@ public class MENUPRINCIPAL extends JFrame {
     static final Color BTN_SALIR      = new Color(160, 40, 40);    // salir
 
  
+  //fuentes
     static final Font FUENTE_TITULO = new Font("Serif",     Font.BOLD,  26);
     static final Font FUENTE_LABEL  = new Font("SansSerif", Font.PLAIN, 12);
     static final Font FUENTE_CAMPO  = new Font("SansSerif", Font.PLAIN, 13);
     static final Font FUENTE_BOTON  = new Font("SansSerif", Font.BOLD,  13);
    
+ //atributos
     private Login_Manager loginManager;
     private Login loginWindow;
     private String usernameActual;
+    private JPanel cardPanel;
+    private CardLayout cardLayout;
+    
     
 public MENUPRINCIPAL (String username, Login_Manager loginManager, Login loginWindow) {
     this.usernameActual=username;
@@ -54,71 +61,82 @@ public MENUPRINCIPAL (String username, Login_Manager loginManager, Login loginWi
     this.loginWindow = loginWindow;
         setTitle("Xiangqi - Menu Principal");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(900, 600);
+        setSize(900, 700);
         setLocationRelativeTo(null);
         setResizable(false);
         getContentPane().setBackground(FONDO);
-        setLayout(new GridBagLayout());
-
-        add(crearPanel());
+        setLayout(new BorderLayout());
+       
+        cardLayout = new java.awt.CardLayout();
+        cardPanel = new JPanel(cardLayout);
+        cardPanel.setBackground(FONDO);
+        cardPanel.add(crearPanel(),"menu");
+        
+        add(cardPanel,BorderLayout.CENTER);
         setVisible(true);
     }
     
-    private JPanel crearPanel(){
-        JPanel panel = new JPanel();
-        panel.setBackground(PANEL);
-        panel.setPreferredSize(new Dimension(420, 420));
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createCompoundBorder(
-        BorderFactory.createLineBorder(ACENTO,1),BorderFactory.createEmptyBorder(30,40,30,40)));
-        
-        JLabel titulo = new JLabel("XIANGQI");
-        titulo.setFont(FUENTE_TITULO);
-        titulo.setForeground(ACENTO);
-        titulo.setAlignmentX(CENTER_ALIGNMENT);
-        
-        JLabel bienvenido = new JLabel("Bienvenido. "+usernameActual);
-        bienvenido.setFont(FUENTE_LABEL);
-        bienvenido.setForeground(TEXTO_TENUE);
-        bienvenido.setAlignmentX(CENTER_ALIGNMENT);
-        
-        JSeparator sep = new JSeparator();
-        sep.setForeground(new Color(60,60,80));
-        sep.setMaximumSize(new Dimension(Integer.MAX_VALUE,1));
-        
-        JButton btnJugar    = crearBoton("Jugar Xiangqi", BTN_PRIMARIO,   Color.WHITE);
-        JButton btnCuenta   = crearBoton("Mi Cuenta",     BTN_SECUNDARIO, ACENTO);
-        JButton btnReportes = crearBoton("Reportes",      BTN_SECUNDARIO, ACENTO);
-        JButton btnLogout   = crearBoton("Log Out",       BTN_SALIR,      Color.WHITE);
+ private JPanel crearPanel(){
+    JPanel panel = new JPanel();
+    panel.setBackground(PANEL);
+   // panel.setPreferredSize(new Dimension(900, 600));
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    panel.setBorder(BorderFactory.createCompoundBorder(
+    BorderFactory.createLineBorder(ACENTO,1),BorderFactory.createEmptyBorder(40,80,40,80)));
+    
+    JLabel titulo = new JLabel("XIANGQI");
+    titulo.setFont(FUENTE_TITULO);
+    titulo.setForeground(ACENTO);
+    titulo.setAlignmentX(CENTER_ALIGNMENT);
+    
+    JLabel bienvenido = new JLabel("Bienvenido. "+usernameActual);
+    bienvenido.setFont(FUENTE_LABEL);
+    bienvenido.setForeground(TEXTO_TENUE);
+    bienvenido.setAlignmentX(CENTER_ALIGNMENT);
+    
+    JSeparator sep = new JSeparator();
+    sep.setForeground(new Color(60,60,80));
+    sep.setMaximumSize(new Dimension(Integer.MAX_VALUE,1));
+    
+    JButton btnJugar    = crearBoton("Jugar Xiangqi", BTN_PRIMARIO,   Color.WHITE);
+    JButton btnCuenta   = crearBoton("Mi Cuenta",     BTN_SECUNDARIO, ACENTO);
+    JButton btnReportes = crearBoton("Reportes",      BTN_SECUNDARIO, ACENTO);
+    JButton btnLogout   = crearBoton("Log Out",       BTN_SALIR,      Color.WHITE);
 
-        // ── Acciones temporales (lógica se conecta después) ──
-        btnJugar.addActionListener(e -> new JUGAR(loginManager, this));
-        btnCuenta.addActionListener(e -> new MiCuenta(loginManager, this));
-        btnReportes.addActionListener(e -> new Reportes(loginManager));
-        btnLogout.addActionListener(e -> {
+    btnJugar.addActionListener(e -> {
+        cardPanel.add(new JUGAR(loginManager, this, cardLayout, cardPanel), "jugar");
+        cardLayout.show(cardPanel, "jugar");
+    });
+    btnCuenta.addActionListener(e -> {
+        cardPanel.add(new MiCuenta(loginManager, this, cardLayout, cardPanel), "micuenta");
+        cardLayout.show(cardPanel, "micuenta");
+    });
+    btnReportes.addActionListener(e -> {
+        cardPanel.add(new Reportes(loginManager, this, cardLayout, cardPanel), "reportes");
+        cardLayout.show(cardPanel, "reportes");
+    });
+    btnLogout.addActionListener(e -> {
         loginManager.logout();
         dispose();
         loginWindow.setVisible(true);
     });
 
-        // ── Armar panel ──
-        panel.add(titulo);
-        panel.add(Box.createVerticalStrut(6));
-        panel.add(bienvenido);
-        panel.add(Box.createVerticalStrut(20));
-        panel.add(sep);
-        panel.add(Box.createVerticalStrut(30));
-        panel.add(btnJugar);
-        panel.add(Box.createVerticalStrut(12));
-        panel.add(btnCuenta);
-        panel.add(Box.createVerticalStrut(12));
-        panel.add(btnReportes);
-        panel.add(Box.createVerticalStrut(12));
-        panel.add(btnLogout);
+    panel.add(titulo);
+    panel.add(Box.createVerticalStrut(6));
+    panel.add(bienvenido);
+    panel.add(Box.createVerticalStrut(20));
+    panel.add(sep);
+    panel.add(Box.createVerticalStrut(30));
+    panel.add(btnJugar);
+    panel.add(Box.createVerticalStrut(12));
+    panel.add(btnCuenta);
+    panel.add(Box.createVerticalStrut(12));
+    panel.add(btnReportes);
+    panel.add(Box.createVerticalStrut(12));
+    panel.add(btnLogout);
 
-        return panel;
-    }
-        
+    return panel;
+}
     
 
  private JButton crearBoton(String texto, Color fondo, Color colorTexto) {

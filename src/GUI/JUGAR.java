@@ -14,6 +14,7 @@ import Logic.piezas.Pieza;
 import Logic.piezas.Soldado;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -35,11 +36,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 /**
  *
  * @athor Dell
  */
-public class JUGAR extends JFrame {
+public class JUGAR extends JPanel {
     //PALETA DE COLORES
        static final Color FONDO           = new Color(18, 18, 24);
     static final Color PANEL           = new Color(28, 28, 38);
@@ -68,20 +70,21 @@ public class JUGAR extends JFrame {
     private String jugador1;
     private String jugador2;
     private Pieza[][] tablero;
-    
-    public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal){
+    private CardLayout cardLayout;
+    private JPanel cardPanel;
+public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal, java.awt.CardLayout cardLayout, JPanel cardPanel){
         this.loginManager=loginManager;
         this.menuPrincipal=menuPrincipal;
         this.jugador1=loginManager.getCurrentUser().getUsername();
+        this.cardLayout = cardLayout;
+        this.cardPanel = cardPanel;
         
-        setTitle("XIANGQI");
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(900,600);
-        setLocationRelativeTo(null);
-        setResizable(false);
-        getContentPane().setBackground(FONDO);
         
-        pedirOponente();
+       setLayout(new BorderLayout());
+       setBackground(FONDO);
+      
+    
+       pedirOponente();
         
         
     }
@@ -89,8 +92,13 @@ public class JUGAR extends JFrame {
     
     private void pedirOponente(){
         
-        
-        JDialog dialog = new JDialog(this, "Seleccionar oponente",true);
+
+        JDialog dialog = new JDialog(
+            (JFrame) javax.swing.SwingUtilities.getWindowAncestor(this),
+            "Seleccionar oponente",
+            true
+        );        
+
         dialog.setSize(900,600);
         dialog.setLocationRelativeTo(null);
         dialog.setResizable(false);
@@ -142,8 +150,10 @@ public class JUGAR extends JFrame {
         JButton btnCancelar = crearBoton("Cancelar", BTN_SECUNDARIO, ACENTO);
         
                 btnJugar.addActionListener(e -> {
+                    
             String oponente = campoOponente.getText().trim();
 
+            
             if (oponente.isEmpty()) {
                 lblMensaje.setForeground(new Color(200, 60, 60));
                 lblMensaje.setText("Ingresa un username.");
@@ -166,11 +176,19 @@ public class JUGAR extends JFrame {
             mostrarTablero();
         });
 
-        btnCancelar.addActionListener(e -> {
-            dialog.dispose();
-            dispose();
-        });
-        
+   
+                btnCancelar.addActionListener(e -> {
+    dialog.dispose();
+    SwingUtilities.invokeLater(() -> {
+        cardLayout.show(cardPanel, "menu");
+        cardPanel.revalidate();
+        cardPanel.repaint();
+    });
+});
+                
+                
+                
+     
         panel.add(titulo);
         panel.add(Box.createVerticalStrut(6));
         panel.add(lblInfo);
@@ -234,9 +252,8 @@ public class JUGAR extends JFrame {
     
    private void mostrarTablero(){
        
-       
-    getContentPane().removeAll();
-    getContentPane().setLayout(new BorderLayout());
+       removeAll();
+    setLayout(new BorderLayout());
     inicializarTablero();
 
     JPanel panelTop = new JPanel();
@@ -288,7 +305,12 @@ btnRetirar.addActionListener(e -> {
 String log = retirado + " SE HA RETIRADO, FELICIDADES " + ganador + ", HAS GANADO 3 PUNTOS";
     loginManager.guardarPartida(log);
 
-    JDialog dialogo = new JDialog(JUGAR.this, "Retiro", true);
+    JDialog dialogo = new JDialog(
+        (JFrame) javax.swing.SwingUtilities.getWindowAncestor(JUGAR.this),
+        "Retiro",
+        true
+    );    
+
     dialogo.setSize(360, 200);
     dialogo.setLocationRelativeTo(JUGAR.this);
     dialogo.setResizable(false);
@@ -323,7 +345,7 @@ String log = retirado + " SE HA RETIRADO, FELICIDADES " + ganador + ", HAS GANAD
     });
     btnOk.addActionListener(ev -> {
         dialogo.dispose();
-        dispose();
+    cardLayout.show(cardPanel, "menu");        
     });
 
     p2.add(lblMsg);
@@ -336,23 +358,33 @@ String log = retirado + " SE HA RETIRADO, FELICIDADES " + ganador + ", HAS GANAD
 
     dialogo.add(p2);
     dialogo.setVisible(true);
-});    btnVolver.addActionListener(e -> dispose());
+    
+    
+    
+});  
+
+        btnVolver.addActionListener(e -> {
+            cardLayout.show(cardPanel, "menu");
+            cardPanel.setMinimumSize(null);  // ← añade esto
+    cardPanel.setPreferredSize(null); 
+            cardPanel.revalidate();
+            cardPanel.repaint();
+        });
 
     panelBot.add(btnRetirar);
     panelBot.add(Box.createHorizontalStrut(12));
     panelBot.add(btnVolver);
 
     PanelTablero panelTablero = new PanelTablero();
+JPanel centro = new JPanel(new GridBagLayout());
+centro.setBackground(TABLERO_FONDO);
+centro.add(panelTablero);
 
-    getContentPane().add(panelTop,     BorderLayout.NORTH);
-    getContentPane().add(panelTablero, BorderLayout.CENTER);
-    getContentPane().add(panelBot,     BorderLayout.SOUTH);
-
+add(panelTop,     BorderLayout.NORTH);
+add(centro,       BorderLayout.CENTER);
+add(panelBot,     BorderLayout.SOUTH);
     revalidate();
     repaint();
-    pack();
-    setLocationRelativeTo(null);
-    setVisible(true);
 }
     
     
@@ -361,8 +393,8 @@ class PanelTablero extends JPanel {
 
     static final int COLS   = 9;
     static final int FILAS  = 10;
-    static final int CELDA  = 62;
-    static final int MARGEN = 45;
+    static final int CELDA  = 42;
+    static final int MARGEN = 40;
 private int filaSeleccionada = -1;
 private int colSeleccionada  = -1;
     public PanelTablero() {
@@ -407,7 +439,12 @@ addMouseListener(new MouseAdapter() {
                 String log = ganador + " venció a " + perdedor;
                 loginManager.guardarPartida(log);
 
-                JDialog dialogo = new JDialog(JUGAR.this, "Fin del Juego", true);
+            JDialog dialogo = new JDialog(
+                (JFrame) javax.swing.SwingUtilities.getWindowAncestor(JUGAR.this),
+                "Fin del Juego",
+                true
+            );              
+                
                 dialogo.setSize(360, 200);
                 dialogo.setLocationRelativeTo(JUGAR.this);
                 dialogo.setResizable(false);
@@ -441,11 +478,16 @@ addMouseListener(new MouseAdapter() {
                 jugador2 = null;
                 pedirOponente();
             });
-            btnOk.addActionListener(ev -> {
+            
+                btnOk.addActionListener(ev -> {
                 dialogo.dispose();
-                dispose();
+                cardLayout.show(cardPanel, "menu");
+                cardPanel.revalidate();
+                cardPanel.repaint();
             });
 
+            
+            
             p2.add(lblGanador);
             p2.add(Box.createVerticalStrut(10));
             p2.add(lblPuntos);
@@ -498,8 +540,8 @@ addMouseListener(new MouseAdapter() {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         dibujarLineas(g2);
         dibujarRio(g2);
-        dibujarPiezas(g2);
         dibujarPalacios(g2);
+        dibujarPiezas(g2);
     }
 
     private void dibujarLineas(Graphics2D g2) {

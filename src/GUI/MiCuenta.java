@@ -1,11 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package GUI;
 
 import Logic.Login_Manager;
 import Logic.Player;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -27,7 +26,7 @@ import java.awt.event.MouseAdapter;
  *
  * @author Dell
  */
-public class MiCuenta extends JFrame {
+public class MiCuenta extends JPanel {
       // ══════════════════════════════════════════
     //  COLORES
     // ══════════════════════════════════════════
@@ -55,25 +54,19 @@ public class MiCuenta extends JFrame {
     // ══════════════════════════════════════════
     private Login_Manager loginManager;
     private MENUPRINCIPAL menuPrincipal;
+    private CardLayout cardLayout;
+    private JPanel cardPanel;
     
-    
-    public MiCuenta(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal){
-        this.loginManager = loginManager;
-        this.menuPrincipal=menuPrincipal;
-        
-        setTitle("Mi cuenta");
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(900,600);
-        setLocationRelativeTo(null);
-        setResizable(false);
-        getContentPane().setBackground(FONDO);
-        setLayout(new GridBagLayout());
-        
-        
-        add(crearPanel());
-        setVisible(true);
-        
-    }
+   public MiCuenta(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal,
+                CardLayout cardLayout, JPanel cardPanel) {
+    this.loginManager = loginManager;
+    this.menuPrincipal = menuPrincipal;
+    this.cardLayout = cardLayout;
+    this.cardPanel = cardPanel;
+    setBackground(FONDO);
+    setLayout(new BorderLayout());
+    add(crearPanel(),BorderLayout.CENTER);
+}
     
     
     private JPanel crearPanel(){
@@ -83,7 +76,7 @@ public class MiCuenta extends JFrame {
        
         panel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(ACENTO, 1),
-            BorderFactory.createEmptyBorder(30, 40, 30, 40)
+            BorderFactory.createEmptyBorder(40, 80, 40, 80)
         ));
         
         JLabel titulo = new JLabel ("Mi cuenta");
@@ -108,8 +101,7 @@ public class MiCuenta extends JFrame {
         btnVerInfo.addActionListener(e     -> abrirVerInfo());
         btnCambiarPass.addActionListener(e -> abrirCambiarPassword());
         btnEliminar.addActionListener(e    -> abrirEliminarCuenta());
-        btnVolver.addActionListener(e      -> dispose());
-
+        btnVolver.addActionListener(e -> cardLayout.show(cardPanel, "menu"));
         panel.add(titulo);
         panel.add(Box.createVerticalStrut(4));
         panel.add(sub);
@@ -139,19 +131,19 @@ public class MiCuenta extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(ACENTO, 1),
-            BorderFactory.createEmptyBorder(25, 35, 25, 35)
+            BorderFactory.createEmptyBorder(40, 80, 40, 80)
         ));
-        panel.setPreferredSize(new Dimension(820,500));
+    panel.setPreferredSize(new Dimension(900,750));
         return panel;
     }
     
     private JDialog crearDialog(String titulo, int ancho, int alto){
-        JDialog dialog = new JDialog(this,titulo, true);
-        dialog.setSize(900,600);
+        JDialog dialog = new JDialog(menuPrincipal, titulo, true);   
+        dialog.setSize(menuPrincipal.getSize());
         dialog.setLocationRelativeTo(this);
         dialog.setResizable(false);
         dialog.getContentPane().setBackground(FONDO);
-        dialog.setLayout(new GridBagLayout());
+        dialog.setLayout(new BorderLayout());
         return dialog;
     }
     
@@ -208,10 +200,16 @@ public class MiCuenta extends JFrame {
      
      
      private void abrirVerInfo(){
-         JDialog dialog = crearDialog("Mi informacion",320,380);
          JPanel panel = crearPanelDialog();
-         
+         panel.setBackground(PANEL);
+         panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(ACENTO, 1),
+            BorderFactory.createEmptyBorder(40, 80, 40, 80)
+        ));             
          Player p = loginManager.getCurrentUser();
+         
+         
          
         JLabel titulo = new JLabel("Mi Información");
         titulo.setFont(FUENTE_TITULO);
@@ -222,9 +220,15 @@ public class MiCuenta extends JFrame {
         JLabel lblPuntos = crearLabelInfo("Puntos:  " + p.getPuntos());
         JLabel lblFecha = crearLabelInfo("Miembro desde: "+p.getFechaIngreso());
         JLabel lblActivo = crearLabelInfo("Activo: "+p.isActivo());
+        
         JButton btnCerrar = crearBoton("Cerrar", BTN_SECUNDARIO, ACENTO);
-        btnCerrar.addActionListener(e -> dialog.dispose());
-
+        
+ btnCerrar.addActionListener(e -> {
+        removeAll();
+        add(crearPanel(), BorderLayout.CENTER);
+        revalidate();
+        repaint();
+    });
         panel.add(titulo);
         panel.add(Box.createVerticalStrut(20));
         panel.add(lblUser);
@@ -237,15 +241,19 @@ public class MiCuenta extends JFrame {
         panel.add(Box.createVerticalStrut(25));
         panel.add(btnCerrar);
 
-        dialog.add(panel);
-        dialog.setVisible(true);
+        removeAll(); setLayout(new BorderLayout()); add(panel, BorderLayout.CENTER); revalidate(); repaint();
      }
      
      
       private void abrirCambiarPassword() {
-        JDialog dialog = crearDialog("Cambiar Password", 360, 320);
         JPanel panel   = crearPanelDialog();
-
+        panel.setBackground(PANEL);
+        panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(ACENTO, 1),
+            BorderFactory.createEmptyBorder(40, 80, 40, 80)
+        ));        
+        
         JLabel titulo = new JLabel("Cambiar Password");
         titulo.setFont(FUENTE_TITULO);
         titulo.setForeground(ACENTO);
@@ -259,7 +267,6 @@ public class MiCuenta extends JFrame {
         lblMensaje.setAlignmentX(CENTER_ALIGNMENT);
 
         JButton btnGuardar  = crearBoton("Guardar",   BTN_PRIMARIO,   Color.WHITE);
-        JButton btnCancelar = crearBoton("Cancelar",  BTN_SECUNDARIO, ACENTO);
 
         btnGuardar.addActionListener(e -> {
             String nuevoPass = new String(campoNuevo.getPassword());
@@ -274,8 +281,14 @@ public class MiCuenta extends JFrame {
             }
         });
 
-        btnCancelar.addActionListener(e -> dialog.dispose());
-
+        JButton btnCancelar = crearBoton("Cerrar", BTN_SECUNDARIO, ACENTO);
+            btnCancelar.addActionListener(e -> {
+                removeAll();
+                add(crearPanel(), BorderLayout.CENTER);
+                revalidate();
+                repaint();
+            });
+            
         panel.add(titulo);
         panel.add(Box.createVerticalStrut(20));
         panel.add(lblNuevo);
@@ -288,14 +301,17 @@ public class MiCuenta extends JFrame {
         panel.add(Box.createVerticalStrut(8));
         panel.add(btnCancelar);
 
-        dialog.add(panel);
-        dialog.setVisible(true);
+        removeAll(); setLayout(new BorderLayout()); add(panel, BorderLayout.CENTER); revalidate(); repaint();
     }
       
         private void abrirEliminarCuenta() {
-        JDialog dialog = crearDialog("Eliminar Cuenta", 360, 310);
         JPanel panel   = crearPanelDialog();
-
+        panel.setBackground(PANEL);
+        panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(ACENTO, 1),
+            BorderFactory.createEmptyBorder(40, 80, 40, 80)
+        ));        
         JLabel titulo = new JLabel("Eliminar Cuenta");
         titulo.setFont(FUENTE_TITULO);
         titulo.setForeground(BTN_PELIGRO);
@@ -314,7 +330,6 @@ public class MiCuenta extends JFrame {
         lblMensaje.setAlignmentX(CENTER_ALIGNMENT);
 
         JButton btnConfirmar = crearBoton("Eliminar mi Cuenta", BTN_PELIGRO,    Color.WHITE);
-        JButton btnCancelar  = crearBoton("Cancelar",           BTN_SECUNDARIO, ACENTO);
 
         btnConfirmar.addActionListener(e -> {
             String passIngresado = new String(campoConfirm.getPassword());
@@ -327,14 +342,17 @@ public class MiCuenta extends JFrame {
             }
 
             loginManager.eliminarCuenta();
-            dialog.dispose();
-            dispose();
-            menuPrincipal.dispose();
+           menuPrincipal.dispose();
             menuPrincipal.volverAlLogin();
         });
 
-        btnCancelar.addActionListener(e -> dialog.dispose());
-
+        JButton btnCancelar = crearBoton("Cerrar", BTN_SECUNDARIO, ACENTO);
+            btnCancelar.addActionListener(e -> {
+                removeAll();
+                add(crearPanel(), BorderLayout.CENTER);
+                revalidate();
+                repaint();
+            });
         panel.add(titulo);
         panel.add(Box.createVerticalStrut(6));
         panel.add(advertencia);
@@ -349,8 +367,7 @@ public class MiCuenta extends JFrame {
         panel.add(Box.createVerticalStrut(8));
         panel.add(btnCancelar);
 
-        dialog.add(panel);
-        dialog.setVisible(true);
+        removeAll(); setLayout(new BorderLayout()); add(panel, BorderLayout.CENTER); revalidate(); repaint();
     }
 
 }

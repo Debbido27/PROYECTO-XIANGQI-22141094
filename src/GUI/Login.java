@@ -2,6 +2,7 @@
 package GUI;
 
 import Logic.Login_Manager;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -54,21 +55,20 @@ public class Login extends JFrame {
         setLocationRelativeTo(null);
         setResizable(true);
         getContentPane().setBackground(FONDO);
-        setLayout(new GridBagLayout());
+        setLayout(new BorderLayout());
         manager = new Login_Manager();
-        add(crearPanel());
+        add(crearPanel(),BorderLayout.CENTER);
         setVisible(true);
     }
 
     
     private JPanel crearPanel(){
       JPanel panel = new JPanel();
-      panel.setPreferredSize(new Dimension(420, 420));
       panel.setBackground(PANEL);
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
       panel.setBorder(BorderFactory.createCompoundBorder(
       BorderFactory.createLineBorder(ACENTO,1),
-      BorderFactory.createEmptyBorder(30,40,30,40)
+      BorderFactory.createEmptyBorder(40,80,40,80)
       ));
       mensajeField = new JTextField(" "); 
         mensajeField.setEditable(false);

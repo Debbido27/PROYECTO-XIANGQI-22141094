@@ -3,6 +3,8 @@ package GUI;
 
 import Logic.Login_Manager;
 import Logic.Player;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -24,7 +26,7 @@ import java.awt.event.MouseAdapter;
  *
  * @author Dell
  */
-public class Reportes extends JFrame {
+public class Reportes extends JPanel {
    
     static final Color FONDO          = new Color(18, 18, 24);
     static final Color PANEL          = new Color(28, 28, 38);
@@ -40,24 +42,24 @@ public class Reportes extends JFrame {
     static final Font FUENTE_LABEL  = new Font("SansSerif", Font.PLAIN, 12);
     static final Font FUENTE_BOTON  = new Font("SansSerif", Font.BOLD,  13);
     static final Font FUENTE_ITEM   = new Font("SansSerif", Font.PLAIN, 13);
-
+    
    
     private Login_Manager loginManager;
+    private MENUPRINCIPAL menuPrincipal;
+    private CardLayout cardLayout;
+    private JPanel cardPanel;
     
-    public Reportes(Login_Manager loginManager){
-        this.loginManager=loginManager;
-        
-        setTitle("Reportes");
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(400, 420);
-        setLocationRelativeTo(null);
-        setResizable(false);
-        getContentPane().setBackground(FONDO);
-        setLayout(new GridBagLayout());
-
-        add(crearPanel());
-        setVisible(true);
-    }
+    
+    public Reportes(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal,
+                CardLayout cardLayout, JPanel cardPanel) {
+    this.loginManager = loginManager;
+    this.menuPrincipal = menuPrincipal;
+    this.cardLayout = cardLayout;
+    this.cardPanel = cardPanel;
+    setBackground(FONDO);
+    setLayout(new BorderLayout());
+    add(crearPanel(),BorderLayout.CENTER);
+}
     
     
     private JPanel crearPanel() {
@@ -66,7 +68,7 @@ public class Reportes extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(ACENTO, 1),
-            BorderFactory.createEmptyBorder(30, 40, 30, 40)
+            BorderFactory.createEmptyBorder(40, 80, 40, 80)
         ));
 
         JLabel titulo = new JLabel("Reportes");
@@ -84,7 +86,7 @@ public class Reportes extends JFrame {
 
         btnRanking.addActionListener(e -> abrirRanking());
         btnLogs.addActionListener(e    -> abrirLogs());
-        btnVolver.addActionListener(e  -> dispose());
+        btnVolver.addActionListener(e -> cardLayout.show(cardPanel, "menu"));
 
         panel.add(titulo);
         panel.add(Box.createVerticalStrut(20));
@@ -100,13 +102,16 @@ public class Reportes extends JFrame {
     }
     
     private void abrirRanking(){
-        JDialog dialog = crearDialog("Ranking de Jugadores", 400, 420);
+         removeAll();
+    setLayout(new BorderLayout());
 
         JPanel panel = new JPanel();
         panel.setBackground(PANEL);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
-
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(ACENTO, 1),
+                BorderFactory.createEmptyBorder(40, 80, 40, 80)
+            ));
         JLabel titulo = new JLabel("Ranking de Jugadores");
         titulo.setFont(FUENTE_TITULO);
         titulo.setForeground(ACENTO);
@@ -150,29 +155,37 @@ public class Reportes extends JFrame {
         }
 
         panel.add(Box.createVerticalStrut(10));
-        JButton btnCerrar = crearBoton("Cerrar", BTN_SECUNDARIO, ACENTO);
-        btnCerrar.addActionListener(e -> dialog.dispose());
-        panel.add(btnCerrar);
+        JButton btnCerrar = crearBoton("Volver", BTN_SECUNDARIO, ACENTO);
+        
+    btnCerrar.addActionListener(e -> {
+        removeAll();
+        add(crearPanel(), BorderLayout.CENTER);
+        revalidate();
+        repaint();
+    });
+    panel.add(btnCerrar);
 
         JScrollPane scroll = new JScrollPane(panel);
         scroll.setBorder(BorderFactory.createLineBorder(ACENTO, 1));
         scroll.getViewport().setBackground(PANEL);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        dialog.setLayout(new java.awt.BorderLayout());
-        dialog.add(scroll);
-        dialog.setVisible(true);
+        add(panel, BorderLayout.CENTER);
+        revalidate();
+        repaint();
 
     }
     
     private void abrirLogs(){
-         JDialog dialog = crearDialog("Mis Últimos Juegos", 400, 420);
-
+    removeAll();
+    setLayout(new BorderLayout());
         JPanel panel = new JPanel();
         panel.setBackground(PANEL);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
-
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(ACENTO, 1),
+                BorderFactory.createEmptyBorder(40, 80, 40, 80)
+            ));
         JLabel titulo = new JLabel("Mis Últimos Juegos");
         titulo.setFont(FUENTE_TITULO);
         titulo.setForeground(ACENTO);
@@ -205,31 +218,26 @@ public class Reportes extends JFrame {
         }
 
         panel.add(Box.createVerticalStrut(10));
-        JButton btnCerrar = crearBoton("Cerrar", BTN_SECUNDARIO, ACENTO);
-        btnCerrar.addActionListener(e -> dialog.dispose());
-        panel.add(btnCerrar);
+        JButton btnCerrar = crearBoton("Volver", BTN_SECUNDARIO, ACENTO);
+    btnCerrar.addActionListener(e -> {
+        removeAll();
+        add(crearPanel(), BorderLayout.CENTER);
+        revalidate();
+        repaint();
+    });
+    panel.add(btnCerrar);
 
-        JScrollPane scroll = new JScrollPane(panel);
-        scroll.setBorder(BorderFactory.createLineBorder(ACENTO, 1));
-        scroll.getViewport().setBackground(PANEL);
-        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+      
 
-        dialog.setLayout(new java.awt.BorderLayout());
-        dialog.add(scroll);
-        dialog.setVisible(true);
+    add(panel, BorderLayout.CENTER);
+    revalidate();
+    repaint();
 
     }
     
     //helpers
     
- private JDialog crearDialog(String titulo, int ancho, int alto) {
-        JDialog dialog = new JDialog(this, titulo, true);
-        dialog.setSize(ancho, alto);
-        dialog.setLocationRelativeTo(this);
-        dialog.setResizable(false);
-        dialog.getContentPane().setBackground(FONDO);
-        return dialog;
-    }
+
 
     private JButton crearBoton(String texto, Color fondo, Color colorTexto) {
         JButton btn = new JButton(texto);
