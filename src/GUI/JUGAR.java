@@ -73,6 +73,9 @@ public class JUGAR extends JPanel {
     private Pieza[][] tablero;
     private CardLayout cardLayout;
     private JPanel cardPanel;
+    
+    
+    
 public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal, java.awt.CardLayout cardLayout, JPanel cardPanel){
         this.loginManager=loginManager;
         this.menuPrincipal=menuPrincipal;
@@ -415,65 +418,57 @@ addMouseListener(new MouseAdapter() {
                 String log = ganador + " venció a " + perdedor;
                 loginManager.guardarPartida(log);
 
-            JDialog dialogo = new JDialog(
-                (JFrame) javax.swing.SwingUtilities.getWindowAncestor(JUGAR.this),
-                "Fin del Juego",
-                true
-            );              
                 
-                dialogo.setSize(360, 200);
-                dialogo.setLocationRelativeTo(JUGAR.this);
-                dialogo.setResizable(false);
-                dialogo.getContentPane().setBackground(FONDO);
-                dialogo.setLayout(new GridBagLayout());
+                
+                
+                            removeAll();
+              setLayout(new BorderLayout());
 
-                JPanel p2 = new JPanel();
-                p2.setBackground(PANEL);
-                p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
-                p2.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(ACENTO, 1),
-                    BorderFactory.createEmptyBorder(20, 30, 20, 30)
-                ));
+              JPanel panel = new JPanel();
+              panel.setBackground(PANEL);
+              panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+              panel.setBorder(BorderFactory.createCompoundBorder(
+                  BorderFactory.createLineBorder(ACENTO, 1),
+                  BorderFactory.createEmptyBorder(40, 80, 40, 80)
+              ));
 
-                JLabel lblGanador = new JLabel(ganador + " VENCIÓ A " + perdedor);
-                lblGanador.setFont(FUENTE_TITULO);
-                lblGanador.setForeground(ACENTO);
-                lblGanador.setAlignmentX(CENTER_ALIGNMENT);
+              JLabel lblGanador = new JLabel(ganador + " VENCIÓ A " + perdedor);
+              lblGanador.setFont(FUENTE_TITULO);
+              lblGanador.setForeground(ACENTO);
+              lblGanador.setAlignmentX(CENTER_ALIGNMENT);
 
-                JLabel lblPuntos = new JLabel("Has ganado 3 puntos!");
-                lblPuntos.setFont(FUENTE_LABEL);
-                lblPuntos.setForeground(TEXTO_TENUE);
-                lblPuntos.setAlignmentX(CENTER_ALIGNMENT);
+              JLabel lblPuntos = new JLabel("Has ganado 3 puntos!");
+              lblPuntos.setFont(FUENTE_LABEL);
+              lblPuntos.setForeground(TEXTO_TENUE);
+              lblPuntos.setAlignmentX(CENTER_ALIGNMENT);
 
-                JButton btnOtra = crearBoton("Jugar Otra Partida", BTN_SECUNDARIO, ACENTO);
-            JButton btnOk   = crearBoton("Volver al Menu",     ACENTO,         Color.WHITE);
+              JButton btnOtra = crearBoton("Jugar Otra Partida", BTN_SECUNDARIO, ACENTO);
+              JButton btnOk = crearBoton("Volver al Menu", ACENTO, Color.WHITE);
 
-            btnOtra.addActionListener(ev -> {
-                dialogo.dispose();
-                turnoRojo = true;
-                jugador2 = null;
-                pedirOponente();
-            });
-            
-                btnOk.addActionListener(ev -> {
-                dialogo.dispose();
-                cardLayout.show(cardPanel, "menu");
-                cardPanel.revalidate();
-                cardPanel.repaint();
-            });
+              btnOtra.addActionListener(ev -> {
+                  turnoRojo = true;
+                  jugador2 = null;
+                  pedirOponente();
+              });
 
-            
-            
-            p2.add(lblGanador);
-            p2.add(Box.createVerticalStrut(10));
-            p2.add(lblPuntos);
-            p2.add(Box.createVerticalStrut(20));
-            p2.add(btnOtra);
-            p2.add(Box.createVerticalStrut(8));
-            p2.add(btnOk);
-                dialogo.add(p2);
-                dialogo.setVisible(true);
-                return;
+              btnOk.addActionListener(ev -> {
+                  cardLayout.show(cardPanel, "menu");
+                  cardPanel.revalidate();
+                  cardPanel.repaint();
+              });
+
+              panel.add(lblGanador);
+              panel.add(Box.createVerticalStrut(10));
+              panel.add(lblPuntos);
+              panel.add(Box.createVerticalStrut(20));
+              panel.add(btnOtra);
+              panel.add(Box.createVerticalStrut(8));
+              panel.add(btnOk);
+
+              add(panel, BorderLayout.CENTER);
+              revalidate();
+              repaint();
+              return;
             }
 
 
