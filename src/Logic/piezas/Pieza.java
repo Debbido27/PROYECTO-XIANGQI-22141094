@@ -8,13 +8,19 @@ package Logic.piezas;
 public abstract class Pieza {
     protected int fila;
     protected int columna;
-    protected boolean isR;
+    public boolean isR;
     
     public Pieza(int fila, int columna, boolean isR){
         this.fila=fila;
         this.columna=columna;
         this.isR=isR;
     }
+    
+    protected boolean enPalacio(int f, int c) {
+    if (c < 3 || c > 5) return false;
+    if (isR) return f >= 7 && f <= 9;
+    else return f >= 0 && f <= 2;
+}
     
     
     //metodos abstractos
@@ -47,7 +53,7 @@ public abstract class Pieza {
     public void setIsR(boolean isR) {
         this.isR = isR;
     }
-    
+    public abstract TipoPieza getTipo();
    
     protected final boolean enTablero(int f, int c){
        return f >= 0 && f < 10 && c >= 0 && c < 9;
@@ -60,7 +66,15 @@ public abstract class Pieza {
     }
     
     
-    
+    public static final boolean generalesMirando(Pieza[][] tablero, int fReyR, int cReyR, int fReyN, int cReyN) {
+    if (cReyR != cReyN) return false;
+    int minF = Math.min(fReyR, fReyN);
+    int maxF = Math.max(fReyR, fReyN);
+    for (int i = minF + 1; i < maxF; i++) {
+        if (tablero[i][cReyR] != null) return false;
+    }
+    return true;
+}
     
     
 }

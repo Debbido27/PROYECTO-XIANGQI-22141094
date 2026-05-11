@@ -4,14 +4,10 @@
         import static GUI.JUGAR.PanelTablero.MARGEN;
         import Logic.Login_Manager;
         import Logic.Player;
-        import Logic.piezas.Caballo;
-        import Logic.piezas.Canon;
-        import Logic.piezas.Carro;
-        import Logic.piezas.Consejero;
-        import Logic.piezas.Elefante;
-        import Logic.piezas.General;
+   
         import Logic.piezas.Pieza;
-        import Logic.piezas.Soldado;
+import Logic.piezas.PiezaConcreta;
+import Logic.piezas.TipoPieza;
         import java.awt.BasicStroke;
         import java.awt.BorderLayout;
         import java.awt.CardLayout;
@@ -224,50 +220,49 @@
 
 
 
+private void inicializarTablero() {
+    tablero = new Pieza[10][9];
 
+    // === PIEZAS NEGRAS (arriba) ===
+    tablero[0][0] = new PiezaConcreta(0, 0, false, TipoPieza.CARRO);
+    tablero[0][1] = new PiezaConcreta(0, 1, false, TipoPieza.CABALLO);
+    tablero[0][2] = new PiezaConcreta(0, 2, false, TipoPieza.ELEFANTE);
+    tablero[0][3] = new PiezaConcreta(0, 3, false, TipoPieza.CONSEJERO);
+    tablero[0][4] = new PiezaConcreta(0, 4, false, TipoPieza.GENERAL);
+    tablero[0][5] = new PiezaConcreta(0, 5, false, TipoPieza.CONSEJERO);
+    tablero[0][6] = new PiezaConcreta(0, 6, false, TipoPieza.ELEFANTE);
+    tablero[0][7] = new PiezaConcreta(0, 7, false, TipoPieza.CABALLO);
+    tablero[0][8] = new PiezaConcreta(0, 8, false, TipoPieza.CARRO);
 
-         ///METODO INCIALIZAR TABLERO
+    tablero[2][1] = new PiezaConcreta(2, 1, false, TipoPieza.CANON);
+    tablero[2][7] = new PiezaConcreta(2, 7, false, TipoPieza.CANON);
 
-        private void inicializarTablero() {
-        tablero = new Pieza[10][9];
+    tablero[3][0] = new PiezaConcreta(3, 0, false, TipoPieza.SOLDADO);
+    tablero[3][2] = new PiezaConcreta(3, 2, false, TipoPieza.SOLDADO);
+    tablero[3][4] = new PiezaConcreta(3, 4, false, TipoPieza.SOLDADO);
+    tablero[3][6] = new PiezaConcreta(3, 6, false, TipoPieza.SOLDADO);
+    tablero[3][8] = new PiezaConcreta(3, 8, false, TipoPieza.SOLDADO);
 
-        tablero[0][0] = new Carro(0, 0, false);
-        tablero[0][1] = new Caballo(0, 1, false);
-        tablero[0][2] = new Elefante(0, 2, false);
-        tablero[0][3] = new Consejero(0, 3, false);
-        tablero[0][4] = new General(0, 4, false);
-        tablero[0][5] = new Consejero(0, 5, false);
-        tablero[0][6] = new Elefante(0, 6, false);
-        tablero[0][7] = new Caballo(0, 7, false);
-        tablero[0][8] = new Carro(0, 8, false);
-        tablero[2][1] = new Canon(2, 1, false);
-        tablero[2][7] = new Canon(2, 7, false);
-        tablero[3][0] = new Soldado(3, 0, false);
-        tablero[3][2] = new Soldado(3, 2, false);
-        tablero[3][4] = new Soldado(3, 4, false);
-        tablero[3][6] = new Soldado(3, 6, false);
-        tablero[3][8] = new Soldado(3, 8, false);
+    // === PIEZAS ROJAS (abajo) ===
+    tablero[9][0] = new PiezaConcreta(9, 0, true, TipoPieza.CARRO);
+    tablero[9][1] = new PiezaConcreta(9, 1, true, TipoPieza.CABALLO);
+    tablero[9][2] = new PiezaConcreta(9, 2, true, TipoPieza.ELEFANTE);
+    tablero[9][3] = new PiezaConcreta(9, 3, true, TipoPieza.CONSEJERO);
+    tablero[9][4] = new PiezaConcreta(9, 4, true, TipoPieza.GENERAL);
+    tablero[9][5] = new PiezaConcreta(9, 5, true, TipoPieza.CONSEJERO);
+    tablero[9][6] = new PiezaConcreta(9, 6, true, TipoPieza.ELEFANTE);
+    tablero[9][7] = new PiezaConcreta(9, 7, true, TipoPieza.CABALLO);
+    tablero[9][8] = new PiezaConcreta(9, 8, true, TipoPieza.CARRO);
 
-        tablero[9][0] = new Carro(9, 0, true);
-        tablero[9][1] = new Caballo(9, 1, true);
-        tablero[9][2] = new Elefante(9, 2, true);
-        tablero[9][3] = new Consejero(9, 3, true);
-        tablero[9][4] = new General(9, 4, true);
-        tablero[9][5] = new Consejero(9, 5, true);
-        tablero[9][6] = new Elefante(9, 6, true);
-        tablero[9][7] = new Caballo(9, 7, true);
-        tablero[9][8] = new Carro(9, 8, true);
-        tablero[7][1] = new Canon(7, 1, true);
-        tablero[7][7] = new Canon(7, 7, true);
-        tablero[6][0] = new Soldado(6, 0, true);
-        tablero[6][2] = new Soldado(6, 2, true);
-        tablero[6][4] = new Soldado(6, 4, true);
-        tablero[6][6] = new Soldado(6, 6, true);
-        tablero[6][8] = new Soldado(6, 8, true);
-        }
+    tablero[7][1] = new PiezaConcreta(7, 1, true, TipoPieza.CANON);
+    tablero[7][7] = new PiezaConcreta(7, 7, true, TipoPieza.CANON);
 
-
-
+    tablero[6][0] = new PiezaConcreta(6, 0, true, TipoPieza.SOLDADO);
+    tablero[6][2] = new PiezaConcreta(6, 2, true, TipoPieza.SOLDADO);
+    tablero[6][4] = new PiezaConcreta(6, 4, true, TipoPieza.SOLDADO);
+    tablero[6][6] = new PiezaConcreta(6, 6, true, TipoPieza.SOLDADO);
+    tablero[6][8] = new PiezaConcreta(6, 8, true, TipoPieza.SOLDADO);
+}
 
 
 
@@ -279,33 +274,27 @@
 //METODO PARA VALIDAR GENERALES ENFRENTADOS
 
         private boolean generalesEnfrentados() {
-
-         int filaRojo = -1, colRojo = -1;
-         int filaNegro = -1, colNegro = -1;
-
-         for (int i = 0; i < 10; i++) {
-             for (int j = 0; j < 9; j++) {
-                 Pieza p = tablero[i][j];
-
-                 if (p instanceof General) {
-                     if (p.isIsR()) {
-                         filaRojo = i;
-                         colRojo = j;
-                     } else {
-                         filaNegro = i;
-                         colNegro = j;
-                     }
-                 }
-             }
-         }
-
-         return General.generalesMirando(
-             tablero,
-             filaRojo, colRojo,
-             filaNegro, colNegro
-        );
+    int fR = -1, cR = -1, fN = -1, cN = -1;
+    
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 9; j++) {
+            Pieza p = tablero[i][j];
+            if (p != null && p.getTipo() == TipoPieza.GENERAL) {
+                if (p.isR) {
+                    fR = i;
+                    cR = j;
+                } else {
+                    fN = i;
+                    cN = j;
+                }
+            }
         }
-
+    }
+    
+    if (fR == -1 || fN == -1) return false;
+    
+    return Pieza.generalesMirando(tablero, fR, cR, fN, cN);
+}
 
 
 
@@ -593,14 +582,15 @@
         tablero[f][c] = origen;
         tablero[filaSeleccionada][colSeleccionada] = null;
 
-        if (comidaLocal instanceof General) {
+        if (comidaLocal != null && comidaLocal.getTipo() == TipoPieza.GENERAL) {
         String ganador = turnoRojo ? jugador1 : jugador2;
         String perdedor = turnoRojo ? jugador2 : jugador1;
 
         Player pGanador = loginManager.buscarPlayer(ganador);
         if (pGanador != null) {
-        pGanador.setPuntos(pGanador.getPuntos() + 3);
+            pGanador.setPuntos(pGanador.getPuntos() + 3);
         }
+
 
         String log = ganador + " venció a " + perdedor;
         loginManager.guardarPartida(log);
@@ -835,7 +825,6 @@
             g2.setColor(new Color(255, 255, 0, 120));
             g2.fillOval(x - tam/2 - 3, y - tam/2 - 3, tam + 6, tam + 6);
         }
-
         Image img = cargarImagen(p.getSimbolo());
         if (img != null) {
             g2.drawImage(img, x - 24, y - 24, this); 
