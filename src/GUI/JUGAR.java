@@ -144,10 +144,12 @@ public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal, java.awt.C
         JButton btnJugar   = crearBoton("Jugar",    ACENTO,         Color.WHITE);
         JButton btnCancelar = crearBoton("Cancelar", BTN_SECUNDARIO, ACENTO);
         
+        
+        
                 btnJugar.addActionListener(e -> {
                     
             String oponente = campoOponente.getText().trim();
-
+    try {
             
             if (oponente.isEmpty()) {
                 lblMensaje.setForeground(new Color(200, 60, 60));
@@ -168,6 +170,11 @@ public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal, java.awt.C
 
             jugador2 = oponente;
             mostrarTablero();
+            
+                } catch (Exception ex) {
+        lblMensaje.setForeground(new Color(200, 60, 60));
+        lblMensaje.setText("Error: " + ex.getMessage());
+    }
         });
 
    
@@ -175,6 +182,8 @@ public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal, java.awt.C
             cardLayout.show(cardPanel, "menu");
             cardPanel.revalidate();
             cardPanel.repaint();
+            
+            
         });
 
                 
@@ -245,6 +254,10 @@ public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal, java.awt.C
     
    private void mostrarTablero(){
        
+       
+           if (jugador2 == null || jugador2.trim().isEmpty()) return;
+           
+           
        removeAll();
     setLayout(new BorderLayout());
     inicializarTablero();
@@ -284,7 +297,13 @@ public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal, java.awt.C
     btnRetirar.setMaximumSize(new Dimension(150, 38));
 
 btnRetirar.addActionListener(e -> {
+
+
+try{
      int confirm = JOptionPane.showConfirmDialog(JUGAR.this, "¿Seguro que quieres retirarte? Perderás la partida.", "Confirmar retiro", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+     if (confirm != JOptionPane.YES_OPTION) {
+    return;
+}
     String ganador  = turnoRojo ? jugador1 : jugador2;
     String retirado = turnoRojo ? jugador2 : jugador1;
 
@@ -346,7 +365,9 @@ add(panel, BorderLayout.CENTER);
 revalidate();
 repaint();    
     
-    
+      } catch (Exception ex) {
+        JOptionPane.showMessageDialog(JUGAR.this, "Error al retirarse: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }  
 });  
 
       
@@ -364,6 +385,8 @@ add(centro,       BorderLayout.CENTER);
 add(panelBot,     BorderLayout.SOUTH);
     revalidate();
     repaint();
+    
+    
 }
     
     
@@ -398,10 +421,29 @@ addMouseListener(new MouseAdapter() {
 
         if (!enTablero(f, c)) return;
 
+        
+        
+        if (filaSeleccionada != -1 && (filaSeleccionada < 0 || filaSeleccionada >= 10 || colSeleccionada < 0 || colSeleccionada >= 9)) {
+            filaSeleccionada = -1;
+            colSeleccionada = -1;
+            repaint();
+            return;
+        }
+        
+        if (tablero[filaSeleccionada][colSeleccionada] == null) {
+                filaSeleccionada = -1;
+                colSeleccionada = -1;
+                repaint();
+                return;
+            }
+        
         if (filaSeleccionada != -1) {
              Pieza comida = tablero[f][c];
             boolean[][] moves = tablero[filaSeleccionada][colSeleccionada].getMoveValido(tablero);
-            if (moves[f][c]) {
+            
+   
+             
+           if (moves != null && moves[f][c]) {
                 tablero[f][c] = tablero[filaSeleccionada][colSeleccionada];
                 tablero[filaSeleccionada][colSeleccionada] = null;
                 
@@ -494,13 +536,26 @@ addMouseListener(new MouseAdapter() {
             colSeleccionada  = c;
         }
         repaint();
-        }catch(Exception ex){
-            
+        
+        } catch (NullPointerException ex) {
+            filaSeleccionada = -1;
+            colSeleccionada = -1;
+            repaint();
+            JOptionPane.showMessageDialog(PanelTablero.this, "Error al mover pieza", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(
+                PanelTablero.this,
+                "Error inesperado",
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+            );
         }
     }
 });
-    }
-
+}
+            
+            
     private boolean enTablero(int f, int c) {
     return f >= 0 && f < 10 && c >= 0 && c < 9;
 }
