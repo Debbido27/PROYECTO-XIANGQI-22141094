@@ -13,6 +13,19 @@ public final class General extends Pieza {
         return isR ? "将" : "帅";
     }
     
+            @Override
+        public void setFila(int fila) {
+            if (enPalacio(fila, this.columna)) {
+                this.fila = fila;
+            }
+        }
+
+        @Override
+        public void setColumna(int columna) {
+            if (enPalacio(this.fila, columna)) {
+                this.columna = columna;
+            }
+        }
     @Override
     public boolean[][] getMoveValido(Pieza[][] tablero){
         boolean [][] movimientos = new boolean[10][9];
@@ -33,6 +46,15 @@ public final class General extends Pieza {
             
         }
     
+    public static boolean generalesMirando(Pieza[][] tablero, int fReyR, int cReyR, int fReyN, int cReyN) {
+    if (cReyR != cReyN) return false;
+    int minF = Math.min(fReyR, fReyN);
+    int maxF = Math.max(fReyR, fReyN);
+    for (int i = minF + 1; i < maxF; i++) {
+        if (tablero[i][cReyR] != null) return false;
+    }
+    return true;
+}
     
     public final boolean estaEnPalacio(){
         return enPalacio(fila,columna);

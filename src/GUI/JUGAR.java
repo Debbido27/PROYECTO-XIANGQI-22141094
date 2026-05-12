@@ -146,36 +146,30 @@ public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal, java.awt.C
         
         
         
-                btnJugar.addActionListener(e -> {
-                    
-            String oponente = campoOponente.getText().trim();
-    try {
-            
-            if (oponente.isEmpty()) {
-                lblMensaje.setForeground(new Color(200, 60, 60));
-                lblMensaje.setText("Ingresa un username.");
-                return;
-            }
-            if (oponente.equals(jugador1)) {
-                lblMensaje.setForeground(new Color(200, 60, 60));
-                lblMensaje.setText("No puedes jugar contra ti mismo.");
-                return;
-            }
-            Player p = loginManager.buscarPlayer(oponente);
-            if (p == null) {
-                lblMensaje.setForeground(new Color(200, 60, 60));
-                lblMensaje.setText("El jugador no existe.");
-                return;
-            }
+             btnJugar.addActionListener(e -> {
+                String oponente = campoOponente.getText().trim();
 
-            jugador2 = oponente;
-            mostrarTablero();
-            
-                } catch (Exception ex) {
-        lblMensaje.setForeground(new Color(200, 60, 60));
-        lblMensaje.setText("Error: " + ex.getMessage());
-    }
-        });
+                if (oponente.isEmpty()) {
+                    lblMensaje.setForeground(new Color(200, 60, 60));
+                    lblMensaje.setText("Ingresa un username.");
+                    return;
+                }
+                if (oponente.equals(jugador1)) {
+                    lblMensaje.setForeground(new Color(200, 60, 60));
+                    lblMensaje.setText("No puedes jugar contra ti mismo.");
+                    return;
+                }
+
+                Player p = loginManager.buscarPlayer(oponente);
+                if (p == null) {
+                    lblMensaje.setForeground(new Color(200, 60, 60));
+                    lblMensaje.setText("El jugador no existe.");
+                    return;
+                }
+
+                jugador2 = oponente;
+                mostrarTablero();
+            });
 
    
              btnCancelar.addActionListener(e -> {
@@ -255,9 +249,15 @@ public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal, java.awt.C
    private void mostrarTablero(){
        
        
+       
+       
            if (jugador2 == null || jugador2.trim().isEmpty()) return;
            
-           
+       if (loginManager == null) {
+        JOptionPane.showMessageDialog(this, "Error interno: LoginManager no inicializado");
+        return;
+    }    
+          
        removeAll();
     setLayout(new BorderLayout());
     inicializarTablero();
@@ -299,7 +299,7 @@ public JUGAR(Login_Manager loginManager, MENUPRINCIPAL menuPrincipal, java.awt.C
 btnRetirar.addActionListener(e -> {
 
 
-try{
+
      int confirm = JOptionPane.showConfirmDialog(JUGAR.this, "¿Seguro que quieres retirarte? Perderás la partida.", "Confirmar retiro", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
      if (confirm != JOptionPane.YES_OPTION) {
     return;
@@ -364,10 +364,7 @@ panel.add(btnOk);
 add(panel, BorderLayout.CENTER);
 revalidate();
 repaint();    
-    
-      } catch (Exception ex) {
-        JOptionPane.showMessageDialog(JUGAR.this, "Error al retirarse: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }  
+      
 });  
 
       
@@ -389,6 +386,50 @@ add(panelBot,     BorderLayout.SOUTH);
     
 }
     
+   
+   
+   
+   
+   
+   private boolean generalesEnJaque() {
+
+    int fRojo = -1;
+    int cRojo = -1;
+
+    int fNegro = -1;
+    int cNegro = -1;
+
+    for (int f = 0; f < 10; f++) {
+
+        for (int c = 0; c < 9; c++) {
+
+            Pieza p = tablero[f][c];
+
+            if (p instanceof General) {
+
+                if (p.isIsR()) {
+
+                    fRojo = f;
+                    cRojo = c;
+
+                } else {
+
+                    fNegro = f;
+                    cNegro = c;
+                }
+            }
+        }
+    }
+
+    return General.generalesMirando(
+            tablero,
+            fRojo, cRojo,
+            fNegro, cNegro
+    );
+}
+   
+   
+   
     
     
 class PanelTablero extends JPanel {
@@ -412,8 +453,7 @@ addMouseListener(new MouseAdapter() {
     public void mouseClicked(MouseEvent e) {
         
         
-        //try
-        try{
+        
             
         
         int c = (e.getX() - MARGEN + CELDA / 2) / CELDA;
@@ -430,24 +470,58 @@ addMouseListener(new MouseAdapter() {
             return;
         }
         
-        if (tablero[filaSeleccionada][colSeleccionada] == null) {
+       
+        
+        if (filaSeleccionada != -1) {
+            Pieza piezaSeleccionada = tablero[filaSeleccionada][colSeleccionada];
+                    if (piezaSeleccionada == null) {
                 filaSeleccionada = -1;
                 colSeleccionada = -1;
                 repaint();
                 return;
             }
-        
-        if (filaSeleccionada != -1) {
+            
              Pieza comida = tablero[f][c];
-            boolean[][] moves = tablero[filaSeleccionada][colSeleccionada].getMoveValido(tablero);
+            boolean[][] moves = piezaSeleccionada.getMoveValido(tablero);
             
    
+           
+            if (moves == null) {
+                filaSeleccionada = -1;
+                colSeleccionada = -1;
+                repaint();
+                return;
+            }
+
+            
+            
              
-           if (moves != null && moves[f][c]) {
-                tablero[f][c] = tablero[filaSeleccionada][colSeleccionada];
+           if (moves[f][c]) {
+               try{
+                   
+                   
+                Pieza origen = tablero[filaSeleccionada][colSeleccionada];
+
+                tablero[f][c] = origen;
                 tablero[filaSeleccionada][colSeleccionada] = null;
-                
                
+
+                        if (generalesEnJaque()) {
+
+            tablero[filaSeleccionada][colSeleccionada] = origen;
+            tablero[f][c] = comida;
+
+            JOptionPane.showMessageDialog(
+                    PanelTablero.this,
+                    "No puedes dejar los generales frente a frente"
+            );
+
+            filaSeleccionada = -1;
+            colSeleccionada = -1;
+
+            repaint();
+            return;
+        }
             if (comida instanceof General) {
                 String ganador = turnoRojo ? jugador2 : jugador1;
                 String perdedor = turnoRojo ? jugador1 : jugador2;
@@ -515,10 +589,12 @@ addMouseListener(new MouseAdapter() {
 
 
                 
+                if (tablero[f][c] != null) {
+                    tablero[f][c].setFila(f);
+                    tablero[f][c].setColumna(c);
+                }
                 
-                
-                tablero[f][c].setFila(f);
-                tablero[f][c].setColumna(c);
+               
                 // cambiar turno
                 turnoRojo = !turnoRojo;
                 if (turnoRojo) {
@@ -528,7 +604,14 @@ addMouseListener(new MouseAdapter() {
                     lblTurno.setText("Turno: " + jugador1 + " (Negras)");
                     lblTurno.setForeground(TEXTO);
                 }
-            }
+            }catch(Exception ex){
+            tablero[filaSeleccionada][colSeleccionada] = tablero[f][c];
+                   tablero[f][c] = comida;
+                   JOptionPane.showMessageDialog(PanelTablero.this, "Movimiento inválido");
+               }                
+            
+               
+           }
             filaSeleccionada = -1;
             colSeleccionada  = -1;
         } else if (tablero[f][c] != null && tablero[f][c].isIsR() == turnoRojo) {
@@ -536,22 +619,8 @@ addMouseListener(new MouseAdapter() {
             colSeleccionada  = c;
         }
         repaint();
-        
-        } catch (NullPointerException ex) {
-            filaSeleccionada = -1;
-            colSeleccionada = -1;
-            repaint();
-            JOptionPane.showMessageDialog(PanelTablero.this, "Error al mover pieza", "Error", JOptionPane.ERROR_MESSAGE);
-                } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(
-                PanelTablero.this,
-                "Error inesperado",
-                "Error",
-                JOptionPane.ERROR_MESSAGE
-            );
-        }
-    }
+    }   
+     
 });
 }
             
@@ -669,6 +738,7 @@ addMouseListener(new MouseAdapter() {
         }
     }
 }
+    
     
 }
 

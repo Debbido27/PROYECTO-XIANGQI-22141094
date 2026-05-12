@@ -26,27 +26,30 @@ public class Canon extends Pieza{
         return movimientos;
     }
     
+    
+    
       private void buscarMovimientos(Pieza[][] tablero, boolean[][] movimientos,
-                                   int f, int c, int df, int dc, boolean pantalla) {
-        if (!enTablero(f, c)) return;
+                               int f, int c, int df, int dc, boolean pantalla) {
+    if (!enTablero(f, c)) return;
 
-        Pieza destino = tablero[f][c];
+    Pieza destino = tablero[f][c];
 
-        if (!pantalla) {
-            if (destino == null) {
-                movimientos[f][c] = true;
-                buscarMovimientos(tablero, movimientos, f + df, c + dc, df, dc, false);
-            } else {
-                buscarMovimientos(tablero, movimientos, f + df, c + dc, df, dc, true);
-            }
+    if (!pantalla) {
+        if (destino == null) {
+            movimientos[f][c] = true;
+            buscarMovimientos(tablero, movimientos, f + df, c + dc, df, dc, false);
         } else {
-            if (destino == null) {
-                buscarMovimientos(tablero, movimientos, f + df, c + dc, df, dc, true);
-            } else if (destino.isR != this.isR) {
-                movimientos[f][c] = true;
-            }
+            buscarMovimientos(tablero, movimientos, f + df, c + dc, df, dc, true);
+        }
+    } else {
+        if (destino == null) {
+         
+            buscarMovimientos(tablero, movimientos, f + df, c + dc, df, dc, true);
+        } else if (destino.isR != this.isR) {
+            movimientos[f][c] = true;
         }
     }
+}
     
     
 }
