@@ -505,23 +505,36 @@ addMouseListener(new MouseAdapter() {
                 tablero[f][c] = origen;
                 tablero[filaSeleccionada][colSeleccionada] = null;
                
+                
+                if (generalesEnJaque()) {
+                // deshacer y mostrar error
+                tablero[filaSeleccionada][colSeleccionada] = origen;
+                tablero[f][c] = comida;
+                JOptionPane.showMessageDialog(PanelTablero.this, "No puedes dejar los generales frente a frente");
+                filaSeleccionada = -1;
+                colSeleccionada = -1;
+                repaint();
+                return;
+            }
 
-                        if (generalesEnJaque()) {
-
+                
+                
+         if (reyEnJaque(tablero, turnoRojo)) { // turnoRojo = el que acaba de mover
+            // deshacer
             tablero[filaSeleccionada][colSeleccionada] = origen;
             tablero[f][c] = comida;
-
-            JOptionPane.showMessageDialog(
-                    PanelTablero.this,
-                    "No puedes dejar los generales frente a frente"
-            );
-
+            JOptionPane.showMessageDialog(PanelTablero.this, "Movimiento inválido: tu rey quedaría en jaque");
             filaSeleccionada = -1;
             colSeleccionada = -1;
-
             repaint();
             return;
-        }
+        }       
+                
+                
+                
+   
+
+  
             if (comida instanceof General) {
                 String ganador = turnoRojo ? jugador2 : jugador1;
                 String perdedor = turnoRojo ? jugador1 : jugador2;
@@ -625,6 +638,35 @@ addMouseListener(new MouseAdapter() {
 }
             
             
+    
+  private boolean reyEnJaque(Pieza[][] tablero, boolean turnoDelQueMovio) {
+    int reyF = -1, reyC = -1;
+    busqueda: // label
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 9; j++) {
+            Pieza p = tablero[i][j];
+            if (p instanceof General && p.isIsR() == turnoDelQueMovio) {
+                reyF = i; reyC = j;
+                break busqueda; // sale de ambos loops
+            }
+        }
+    }
+    if (reyF == -1) return false;
+    
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 9; j++) {
+            Pieza p = tablero[i][j];
+            if (p != null && p.isIsR() != turnoDelQueMovio) {
+                boolean[][] moves = p.getMoveValido(tablero);
+                if (moves != null && moves[reyF][reyC]) return true;
+            }
+        }
+    }
+    return false;
+}
+  
+  
+  
     private boolean enTablero(int f, int c) {
     return f >= 0 && f < 10 && c >= 0 && c < 9;
 }
