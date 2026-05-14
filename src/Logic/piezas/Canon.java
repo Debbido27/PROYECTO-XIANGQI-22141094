@@ -10,7 +10,7 @@ public class Canon extends Pieza{
     
     @Override
     public String getSimbolo(){
-      return isR ? "炮" : "砲";
+      return isR ? "CANON_ROJO" : "CANON_NEGRO";
 
     }
     

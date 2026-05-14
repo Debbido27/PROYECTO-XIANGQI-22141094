@@ -10,7 +10,7 @@ public class Soldado extends Pieza {
     
     @Override
     public String getSimbolo() {
-        return isR ? "兵" : "卒";
+        return isR ? "SOLDADO_ROJO" : "SOLDADO_NEGRO";
     }
     
     

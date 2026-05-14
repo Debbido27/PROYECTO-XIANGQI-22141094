@@ -253,67 +253,141 @@ public class MiCuenta extends JPanel {
      }
      
      
-      private void abrirCambiarPassword() {
-        JPanel panel   = crearPanelDialog();
-        panel.setBackground(PANEL);
-        panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(ACENTO, 1),
-            BorderFactory.createEmptyBorder(40, 80, 40, 80)
-        ));        
+     private void abrirCambiarPassword() {
+         
+         
+    JPanel panel = crearPanelDialog();
+    panel.setBackground(PANEL);
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    panel.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(ACENTO, 1),
+        BorderFactory.createEmptyBorder(40, 80, 40, 80)
+    ));
+
+    JLabel titulo = new JLabel("Cambiar Password");
+    titulo.setFont(FUENTE_TITULO);
+    titulo.setForeground(ACENTO);
+    titulo.setAlignmentX(CENTER_ALIGNMENT);
+
+    // Panel para validar contraseña actual
+    JLabel lblActual = crearLabel("Ingrese su password actual");
+    lblActual.setAlignmentX(CENTER_ALIGNMENT);
+    JPasswordField campoActual = crearCampoPassword();
+    campoActual.setAlignmentX(CENTER_ALIGNMENT);
+    JLabel lblMensaje = new JLabel(" ");
+    lblMensaje.setFont(FUENTE_LABEL);
+    lblMensaje.setAlignmentX(CENTER_ALIGNMENT);
+    JButton btnValidar = crearBoton("Validar", BTN_PRIMARIO, Color.WHITE);
+    btnValidar.setAlignmentX(CENTER_ALIGNMENT);
+
+    // Panel para nueva contraseña (inicialmente oculto)
+    JLabel lblNuevo = crearLabel("Nuevo password (exactamente 5 caracteres)");
+    lblNuevo.setAlignmentX(CENTER_ALIGNMENT);
+    lblNuevo.setVisible(false);
+    JPasswordField campoNuevo = crearCampoPassword();
+    campoNuevo.setAlignmentX(CENTER_ALIGNMENT);
+    campoNuevo.setVisible(false);
+    JLabel lblConfirmar = crearLabel("Confirmar nuevo password");
+    lblConfirmar.setAlignmentX(CENTER_ALIGNMENT);
+    lblConfirmar.setVisible(false);
+    JPasswordField campoConfirmar = crearCampoPassword();
+    campoConfirmar.setAlignmentX(CENTER_ALIGNMENT);
+    campoConfirmar.setVisible(false);
+    JButton btnGuardar = crearBoton("Guardar", BTN_PRIMARIO, Color.WHITE);
+    btnGuardar.setAlignmentX(CENTER_ALIGNMENT);
+    btnGuardar.setVisible(false);
+
+    panel.add(titulo);
+    panel.add(Box.createVerticalStrut(20));
+    panel.add(lblActual);
+    panel.add(Box.createVerticalStrut(6));
+    panel.add(campoActual);
+    panel.add(Box.createVerticalStrut(14));
+    panel.add(lblMensaje);
+    panel.add(Box.createVerticalStrut(8));
+    panel.add(btnValidar);
+    panel.add(Box.createVerticalStrut(8));
+    panel.add(lblNuevo);
+    panel.add(Box.createVerticalStrut(6));
+    panel.add(campoNuevo);
+    panel.add(Box.createVerticalStrut(8));
+    panel.add(lblConfirmar);
+    panel.add(Box.createVerticalStrut(6));
+    panel.add(campoConfirmar);
+    panel.add(Box.createVerticalStrut(14));
+    panel.add(btnGuardar);
+
+    btnValidar.addActionListener(e -> {
+        String passActual = new String(campoActual.getPassword());
+        String passReal = loginManager.getCurrentUser().getPassword();
+
+        if (!passActual.equals(passReal)) {
+            lblMensaje.setForeground(new Color(200, 60, 60));
+            lblMensaje.setText("Password incorrecto");
+        } else {
+            lblMensaje.setForeground(new Color(80, 180, 80));
+            lblMensaje.setText("Validado correctamente. Ingrese nueva contraseña");
+            // Mostrar campos de nueva contraseña
+            lblNuevo.setVisible(true);
+            campoNuevo.setVisible(true);
+            lblConfirmar.setVisible(true);
+            campoConfirmar.setVisible(true);
+            btnGuardar.setVisible(true);
+            btnValidar.setEnabled(false);
+            campoActual.setEnabled(false);
+        }
+    });
+
+    btnGuardar.addActionListener(e -> {
+        String nuevoPass = new String(campoNuevo.getPassword());
+        String confirmarPass = new String(campoConfirmar.getPassword());
+
+        if (nuevoPass.length() != 5) {
+            lblMensaje.setForeground(new Color(200, 60, 60));
+            lblMensaje.setText("Error: La contraseña debe tener 5 caracteres");
+            return;
+        }
+
+        if (!nuevoPass.equals(confirmarPass)) {
+            lblMensaje.setForeground(new Color(200, 60, 60));
+            lblMensaje.setText("Error: Las contraseñas no coinciden");
+            return;
+        }
+
+        String username = loginManager.getCurrentUser().getUsername();
+        String resultado = loginManager.modificarDatos(username, nuevoPass);
         
-        JLabel titulo = new JLabel("Cambiar Password");
-        titulo.setFont(FUENTE_TITULO);
-        titulo.setForeground(ACENTO);
-        titulo.setAlignmentX(CENTER_ALIGNMENT);
+        if (resultado.startsWith("Datos modificados")) {
+            lblMensaje.setForeground(new Color(80, 180, 80));
+            lblMensaje.setText("Password cambiado exitosamente.");
+            btnGuardar.setEnabled(false);
+        } else {
+            lblMensaje.setForeground(new Color(200, 60, 60));
+            lblMensaje.setText(resultado);
+        }
+    });
 
-        JLabel lblNuevo = crearLabel("Nuevo password (exactamente 5 caracteres)");
-        lblNuevo.setAlignmentX(CENTER_ALIGNMENT);
-        JPasswordField campoNuevo = crearCampoPassword();
-        campoNuevo.setAlignmentX(CENTER_ALIGNMENT);
-        JLabel lblMensaje = new JLabel(" ");
-        lblMensaje.setFont(FUENTE_LABEL);
-        lblMensaje.setAlignmentX(CENTER_ALIGNMENT);
+    JButton btnCancelar = crearBoton("Cerrar", BTN_SECUNDARIO, ACENTO);
+    btnCancelar.setAlignmentX(CENTER_ALIGNMENT);
+    btnCancelar.addActionListener(e -> {
+        removeAll();
+        add(crearPanel(), BorderLayout.CENTER);
+        revalidate();
+        repaint();
+    });
+    panel.add(Box.createVerticalStrut(8));
+    panel.add(btnCancelar);
 
-        JButton btnGuardar  = crearBoton("Guardar",   BTN_PRIMARIO,   Color.WHITE);
-        btnGuardar.setAlignmentX(CENTER_ALIGNMENT);
-        btnGuardar.addActionListener(e -> {
-            String nuevoPass = new String(campoNuevo.getPassword());
-            String username  = loginManager.getCurrentUser().getUsername();
-            String resultado = loginManager.modificarDatos(username, nuevoPass);
-            if (resultado.startsWith("Datos modificados")) {
-                lblMensaje.setForeground(new Color(80, 180, 80));
-                lblMensaje.setText("Password cambiado exitosamente.");
-            } else {
-                lblMensaje.setForeground(new Color(200, 60, 60));
-                lblMensaje.setText(resultado);
-            }
-        });
+    removeAll();
+    setLayout(new BorderLayout());
+    add(panel, BorderLayout.CENTER);
+    revalidate();
+    repaint();
+    String passActual = new String(campoActual.getPassword());
+String passReal = loginManager.getCurrentUser().getPassword();
 
-        JButton btnCancelar = crearBoton("Cerrar", BTN_SECUNDARIO, ACENTO);
-        btnCancelar.setAlignmentX(CENTER_ALIGNMENT);
-            btnCancelar.addActionListener(e -> {
-                removeAll();
-                add(crearPanel(), BorderLayout.CENTER);
-                revalidate();
-                repaint();
-            });
-            
-        panel.add(titulo);
-        panel.add(Box.createVerticalStrut(20));
-        panel.add(lblNuevo);
-        panel.add(Box.createVerticalStrut(6));
-        panel.add(campoNuevo);
-        panel.add(Box.createVerticalStrut(14));
-        panel.add(lblMensaje);
-        panel.add(Box.createVerticalStrut(8));
-        panel.add(btnGuardar);
-        panel.add(Box.createVerticalStrut(8));
-        panel.add(btnCancelar);
 
-        removeAll(); setLayout(new BorderLayout()); add(panel, BorderLayout.CENTER); revalidate(); repaint();
-    }
-      
+}
         private void abrirEliminarCuenta() {
         JPanel panel   = crearPanelDialog();
         panel.setBackground(PANEL);

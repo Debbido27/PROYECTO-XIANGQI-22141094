@@ -14,7 +14,7 @@ public class Caballo extends Pieza {
     
     @Override
     public String getSimbolo(){
-        return isR ? "傌" : "馬";
+        return isR ? "CABALLO_ROJO" : "CABALLO_NEGRO";
     }
     
     

@@ -14,7 +14,7 @@ public class Elefante extends Pieza{
     
     @Override
     public String getSimbolo(){
-       return isR ? "相" : "象";
+       return isR ? "ELEFANTE_ROJO" : "ELEFANTE_NEGRO";
 
     }
    

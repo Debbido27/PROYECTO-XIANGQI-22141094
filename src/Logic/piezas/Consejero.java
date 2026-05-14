@@ -13,7 +13,7 @@ public class Consejero extends Pieza {
     
     @Override
     public String getSimbolo(){
-      return isR ? "仕" : "士";
+      return isR ? "CONSEJERO_ROJO" : "CONSEJERO_NEGRO";
 
     }
     

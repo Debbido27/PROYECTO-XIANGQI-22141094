@@ -10,6 +10,5 @@ public interface DataManager {
     Player buscarPlayer(String username);
     boolean guardarPartida(String log);
     String [] cargarPartidas();
-    boolean eliminarPartidas();
    
 }

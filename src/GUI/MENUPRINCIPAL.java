@@ -22,10 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
-/**
- *
- * @author Dell
- */
+
 public class MENUPRINCIPAL extends JFrame {
   
  //paleta colores

@@ -13,7 +13,7 @@ public class Carro extends Pieza{
     
     @Override
     public String getSimbolo() {
-        return isR ? "俥" : "車";
+        return isR ? "CARRO_ROJO" : "CARRO_NEGRO";
     }
             
             

@@ -237,18 +237,7 @@ public class Login_Manager implements DataManager {
         }
         
         
-        @Override
-        public boolean eliminarPartidas(){
-            try {
-        if (CurrentUser == null) return false;
-        CurrentUser.setLogs(new String[10]);
-        CurrentUser.setCuentaLog(0);
-        return true;
-        } catch (Exception e) {
-            return false;
-        }
-        }
-        
+      
         
     
     

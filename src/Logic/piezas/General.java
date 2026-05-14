@@ -10,7 +10,7 @@ public final class General extends Pieza {
     
     @Override
     public String getSimbolo(){
-        return isR ? "将" : "帅";
+        return isR ? "GENERAL_ROJO" : "GENERAL_NEGRO";
     }
     
             @Override
