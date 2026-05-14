@@ -24,12 +24,15 @@
         import java.awt.Graphics2D;
         import java.awt.GridBagLayout;
         import java.awt.GridLayout;
+import java.awt.Image;
         import java.awt.RenderingHints;
         import java.awt.event.MouseAdapter;
         import java.awt.event.MouseEvent;
+import java.net.URL;
         import javax.swing.BorderFactory;
         import javax.swing.Box;
         import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
         import javax.swing.JButton;
         import javax.swing.JDialog;
         import javax.swing.JFrame;
@@ -303,7 +306,7 @@
             panelTop.setLayout(new BoxLayout(panelTop, BoxLayout.X_AXIS));
             panelTop.setBorder(BorderFactory.createEmptyBorder(10,20,10,20));
 
-            JLabel lblJ1 = new JLabel(jugador1+"(NEGRAS)");
+            JLabel lblJ1 = new JLabel(jugador1+"(ROJAS)");
             lblJ1.setFont(FUENTE_TITULO);
             lblJ1.setForeground(TEXTO);
 
@@ -311,7 +314,7 @@
             lblVs.setFont(FUENTE_TITULO);
             lblVs.setForeground(ACENTO);
 
-            JLabel lblJ2 = new JLabel(jugador2 + "  (Rojas)");
+            JLabel lblJ2 = new JLabel(jugador2 + "  (NEGRAS)");
             lblJ2.setFont(FUENTE_TITULO);
             lblJ2.setForeground(new Color(200, 80, 80));
 
@@ -324,7 +327,7 @@
             panelBot.setBackground(PANEL);
             panelBot.setLayout(new BoxLayout(panelBot, BoxLayout.X_AXIS));
             panelBot.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-            lblTurno = new JLabel("Turno: " + jugador2 + " (Rojas)");
+            lblTurno = new JLabel("Turno: " + jugador1 + " (Rojas)");
             lblTurno.setFont(FUENTE_LABEL);
             lblTurno.setForeground(new Color(200, 80, 80));
             panelTop.add(lblTurno);
@@ -432,10 +435,25 @@
 
             static final int COLS   = 9;
             static final int FILAS  = 10;
-            static final int CELDA  = 42;
-            static final int MARGEN = 40;
+            static final int CELDA  = 52;
+            static final int MARGEN = 50;
         private int filaSeleccionada = -1;
         private int colSeleccionada  = -1;
+        
+        
+        
+        private final java.util.Map<String, Image> cacheImagenes = new java.util.HashMap<>();
+  private Image cargarImagen(String nombre) {
+    return cacheImagenes.computeIfAbsent(nombre, k -> {
+        URL url = getClass().getResource("/IMAGENES/" + k + ".png");
+        if (url == null) return null;
+        try {
+            return javax.imageio.ImageIO.read(url); // sin escalar
+        } catch (Exception e) {
+            return null;
+        }
+    });
+}
             public PanelTablero() {
                 setBackground(TABLERO_FONDO);
                 setPreferredSize(new Dimension(
@@ -444,7 +462,8 @@
 
 
                 ));
-
+   
+        
 
 
         addMouseListener(new MouseAdapter() {
@@ -539,8 +558,8 @@
 
 
                     if (comidaLocal instanceof General) {
-                        String ganador = turnoRojo ? jugador2 : jugador1;
-                        String perdedor = turnoRojo ? jugador1 : jugador2;
+                        String ganador = turnoRojo ? jugador1 : jugador2;
+                        String perdedor = turnoRojo ? jugador2 : jugador1;
 
                         Player pGanador = loginManager.buscarPlayer(ganador);
                         if (pGanador != null) {
@@ -614,10 +633,10 @@
                         // cambiar turno
                         turnoRojo = !turnoRojo;
                         if (turnoRojo) {
-                            lblTurno.setText("Turno: " + jugador2 + " (Rojas)");
+                            lblTurno.setText("Turno: " + jugador1 + " (Rojas)");
                             lblTurno.setForeground(new Color(200, 80, 80));
                         } else {
-                            lblTurno.setText("Turno: " + jugador1 + " (Negras)");
+                            lblTurno.setText("Turno: " + jugador2 + " (Negras)");
                             lblTurno.setForeground(TEXTO);
                         }
                     }catch(Exception ex){
@@ -724,38 +743,27 @@
             g2.drawLine(px2 + CELDA, py2, px2 + CELDA, py2 + ph);
         }
 
-            private void dibujarPiezas(Graphics2D g2) {
-            for (int f = 0; f < 10; f++) {
-                for (int c = 0; c < 9; c++) {
-                    Pieza p = tablero[f][c];
-                    if (p != null) {
-                        int x = MARGEN + c * CELDA;
-                        int y = MARGEN + f * CELDA;
-                        int radio = CELDA / 2 - 5;
+       private void dibujarPiezas(Graphics2D g2) {
+    for (int f = 0; f < 10; f++) {
+        for (int c = 0; c < 9; c++) {
+            Pieza p = tablero[f][c];
+            if (p == null) continue;
+            int x = MARGEN + c * CELDA;
+            int y = MARGEN + f * CELDA;
+            int tam = 48; // tamaño exacto de la imagen, sin transformar
 
-                        // círculo
-                        if (p.isIsR()) {
-                            g2.setColor(new Color(200, 50, 50));
-                        } else {
-                            g2.setColor(new Color(30, 30, 30));
-                        }
-                        g2.fillOval(x - radio, y - radio, radio * 2, radio * 2);
+            if (f == filaSeleccionada && c == colSeleccionada) {
+                g2.setColor(new Color(255, 255, 0, 120));
+                g2.fillOval(x - tam/2 - 3, y - tam/2 - 3, tam + 6, tam + 6);
+            }
 
-                        // borde
-                        g2.setColor(new Color(200, 150, 50));
-                        g2.setStroke(new BasicStroke(1.5f));
-                        g2.drawOval(x - radio, y - radio, radio * 2, radio * 2);
-
-                        // símbolo
-                        g2.setColor(Color.WHITE);
-                        g2.setFont(new Font("Serif", Font.BOLD, 16));
-                        FontMetrics fm = g2.getFontMetrics();
-                        String s = p.getSimbolo();
-                        g2.drawString(s, x - fm.stringWidth(s) / 2, y + fm.getAscent() / 2 - 2);
-                    }
-                }
+            Image img = cargarImagen(p.getSimbolo());
+            if (img != null) {
+                g2.drawImage(img, x - 24, y - 24, this); // sin tam,tam = 1:1
             }
         }
+    }
+}
 
 
         }
