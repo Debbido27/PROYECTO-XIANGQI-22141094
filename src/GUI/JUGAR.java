@@ -24,15 +24,15 @@
         import java.awt.Graphics2D;
         import java.awt.GridBagLayout;
         import java.awt.GridLayout;
-import java.awt.Image;
+        import java.awt.Image;
         import java.awt.RenderingHints;
         import java.awt.event.MouseAdapter;
         import java.awt.event.MouseEvent;
-import java.net.URL;
+        import java.net.URL;
         import javax.swing.BorderFactory;
         import javax.swing.Box;
         import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
+        import javax.swing.ImageIcon;
         import javax.swing.JButton;
         import javax.swing.JDialog;
         import javax.swing.JFrame;
@@ -47,7 +47,7 @@ import javax.swing.ImageIcon;
          */
         public class JUGAR extends JPanel {
             //PALETA DE COLORES
-               static final Color FONDO           = new Color(18, 18, 24);
+            static final Color FONDO           = new Color(18, 18, 24);
             static final Color PANEL           = new Color(28, 28, 38);
             static final Color ACENTO          = new Color(200, 150, 50);
             static final Color TEXTO           = new Color(220, 220, 230);
@@ -183,10 +183,6 @@ import javax.swing.ImageIcon;
 
                 });
 
-
-
-
-
                 panel.add(titulo);
                 panel.add(Box.createVerticalStrut(6));
                 panel.add(lblInfo);
@@ -250,54 +246,46 @@ import javax.swing.ImageIcon;
 
             
             private boolean generalesEnfrentados() {
-    // Encontrar posiciones de ambos generales
-    int filaRojo = -1, colRojo = -1;
-    int filaNegro = -1, colNegro = -1;
-    
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 9; j++) {
-            Pieza p = tablero[i][j];
-            if (p instanceof General) {
-                if (p.isIsR()) {
-                    filaRojo = i;
-                    colRojo = j;
-                } else {
-                    filaNegro = i;
-                    colNegro = j;
-                }
-            }
-        }
-    }
-    
-    // Si están en la misma columna
-    if (colRojo == colNegro) {
-        int minFila = Math.min(filaRojo, filaNegro);
-        int maxFila = Math.max(filaRojo, filaNegro);
-        
-        // Verificar que no haya piezas entre ellos
-        for (int i = minFila + 1; i < maxFila; i++) {
-            if (tablero[i][colRojo] != null) {
-                return false; // Hay pieza entremedio
-            }
-        }
-        return true; // Enfrentados sin piezas entre
-    }
-    return false;
-}
 
-           private void mostrarTablero(){
+             int filaRojo = -1, colRojo = -1;
+             int filaNegro = -1, colNegro = -1;
 
+             for (int i = 0; i < 10; i++) {
+                 for (int j = 0; j < 9; j++) {
+                     Pieza p = tablero[i][j];
 
+                     if (p instanceof General) {
+                         if (p.isIsR()) {
+                             filaRojo = i;
+                             colRojo = j;
+                         } else {
+                             filaNegro = i;
+                             colNegro = j;
+                         }
+                     }
+                 }
+             }
 
+             return General.generalesMirando(
+                 tablero,
+                 filaRojo, colRojo,
+                 filaNegro, colNegro
+             );
+         }
+            
+            
+            
+            
+             private void mostrarTablero(){
 
-                   if (jugador2 == null || jugador2.trim().isEmpty()) return;
+              if (jugador2 == null || jugador2.trim().isEmpty()) return;
 
                if (loginManager == null) {
                 JOptionPane.showMessageDialog(this, "Error interno: LoginManager no inicializado");
                 return;
             }    
 
-               removeAll();
+            removeAll();
             setLayout(new BorderLayout());
             inicializarTablero();
 
@@ -335,28 +323,30 @@ import javax.swing.ImageIcon;
             JButton btnRetirar = crearBoton("Retirarme", BTN_PELIGRO, Color.WHITE);
             btnRetirar.setMaximumSize(new Dimension(150, 38));
 
-        btnRetirar.addActionListener(e -> {
+            btnRetirar.addActionListener(e -> {
 
 
 
              int confirm = JOptionPane.showConfirmDialog(JUGAR.this, "¿Seguro que quieres retirarte? Perderás la partida.", "Confirmar retiro", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
              if (confirm != JOptionPane.YES_OPTION) {
-            return;
-        }
-            String ganador  = turnoRojo ? jugador1 : jugador2;
-            String retirado = turnoRojo ? jugador2 : jugador1;
+             return;
+             }
+             
+             
+             String ganador  = turnoRojo ? jugador1 : jugador2;
+             String retirado = turnoRojo ? jugador2 : jugador1;
 
-            Player pGanador = loginManager.buscarPlayer(ganador);
-            if (pGanador != null) {
+             Player pGanador = loginManager.buscarPlayer(ganador);
+             if (pGanador != null) {
                 pGanador.setPuntos(pGanador.getPuntos() + 3);
-            }
+             }
 
 
 
         String log = retirado + " SE HA RETIRADO, FELICIDADES " + ganador + ", HAS GANADO 3 PUNTOS";
             loginManager.guardarPartida(log);
 
-            removeAll();
+        removeAll();
         setLayout(new BorderLayout());
 
         JPanel panel = new JPanel();
@@ -408,10 +398,10 @@ import javax.swing.ImageIcon;
 
 
 
-            panelBot.add(btnRetirar);
-            panelBot.add(Box.createHorizontalStrut(12));
+        panelBot.add(btnRetirar);
+        panelBot.add(Box.createHorizontalStrut(12));
 
-            PanelTablero panelTablero = new PanelTablero();
+        PanelTablero panelTablero = new PanelTablero();
         JPanel centro = new JPanel(new GridBagLayout());
         centro.setBackground(TABLERO_FONDO);
         centro.add(panelTablero);
@@ -419,32 +409,32 @@ import javax.swing.ImageIcon;
         add(panelTop,     BorderLayout.NORTH);
         add(centro,       BorderLayout.CENTER);
         add(panelBot,     BorderLayout.SOUTH);
-            revalidate();
-            repaint();
+        revalidate();
+        repaint();
 
 
         }
 
-
-
-
-
+             
+             
 
 
         class PanelTablero extends JPanel {
 
-            static final int COLS   = 9;
-            static final int FILAS  = 10;
-            static final int CELDA  = 52;
-            static final int MARGEN = 50;
+        static final int COLS   = 9;
+        static final int FILAS  = 10;
+        static final int CELDA  = 52;
+        static final int MARGEN = 50;
         private int filaSeleccionada = -1;
         private int colSeleccionada  = -1;
         
         
         
         private final java.util.Map<String, Image> cacheImagenes = new java.util.HashMap<>();
-  private Image cargarImagen(String nombre) {
-    return cacheImagenes.computeIfAbsent(nombre, k -> {
+        
+        private Image cargarImagen(String nombre) {
+        
+        return cacheImagenes.computeIfAbsent(nombre, k -> {
         URL url = getClass().getResource("/IMAGENES/" + k + ".png");
         if (url == null) return null;
         try {
@@ -452,175 +442,158 @@ import javax.swing.ImageIcon;
         } catch (Exception e) {
             return null;
         }
-    });
-}
-            public PanelTablero() {
-                setBackground(TABLERO_FONDO);
-                setPreferredSize(new Dimension(
-                    MARGEN * 2 + CELDA * (COLS - 1),
-                    MARGEN * 2 + CELDA * (FILAS - 1)
-
-
-                ));
-   
+        });
+        }
         
-
-
+        
+        public PanelTablero() {
+         setBackground(TABLERO_FONDO);
+         setPreferredSize(new Dimension(
+         MARGEN * 2 + CELDA * (COLS - 1),
+         MARGEN * 2 + CELDA * (FILAS - 1)
+         ));
+   
+       
         addMouseListener(new MouseAdapter() {
+         
             public void mouseClicked(MouseEvent e) {
 
+            int c = (e.getX() - MARGEN + CELDA / 2) / CELDA;
+            int f = (e.getY() - MARGEN + CELDA / 2) / CELDA;
+
+            if (!enTablero(f, c)) return;
 
 
 
-
-                int c = (e.getX() - MARGEN + CELDA / 2) / CELDA;
-                int f = (e.getY() - MARGEN + CELDA / 2) / CELDA;
-
-                if (!enTablero(f, c)) return;
-
-
-
-                if (filaSeleccionada != -1 && (filaSeleccionada < 0 || filaSeleccionada >= 10 || colSeleccionada < 0 || colSeleccionada >= 9)) {
-                    filaSeleccionada = -1;
-                    colSeleccionada = -1;
-                    repaint();
-                    return;
-                }
+            if (filaSeleccionada != -1 && (filaSeleccionada < 0 || filaSeleccionada >= 10 || colSeleccionada < 0 || colSeleccionada >= 9)) {
+                filaSeleccionada = -1;
+                colSeleccionada = -1;
+                repaint();
+                return;
+            }
 
 
 
-                if (filaSeleccionada != -1) {
-                    Pieza piezaSeleccionada = tablero[filaSeleccionada][colSeleccionada];
-                            if (piezaSeleccionada == null) {
-                        filaSeleccionada = -1;
-                        colSeleccionada = -1;
-                        repaint();
-                        return;
-                    }
+            if (filaSeleccionada != -1) {
+               Pieza piezaSeleccionada = tablero[filaSeleccionada][colSeleccionada];
+               if (piezaSeleccionada == null) {
+               filaSeleccionada = -1;
+               colSeleccionada = -1;
+               repaint();
+               return;
+             }
 
-                     Pieza comida = tablero[f][c];
-                    boolean[][] moves = piezaSeleccionada.getMoveValido(tablero);
+       
+             Pieza comida = tablero[f][c];
+             boolean[][] moves = piezaSeleccionada.getMoveValido(tablero);
 
+             if (moves == null) {
+                filaSeleccionada = -1;
+                colSeleccionada = -1;
+                repaint();
+                return;
+               }
 
+               
+               
 
-                    if (moves == null) {
-                        filaSeleccionada = -1;
-                        colSeleccionada = -1;
-                        repaint();
-                        return;
-                    }
-
-
-
-
-                  if (moves[f][c]) {
-                      
-    // SIMULAR el movimiento para verificar regla de generales
-    Pieza origenSim = tablero[filaSeleccionada][colSeleccionada];
-    Pieza destinoSim = tablero[f][c];
+            if (moves[f][c]) {                     
+         // SIMULAR el movimiento para verificar regla de generales
+            Pieza origenSim = tablero[filaSeleccionada][colSeleccionada];
+            Pieza destinoSim = tablero[f][c];
     
-    // Ejecutar movimiento temporal
-    tablero[f][c] = origenSim;
-    tablero[filaSeleccionada][colSeleccionada] = null;
+          // Ejecutar movimiento temporal
+          tablero[f][c] = origenSim;
+          tablero[filaSeleccionada][colSeleccionada] = null;
     
-    // Verificar regla
-    if (generalesEnfrentados()) {
-        // Revertir movimiento
+            // Verificar regla
+            if (generalesEnfrentados()) {
+                // Revertir movimiento
+                tablero[filaSeleccionada][colSeleccionada] = origenSim;
+                tablero[f][c] = destinoSim;
+                JOptionPane.showMessageDialog(PanelTablero.this, 
+                    "Movimiento inválido: los generales no pueden quedar enfrentados sin piezas entre ellos");
+                filaSeleccionada = -1;
+                colSeleccionada = -1;
+                repaint();
+                return;
+            }
+    
+        // Revertir movimiento temporal
         tablero[filaSeleccionada][colSeleccionada] = origenSim;
         tablero[f][c] = destinoSim;
-        JOptionPane.showMessageDialog(PanelTablero.this, 
-            "Movimiento inválido: los generales no pueden quedar enfrentados sin piezas entre ellos");
-        filaSeleccionada = -1;
-        colSeleccionada = -1;
-        repaint();
-        return;
-    }
     
-    // Revertir movimiento temporal
-    tablero[filaSeleccionada][colSeleccionada] = origenSim;
-    tablero[f][c] = destinoSim;
-    
-    // Continuar con el movimiento normal...
-    Pieza comidaLocal = tablero[f][c];
-    try {
+        // Continuar con el movimiento normal...
+        Pieza comidaLocal = tablero[f][c];
+        try {
         
         Pieza origen = tablero[filaSeleccionada][colSeleccionada];
         // ... resto de tu código existente
 
+        tablero[f][c] = origen;
+        tablero[filaSeleccionada][colSeleccionada] = null;
 
-                        tablero[f][c] = origen;
-                        tablero[filaSeleccionada][colSeleccionada] = null;
+        if (comidaLocal instanceof General) {
+          String ganador = turnoRojo ? jugador1 : jugador2;
+          String perdedor = turnoRojo ? jugador2 : jugador1;
 
+        Player pGanador = loginManager.buscarPlayer(ganador);
+        if (pGanador != null) {
+         pGanador.setPuntos(pGanador.getPuntos() + 3);
+        }
 
+        String log = ganador + " venció a " + perdedor;
+        loginManager.guardarPartida(log);
 
+        removeAll();
+        setLayout(new BorderLayout());
 
+        JPanel panel = new JPanel();
+        panel.setBackground(PANEL);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(ACENTO, 1),
+            BorderFactory.createEmptyBorder(40, 80, 40, 80)
+        ));
 
+            JLabel lblGanador = new JLabel(ganador + " VENCIÓ A " + perdedor);
+            lblGanador.setFont(FUENTE_TITULO);
+            lblGanador.setForeground(ACENTO);
+            lblGanador.setAlignmentX(CENTER_ALIGNMENT);
 
+            JLabel lblPuntos = new JLabel("Has ganado 3 puntos!");
+            lblPuntos.setFont(FUENTE_LABEL);
+            lblPuntos.setForeground(TEXTO_TENUE);
+            lblPuntos.setAlignmentX(CENTER_ALIGNMENT);
 
-                    if (comidaLocal instanceof General) {
-                        String ganador = turnoRojo ? jugador1 : jugador2;
-                        String perdedor = turnoRojo ? jugador2 : jugador1;
+            JButton btnOtra = crearBoton("Jugar Otra Partida", BTN_SECUNDARIO, ACENTO);
+            JButton btnOk = crearBoton("Volver al Menu", ACENTO, Color.WHITE);
 
-                        Player pGanador = loginManager.buscarPlayer(ganador);
-                        if (pGanador != null) {
-                            pGanador.setPuntos(pGanador.getPuntos() + 3);
-                        }
+            btnOtra.addActionListener(ev -> {
+                turnoRojo = true;
+                jugador2 = null;
+                pedirOponente();
+            });
 
-                        String log = ganador + " venció a " + perdedor;
-                        loginManager.guardarPartida(log);
+            btnOk.addActionListener(ev -> {
+             cardLayout.show(cardPanel, "menu");
+             cardPanel.revalidate();
+             cardPanel.repaint();
+            });
 
+            panel.add(lblGanador);
+            panel.add(Box.createVerticalStrut(10));
+            panel.add(lblPuntos);
+            panel.add(Box.createVerticalStrut(20));
+            panel.add(btnOtra);
+            panel.add(Box.createVerticalStrut(8));
+            panel.add(btnOk);
 
-
-
-                                    removeAll();
-                      setLayout(new BorderLayout());
-
-                      JPanel panel = new JPanel();
-                      panel.setBackground(PANEL);
-                      panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-                      panel.setBorder(BorderFactory.createCompoundBorder(
-                          BorderFactory.createLineBorder(ACENTO, 1),
-                          BorderFactory.createEmptyBorder(40, 80, 40, 80)
-                      ));
-
-                      JLabel lblGanador = new JLabel(ganador + " VENCIÓ A " + perdedor);
-                      lblGanador.setFont(FUENTE_TITULO);
-                      lblGanador.setForeground(ACENTO);
-                      lblGanador.setAlignmentX(CENTER_ALIGNMENT);
-
-                      JLabel lblPuntos = new JLabel("Has ganado 3 puntos!");
-                      lblPuntos.setFont(FUENTE_LABEL);
-                      lblPuntos.setForeground(TEXTO_TENUE);
-                      lblPuntos.setAlignmentX(CENTER_ALIGNMENT);
-
-                      JButton btnOtra = crearBoton("Jugar Otra Partida", BTN_SECUNDARIO, ACENTO);
-                      JButton btnOk = crearBoton("Volver al Menu", ACENTO, Color.WHITE);
-
-                      btnOtra.addActionListener(ev -> {
-                          turnoRojo = true;
-                          jugador2 = null;
-                          pedirOponente();
-                      });
-
-                      btnOk.addActionListener(ev -> {
-                          cardLayout.show(cardPanel, "menu");
-                          cardPanel.revalidate();
-                          cardPanel.repaint();
-                      });
-
-                      panel.add(lblGanador);
-                      panel.add(Box.createVerticalStrut(10));
-                      panel.add(lblPuntos);
-                      panel.add(Box.createVerticalStrut(20));
-                      panel.add(btnOtra);
-                      panel.add(Box.createVerticalStrut(8));
-                      panel.add(btnOk);
-
-                      add(panel, BorderLayout.CENTER);
-                      revalidate();
-                      repaint();
-                      return;
-                    }
+            add(panel, BorderLayout.CENTER);
+            revalidate();
+            repaint();
+            return;
+           }
 
 
 
@@ -659,9 +632,7 @@ import javax.swing.ImageIcon;
         });
         }
 
-
-
-
+        
             private boolean enTablero(int f, int c) {
             return f >= 0 && f < 10 && c >= 0 && c < 9;
         }
