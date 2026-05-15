@@ -2,6 +2,7 @@
         package GUI;
         import static GUI.JUGAR.PanelTablero.CELDA;
         import static GUI.JUGAR.PanelTablero.MARGEN;
+import Logic.LogVictoria;
         import Logic.Login_Manager;
         import Logic.Player;
 import Logic.piezas.Caballo;
@@ -406,8 +407,8 @@ add(panelJuego, BorderLayout.CENTER);
          }
 
 
-
-        String log = retirado + " SE HA RETIRADO, FELICIDADES JUGADOR " + ganador + "HAS GANADO 3 PUNTOS";
+ 
+        LogVictoria log = new LogVictoria(ganador, retirado);
         loginManager.guardarPartida(log);
 
         removeAll();
@@ -646,7 +647,7 @@ private final java.util.Map<String, Image> cacheImagenes = new java.util.HashMap
         }
 
 
-        String log = ganador + " VENCIO A JUGADOR " + perdedor+" FELICIDADES HAS GANADO 3 PUNTOS";
+        LogVictoria log = new LogVictoria(ganador, perdedor);
         loginManager.guardarPartida(log);
 
         removeAll();

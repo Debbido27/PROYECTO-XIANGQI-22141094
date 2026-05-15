@@ -8,7 +8,7 @@ public interface DataManager {
     String eliminarCuenta();
     Player[] getPlayers();
     Player buscarPlayer(String username);
-    boolean guardarPartida(String log);
+    boolean guardarPartida(Log log);
     String [] cargarPartidas();
    
 }

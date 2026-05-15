@@ -226,15 +226,16 @@ public class Login_Manager implements DataManager {
   
         
         @Override
-        public boolean guardarPartida(String log){
-          try {
-        if (CurrentUser == null) return false;
-        CurrentUser.agregarLog(log);
-        return true;
-       } catch (Exception e) {
-        return false;
-    }
+        public boolean guardarPartida(Log log) {  
+            try {
+                if (CurrentUser == null) return false;
+                CurrentUser.agregarLog(log.getTexto()); 
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
         }
+        
         
         @Override
         public String [] cargarPartidas(){
