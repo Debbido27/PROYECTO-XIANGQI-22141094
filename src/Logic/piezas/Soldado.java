@@ -1,14 +1,19 @@
 package Logic.piezas;
 
-public class Soldado extends Pieza {
+public  final class Soldado extends Pieza {
+    private final TipoPieza tipo = TipoPieza.SOLDADO;
     
     public Soldado(int fila, int columna, ColorPieza color) {
         super(fila, columna, color);
     }
     
+      @Override
+    public TipoPieza getTipo() {
+        return tipo;
+    }
     @Override
     public String getSimbolo() {
-        return color.getNombre() + "_SOLDADO";
+    return "SOLDADO_" + color.getNombre();
     }
     
     @Override

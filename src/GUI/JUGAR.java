@@ -407,7 +407,7 @@ add(panelJuego, BorderLayout.CENTER);
 
 
 
-        String log = retirado + " SE HA RETIRADO, FELICIDADES " + ganador + ", HAS GANADO 3 PUNTOS";
+        String log = retirado + " SE HA RETIRADO, FELICIDADES JUGADOR " + ganador + "HAS GANADO 3 PUNTOS";
         loginManager.guardarPartida(log);
 
         removeAll();
@@ -646,7 +646,7 @@ private final java.util.Map<String, Image> cacheImagenes = new java.util.HashMap
         }
 
 
-        String log = ganador + " venció a " + perdedor;
+        String log = ganador + " VENCIO A JUGADOR " + perdedor+" FELICIDADES HAS GANADO 3 PUNTOS";
         loginManager.guardarPartida(log);
 
         removeAll();

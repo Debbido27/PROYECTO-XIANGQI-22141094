@@ -24,7 +24,7 @@ public abstract class Pieza {
     
     //metodos abstractos
     public abstract boolean[][] getMoveValido(Pieza [][] tablero);
-    
+    public abstract TipoPieza getTipo();
     public abstract String getSimbolo();
     
     //Metodos concretos
@@ -45,13 +45,7 @@ public abstract class Pieza {
         this.columna = columna;
     }
 
-    public boolean isIsR() {
-        return esRojo();
-    }
 
-    public void setIsR(boolean isR) {
-        this.esRojo() = isR;
-    }
    
     protected final boolean enTablero(int f, int c){
        return f >= 0 && f < 10 && c >= 0 && c < 9;

@@ -210,8 +210,10 @@ import java.text.SimpleDateFormat;
                 BorderFactory.createEmptyBorder(40, 80, 40, 80)
             ));             
              Player p = loginManager.getCurrentUser();
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-         String fechaBonita = formato.format(p.getFechaIngreso());
+             
+             
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            String fechaBonita = formato.format(p.getFechaIngreso());
 
 
             JLabel titulo = new JLabel("Mi Información");

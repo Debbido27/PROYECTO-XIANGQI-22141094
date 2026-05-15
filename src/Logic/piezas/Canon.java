@@ -1,14 +1,20 @@
 package Logic.piezas;
 
-public class Canon extends Pieza {
+public final class Canon extends Pieza {
+    private final TipoPieza tipo = TipoPieza.CANON;
     
     public Canon(int fila, int columna, ColorPieza color) {
         super(fila, columna, color);
     }
     
     @Override
+    public TipoPieza getTipo() {
+        return tipo;
+    }
+    
+    @Override
     public String getSimbolo() {
-        return color.getNombre() + "_CANON";
+    return "CANON_" + color.getNombre();
     }
     
     @Override

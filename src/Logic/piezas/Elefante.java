@@ -1,14 +1,20 @@
 package Logic.piezas;
 
-public class Elefante extends Pieza {
+public final class Elefante extends Pieza {
+    private final TipoPieza tipo = TipoPieza.ELEFANTE;
     
     public Elefante(int fila, int columna, ColorPieza color) {
         super(fila, columna, color);
     }
     
     @Override
+    public TipoPieza getTipo() {
+        return tipo;
+    }
+    
+    @Override
     public String getSimbolo() {
-        return color.getNombre() + "_ELEFANTE";
+    return "ELEFANTE_" + color.getNombre();
     }
     
     @Override

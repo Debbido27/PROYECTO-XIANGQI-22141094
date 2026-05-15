@@ -1,14 +1,20 @@
 package Logic.piezas;
 
-public class General extends Pieza {
+public final class General extends Pieza {
+    private final TipoPieza tipo = TipoPieza.GENERAL;
     
     public General(int fila, int columna, ColorPieza color) {
         super(fila, columna, color);
     }
     
+     @Override
+    public TipoPieza getTipo() {
+        return tipo;
+    }
+    
     @Override
     public String getSimbolo() {
-        return color.getNombre() + "_GENERAL";
+     return "GENERAL_" + color.getNombre();
     }
     
     @Override
