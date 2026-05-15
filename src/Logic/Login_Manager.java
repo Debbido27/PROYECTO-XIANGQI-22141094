@@ -51,10 +51,9 @@ public class Login_Manager implements DataManager {
              if(totalPlayers>=MAX_PLAYERS){
               return false;   
              }
-             if(password.length() != 5){
+             if(!validarPassword(password)){
                 return false;
             }
-
              Player nuevo = new Player(username,password);
              players[totalPlayers]=nuevo;
              totalPlayers++;
@@ -92,8 +91,8 @@ public class Login_Manager implements DataManager {
             if(CurrentUser==null){
                 return "Error, no hay usuario";
             }
-            if(newPassword.length() != 5){
-                return "Error: la contraseña debe tener 5 caracteres";
+            if(!validarPassword(newPassword)){
+                return "Error: la contraseña debe tener 5 caracteres, incluir una mayúscula, una minuscula y un numero";
             }
 
             if(newUsername.isEmpty()||newPassword.isEmpty()){
@@ -115,6 +114,28 @@ public class Login_Manager implements DataManager {
             return "Datos modificados exitosamente "+"Nuevo Usuario: "+newUsername+"\n"+"Nueva Contrasena: "+newPassword+"\n";
        }
 
+            
+            private boolean validarPassword(String password) {
+            if (password.length() != 5) {
+                return false;
+            }
+
+            boolean hasMayuscula = false;
+            boolean hasMinuscula = false;
+            boolean hasNumero = false;
+
+            for (char c : password.toCharArray()) {
+                if (Character.isUpperCase(c)) {
+                    hasMayuscula = true;
+                } else if (Character.isLowerCase(c)) {
+                    hasMinuscula = true;
+                } else if (Character.isDigit(c)) {
+                    hasNumero = true;
+                }
+            }
+
+            return hasMayuscula && hasMinuscula && hasNumero;
+           }
 
          
          
@@ -186,19 +207,8 @@ public class Login_Manager implements DataManager {
         }
  
             
-            
-            
-            
-           
-         
-         
-         
-         
-            
-         
- 
-        //COPIAS PARA EVITAR LOS NULL Y SE CREA CON LA POCISION CABAL DE JUGADORES
-        public Player [] getPlayers(){
+      
+            public Player [] getPlayers(){
             Player [] copia = new Player [totalPlayers];
             for (int i = 0; i < totalPlayers; i++) {
                 copia[i]=players[i];
