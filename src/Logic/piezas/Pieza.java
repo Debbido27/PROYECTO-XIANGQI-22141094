@@ -1,26 +1,25 @@
 
 package Logic.piezas;
 
-/**
- *
- * @author Dell
- */
 public abstract class Pieza {
     protected int fila;
     protected int columna;
-    public boolean isR;
+    protected ColorPieza color;
     
-    public Pieza(int fila, int columna, boolean isR){
+    public Pieza(int fila, int columna, ColorPieza color){
         this.fila=fila;
         this.columna=columna;
-        this.isR=isR;
+        this.color=color;
     }
     
     protected boolean enPalacio(int f, int c) {
     if (c < 3 || c > 5) return false;
-    if (isR) return f >= 7 && f <= 9;
+    if (esRojo()) return f >= 7 && f <= 9;
     else return f >= 0 && f <= 2;
 }
+    
+     public boolean esRojo() { return color == ColorPieza.ROJO; }
+     public boolean esNegro() { return color == ColorPieza.NEGRO; }
     
     
     //metodos abstractos
@@ -47,13 +46,12 @@ public abstract class Pieza {
     }
 
     public boolean isIsR() {
-        return isR;
+        return esRojo();
     }
 
     public void setIsR(boolean isR) {
-        this.isR = isR;
+        this.esRojo() = isR;
     }
-    public abstract TipoPieza getTipo();
    
     protected final boolean enTablero(int f, int c){
        return f >= 0 && f < 10 && c >= 0 && c < 9;
@@ -62,7 +60,7 @@ public abstract class Pieza {
     protected final  boolean puedeMoverA(int f, int c, Pieza[][] tablero){
       if (!enTablero(f, c)) return false;
         Pieza destino = tablero[f][c];
-        return destino == null || destino.isR != this.isR;
+        return destino == null || destino.esRojo() != this.esRojo();
     }
     
     

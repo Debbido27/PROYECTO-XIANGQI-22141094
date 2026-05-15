@@ -4,9 +4,16 @@
         import static GUI.JUGAR.PanelTablero.MARGEN;
         import Logic.Login_Manager;
         import Logic.Player;
+import Logic.piezas.Caballo;
+import Logic.piezas.Canon;
+import Logic.piezas.Carro;
+import Logic.piezas.ColorPieza;
+import Logic.piezas.Consejero;
+import Logic.piezas.Elefante;
+import Logic.piezas.General;
    
         import Logic.piezas.Pieza;
-import Logic.piezas.PiezaConcreta;
+import Logic.piezas.Soldado;
 import Logic.piezas.TipoPieza;
         import java.awt.BasicStroke;
         import java.awt.BorderLayout;
@@ -14,6 +21,7 @@ import Logic.piezas.TipoPieza;
         import java.awt.Color;
         import java.awt.Cursor;
         import java.awt.Dimension;
+import java.awt.FlowLayout;
         import java.awt.Font;
         import java.awt.FontMetrics;
         import java.awt.Graphics;
@@ -78,7 +86,9 @@ import Logic.piezas.TipoPieza;
         private Pieza[][] tablero;
         private CardLayout cardLayout;
         private JPanel cardPanel;
-
+private java.util.ArrayList<Pieza> piezasCapturadasRojas;
+private java.util.ArrayList<Pieza> piezasCapturadasNegras;
+private JPanel panelCementerio;
 
 
 
@@ -95,7 +105,8 @@ import Logic.piezas.TipoPieza;
             this.jugador1=loginManager.getCurrentUser().getUsername();
             this.cardLayout = cardLayout;
             this.cardPanel = cardPanel;
-
+piezasCapturadasRojas = new java.util.ArrayList<>();
+piezasCapturadasNegras = new java.util.ArrayList<>();
 
            setLayout(new BorderLayout());
            setBackground(FONDO);
@@ -113,6 +124,16 @@ import Logic.piezas.TipoPieza;
 
         private void pedirOponente(){
 
+            turnoRojo = true;
+            jugador2 = null;
+            piezasCapturadasRojas.clear();
+            piezasCapturadasNegras.clear();
+            if (panelCementerio != null) {
+                panelCementerio.removeAll();
+                panelCementerio.revalidate();
+                panelCementerio.repaint();
+            }
+            
         removeAll();
         setLayout(new BorderLayout());
 
@@ -220,53 +241,49 @@ import Logic.piezas.TipoPieza;
 
 
 
-private void inicializarTablero() {
-    tablero = new Pieza[10][9];
+        private void inicializarTablero() {
+            tablero = new Pieza[10][9];
 
-    // === PIEZAS NEGRAS (arriba) ===
-    tablero[0][0] = new PiezaConcreta(0, 0, false, TipoPieza.CARRO);
-    tablero[0][1] = new PiezaConcreta(0, 1, false, TipoPieza.CABALLO);
-    tablero[0][2] = new PiezaConcreta(0, 2, false, TipoPieza.ELEFANTE);
-    tablero[0][3] = new PiezaConcreta(0, 3, false, TipoPieza.CONSEJERO);
-    tablero[0][4] = new PiezaConcreta(0, 4, false, TipoPieza.GENERAL);
-    tablero[0][5] = new PiezaConcreta(0, 5, false, TipoPieza.CONSEJERO);
-    tablero[0][6] = new PiezaConcreta(0, 6, false, TipoPieza.ELEFANTE);
-    tablero[0][7] = new PiezaConcreta(0, 7, false, TipoPieza.CABALLO);
-    tablero[0][8] = new PiezaConcreta(0, 8, false, TipoPieza.CARRO);
+            // === PIEZAS NEGRAS (arriba) ===
+            tablero[0][0] = new Carro(0, 0, ColorPieza.NEGRO);
+            tablero[0][1] = new Caballo(0, 1, ColorPieza.NEGRO);
+            tablero[0][2] = new Elefante(0, 2, ColorPieza.NEGRO);
+            tablero[0][3] = new Consejero(0, 3, ColorPieza.NEGRO);
+            tablero[0][4] = new General(0, 4, ColorPieza.NEGRO);
+            tablero[0][5] = new Consejero(0, 5, ColorPieza.NEGRO);
+            tablero[0][6] = new Elefante(0, 6, ColorPieza.NEGRO);
+            tablero[0][7] = new Caballo(0, 7, ColorPieza.NEGRO);
+            tablero[0][8] = new Carro(0, 8, ColorPieza.NEGRO);
 
-    tablero[2][1] = new PiezaConcreta(2, 1, false, TipoPieza.CANON);
-    tablero[2][7] = new PiezaConcreta(2, 7, false, TipoPieza.CANON);
+            tablero[2][1] = new Canon(2, 1, ColorPieza.NEGRO);
+            tablero[2][7] = new Canon(2, 7, ColorPieza.NEGRO);
 
-    tablero[3][0] = new PiezaConcreta(3, 0, false, TipoPieza.SOLDADO);
-    tablero[3][2] = new PiezaConcreta(3, 2, false, TipoPieza.SOLDADO);
-    tablero[3][4] = new PiezaConcreta(3, 4, false, TipoPieza.SOLDADO);
-    tablero[3][6] = new PiezaConcreta(3, 6, false, TipoPieza.SOLDADO);
-    tablero[3][8] = new PiezaConcreta(3, 8, false, TipoPieza.SOLDADO);
+            tablero[3][0] = new Soldado(3, 0, ColorPieza.NEGRO);
+            tablero[3][2] = new Soldado(3, 2, ColorPieza.NEGRO);
+            tablero[3][4] = new Soldado(3, 4, ColorPieza.NEGRO);
+            tablero[3][6] = new Soldado(3, 6, ColorPieza.NEGRO);
+            tablero[3][8] = new Soldado(3, 8, ColorPieza.NEGRO);
 
-    // === PIEZAS ROJAS (abajo) ===
-    tablero[9][0] = new PiezaConcreta(9, 0, true, TipoPieza.CARRO);
-    tablero[9][1] = new PiezaConcreta(9, 1, true, TipoPieza.CABALLO);
-    tablero[9][2] = new PiezaConcreta(9, 2, true, TipoPieza.ELEFANTE);
-    tablero[9][3] = new PiezaConcreta(9, 3, true, TipoPieza.CONSEJERO);
-    tablero[9][4] = new PiezaConcreta(9, 4, true, TipoPieza.GENERAL);
-    tablero[9][5] = new PiezaConcreta(9, 5, true, TipoPieza.CONSEJERO);
-    tablero[9][6] = new PiezaConcreta(9, 6, true, TipoPieza.ELEFANTE);
-    tablero[9][7] = new PiezaConcreta(9, 7, true, TipoPieza.CABALLO);
-    tablero[9][8] = new PiezaConcreta(9, 8, true, TipoPieza.CARRO);
+            // === PIEZAS ROJAS (abajo) ===
+            tablero[9][0] = new Carro(9, 0, ColorPieza.ROJO);
+            tablero[9][1] = new Caballo(9, 1, ColorPieza.ROJO);
+            tablero[9][2] = new Elefante(9, 2, ColorPieza.ROJO);
+            tablero[9][3] = new Consejero(9, 3, ColorPieza.ROJO);
+            tablero[9][4] = new General(9, 4, ColorPieza.ROJO);
+            tablero[9][5] = new Consejero(9, 5, ColorPieza.ROJO);
+            tablero[9][6] = new Elefante(9, 6, ColorPieza.ROJO);
+            tablero[9][7] = new Caballo(9, 7, ColorPieza.ROJO);
+            tablero[9][8] = new Carro(9, 8, ColorPieza.ROJO);
 
-    tablero[7][1] = new PiezaConcreta(7, 1, true, TipoPieza.CANON);
-    tablero[7][7] = new PiezaConcreta(7, 7, true, TipoPieza.CANON);
+            tablero[7][1] = new Canon(7, 1, ColorPieza.ROJO);
+            tablero[7][7] = new Canon(7, 7, ColorPieza.ROJO);
 
-    tablero[6][0] = new PiezaConcreta(6, 0, true, TipoPieza.SOLDADO);
-    tablero[6][2] = new PiezaConcreta(6, 2, true, TipoPieza.SOLDADO);
-    tablero[6][4] = new PiezaConcreta(6, 4, true, TipoPieza.SOLDADO);
-    tablero[6][6] = new PiezaConcreta(6, 6, true, TipoPieza.SOLDADO);
-    tablero[6][8] = new PiezaConcreta(6, 8, true, TipoPieza.SOLDADO);
-}
-
-
-
-
+            tablero[6][0] = new Soldado(6, 0, ColorPieza.ROJO);
+            tablero[6][2] = new Soldado(6, 2, ColorPieza.ROJO);
+            tablero[6][4] = new Soldado(6, 4, ColorPieza.ROJO);
+            tablero[6][6] = new Soldado(6, 6, ColorPieza.ROJO);
+            tablero[6][8] = new Soldado(6, 8, ColorPieza.ROJO);
+        }
 
 
 
@@ -280,7 +297,7 @@ private void inicializarTablero() {
         for (int j = 0; j < 9; j++) {
             Pieza p = tablero[i][j];
             if (p != null && p.getTipo() == TipoPieza.GENERAL) {
-                if (p.isR) {
+                if (p.esRojo()) {
                     fR = i;
                     cR = j;
                 } else {
@@ -314,6 +331,8 @@ private void inicializarTablero() {
 
         removeAll();
         setLayout(new BorderLayout());
+        
+        
         inicializarTablero();
 
         JPanel panelTop = new JPanel();
@@ -338,6 +357,25 @@ private void inicializarTablero() {
         panelTop.add(lblJ2);
         panelTop.add(Box.createHorizontalGlue());
 
+        
+            JPanel panelJuego = new JPanel(new BorderLayout());
+    PanelTablero panelTablero = new PanelTablero();
+    JPanel centro = new JPanel(new GridBagLayout());
+    centro.setBackground(TABLERO_FONDO);
+    centro.add(panelTablero);
+
+    // Crear el cementerio
+    panelCementerio = new JPanel();
+    panelCementerio.setBackground(PANEL);
+    panelCementerio.setPreferredSize(new Dimension(200, 568));
+    panelCementerio.setLayout(new BoxLayout(panelCementerio, BoxLayout.Y_AXIS));
+    panelCementerio.setBorder(BorderFactory.createTitledBorder(
+        BorderFactory.createLineBorder(ACENTO), "Cementerio"
+    ));
+
+panelJuego.add(centro, BorderLayout.CENTER);
+panelJuego.add(panelCementerio, BorderLayout.EAST);
+add(panelJuego, BorderLayout.CENTER);
         JPanel panelBot = new JPanel();
         panelBot.setBackground(PANEL);
         panelBot.setLayout(new BoxLayout(panelBot, BoxLayout.X_AXIS));
@@ -399,6 +437,8 @@ private void inicializarTablero() {
         btnOtra.addActionListener(ev -> {
         turnoRojo = true;
         jugador2 = null;
+        piezasCapturadasRojas.clear();
+        piezasCapturadasNegras.clear();
         pedirOponente();
         });
 
@@ -423,7 +463,6 @@ private void inicializarTablero() {
         });  
 
 
-        PanelTablero panelTablero = new PanelTablero();
 
 
         panelBot.add(btnRetirar);
@@ -447,13 +486,13 @@ private void inicializarTablero() {
         panelBot.add(btnAyuda);
 
 
-        JPanel centro = new JPanel(new GridBagLayout());
         centro.setBackground(TABLERO_FONDO);
         centro.add(panelTablero);
 
         add(panelTop,     BorderLayout.NORTH);
-        add(centro,       BorderLayout.CENTER);
+        add(panelJuego,       BorderLayout.CENTER);
         add(panelBot,     BorderLayout.SOUTH);
+        actualizarCementerio();
         revalidate();
         repaint();
 
@@ -463,7 +502,20 @@ private void inicializarTablero() {
         }
 
 
+private final java.util.Map<String, Image> cacheImagenes = new java.util.HashMap<>();
 
+        private Image cargarImagen(String nombre) {
+
+        return cacheImagenes.computeIfAbsent(nombre, k -> {
+        URL url = getClass().getResource("/IMAGENES/" + k + ".png");
+        if (url == null) return null;
+        try {
+        return javax.imageio.ImageIO.read(url); // sin escalar
+        } catch (Exception e) {
+        return null;
+        }
+        });
+        }
 
 //CLASE PANEL TABLERO
          
@@ -481,21 +533,10 @@ private void inicializarTablero() {
         
         //CARGAR IMAGNE
         
-
-        private final java.util.Map<String, Image> cacheImagenes = new java.util.HashMap<>();
-
         private Image cargarImagen(String nombre) {
-
-        return cacheImagenes.computeIfAbsent(nombre, k -> {
-        URL url = getClass().getResource("/IMAGENES/" + k + ".png");
-        if (url == null) return null;
-        try {
-        return javax.imageio.ImageIO.read(url); // sin escalar
-        } catch (Exception e) {
-        return null;
+            return JUGAR.this.cargarImagen(nombre);
         }
-        });
-        }
+        
 
 
         public PanelTablero() {
@@ -550,6 +591,7 @@ private void inicializarTablero() {
            }
 
 
+         
 
 
         if (moves[f][c]) {                     
@@ -582,6 +624,18 @@ private void inicializarTablero() {
         tablero[f][c] = origen;
         tablero[filaSeleccionada][colSeleccionada] = null;
 
+        
+         if (comidaLocal != null) {
+            // Agregar al cementerio según el color
+            if (comidaLocal.esRojo()) {
+                piezasCapturadasRojas.add(comidaLocal);
+            } else {
+                piezasCapturadasNegras.add(comidaLocal);
+            }
+            actualizarCementerio();
+         }
+                
+                
         if (comidaLocal != null && comidaLocal.getTipo() == TipoPieza.GENERAL) {
         String ganador = turnoRojo ? jugador1 : jugador2;
         String perdedor = turnoRojo ? jugador2 : jugador1;
@@ -622,6 +676,8 @@ private void inicializarTablero() {
         btnOtra.addActionListener(ev -> {
             turnoRojo = true;
             jugador2 = null;
+            piezasCapturadasRojas.clear();
+            piezasCapturadasNegras.clear();
             pedirOponente();
         });
 
@@ -673,7 +729,7 @@ private void inicializarTablero() {
                 colSeleccionada  = -1;
                 movimientosActuales = null;
 
-            } else if (tablero[f][c] != null && tablero[f][c].isIsR() == turnoRojo) {
+            } else if (tablero[f][c] != null && tablero[f][c].esRojo() == turnoRojo) {
                 filaSeleccionada = f;
                 colSeleccionada  = c;
                  if (ayudaActiva) {
@@ -825,7 +881,8 @@ private void inicializarTablero() {
             g2.setColor(new Color(255, 255, 0, 120));
             g2.fillOval(x - tam/2 - 3, y - tam/2 - 3, tam + 6, tam + 6);
         }
-        Image img = cargarImagen(p.getSimbolo());
+        Image img = JUGAR.this.cargarImagen(p.getSimbolo());        
+        
         if (img != null) {
             g2.drawImage(img, x - 24, y - 24, this); 
         }
@@ -837,9 +894,68 @@ private void inicializarTablero() {
         }
 
 
+ private void actualizarCementerio() {
+    panelCementerio.removeAll();
+    
+    // Título
+    JLabel titulo = new JLabel("⚰️ CAPTURADAS ⚰️");
+    titulo.setFont(FUENTE_LABEL);
+    titulo.setForeground(ACENTO);
+    titulo.setAlignmentX(CENTER_ALIGNMENT);
+    panelCementerio.add(titulo);
+    panelCementerio.add(Box.createVerticalStrut(10));
+    
+    // Piezas negras capturadas
+    if (!piezasCapturadasNegras.isEmpty()) {
+        JLabel lblNegras = new JLabel("NEGRAS:");
+        lblNegras.setForeground(new Color(200, 80, 80));
+        lblNegras.setFont(FUENTE_LABEL);
+        lblNegras.setAlignmentX(CENTER_ALIGNMENT);
+        panelCementerio.add(lblNegras);
         
-        
+        JPanel panelNegras = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        panelNegras.setBackground(PANEL);
+        for (Pieza p : piezasCapturadasNegras) {
+Image img = JUGAR.this.cargarImagen(p.getSimbolo());
 
+// esto devuelve Image
+            if (img != null) {
+                Image imgEscalada = img.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+                JLabel lblImg = new JLabel(new ImageIcon(imgEscalada));
+                lblImg.setToolTipText(p.getSimbolo());
+                panelNegras.add(lblImg);
+            }
+        }
+        panelCementerio.add(panelNegras);
+        panelCementerio.add(Box.createVerticalStrut(10));
+    }
+    
+    // Piezas rojas capturadas
+    if (!piezasCapturadasRojas.isEmpty()) {
+        JLabel lblRojas = new JLabel("ROJAS:");
+        lblRojas.setForeground(new Color(200, 80, 80));
+        lblRojas.setFont(FUENTE_LABEL);
+        lblRojas.setAlignmentX(CENTER_ALIGNMENT);
+        panelCementerio.add(lblRojas);
+        
+        JPanel panelRojas = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        panelRojas.setBackground(PANEL);
+        for (Pieza p : piezasCapturadasRojas) {
+            Image img = cargarImagen(p.getSimbolo());
+            if (img != null) {
+                Image imgEscalada = img.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+                JLabel lblImg = new JLabel(new ImageIcon(imgEscalada));
+                lblImg.setToolTipText(p.getSimbolo());
+                panelRojas.add(lblImg);
+            }
+        }
+        panelCementerio.add(panelRojas);
+    }
+    
+    panelCementerio.revalidate();
+    panelCementerio.repaint();
+}
+        
         
         //CREAR BOTON
         private JButton crearBoton(String texto, Color fondo, Color colorTexto) {
