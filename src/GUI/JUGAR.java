@@ -277,6 +277,8 @@
             
             
              private void mostrarTablero(){
+                 
+                 
 
               if (jugador2 == null || jugador2.trim().isEmpty()) return;
 
@@ -320,11 +322,18 @@
             lblTurno.setForeground(new Color(200, 80, 80));
             panelTop.add(lblTurno);
 
+            
+            
             JButton btnRetirar = crearBoton("Retirarme", BTN_PELIGRO, Color.WHITE);
+          
+          
             btnRetirar.setMaximumSize(new Dimension(150, 38));
 
+            
+            
             btnRetirar.addActionListener(e -> {
 
+                
 
 
              int confirm = JOptionPane.showConfirmDialog(JUGAR.this, "¿Seguro que quieres retirarte? Perderás la partida.", "Confirmar retiro", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
@@ -396,12 +405,31 @@
 
         });  
 
+            
+    PanelTablero panelTablero = new PanelTablero();
+        
+
+panelBot.add(btnRetirar);
+panelBot.add(Box.createHorizontalStrut(12));
+
+JButton btnAyuda = crearBoton("Ayuda", new Color(50, 80, 150), Color.WHITE);
+btnAyuda.setMaximumSize(new Dimension(150, 38));
+final boolean[] ayudaActiva = {false};
+btnAyuda.addActionListener(e -> {
+    ayudaActiva[0] = !ayudaActiva[0];
+    if (ayudaActiva[0]) {
+        btnAyuda.setBackground(new Color(80, 130, 200));
+        btnAyuda.setText("Ayuda ON");
+    } else {
+        btnAyuda.setBackground(new Color(50, 80, 150));
+        btnAyuda.setText("Ayuda");
+    }
+    panelTablero.setAyudaActiva(ayudaActiva[0]);
+    panelTablero.repaint();
+});
+panelBot.add(btnAyuda);
 
 
-        panelBot.add(btnRetirar);
-        panelBot.add(Box.createHorizontalStrut(12));
-
-        PanelTablero panelTablero = new PanelTablero();
         JPanel centro = new JPanel(new GridBagLayout());
         centro.setBackground(TABLERO_FONDO);
         centro.add(panelTablero);
@@ -413,6 +441,8 @@
         repaint();
 
 
+        
+        
         }
 
              
@@ -427,7 +457,8 @@
         static final int MARGEN = 50;
         private int filaSeleccionada = -1;
         private int colSeleccionada  = -1;
-        
+        private boolean ayudaActiva = false;
+        private boolean[][] movimientosActuales = null;
         
         
         private final java.util.Map<String, Image> cacheImagenes = new java.util.HashMap<>();
@@ -456,13 +487,14 @@
        
         addMouseListener(new MouseAdapter() {
          
+            
+            
             public void mouseClicked(MouseEvent e) {
 
             int c = (e.getX() - MARGEN + CELDA / 2) / CELDA;
             int f = (e.getY() - MARGEN + CELDA / 2) / CELDA;
 
             if (!enTablero(f, c)) return;
-
 
 
             if (filaSeleccionada != -1 && (filaSeleccionada < 0 || filaSeleccionada >= 10 || colSeleccionada < 0 || colSeleccionada >= 9)) {
@@ -622,16 +654,38 @@
                    }
                     filaSeleccionada = -1;
                     colSeleccionada  = -1;
+                    movimientosActuales = null;
+
                 } else if (tablero[f][c] != null && tablero[f][c].isIsR() == turnoRojo) {
                     filaSeleccionada = f;
                     colSeleccionada  = c;
+                     if (ayudaActiva) {
+                movimientosActuales = tablero[filaSeleccionada][colSeleccionada].getMoveValido(tablero);    }
                 }
                 repaint();
             }   
 
         });
         }
-
+        
+        
+        
+        
+        
+            public void setAyudaActiva(boolean activa) {
+    this.ayudaActiva = activa;
+    if (activa) {
+        if (filaSeleccionada != -1 && colSeleccionada != -1) {
+            Pieza p = tablero[filaSeleccionada][colSeleccionada];
+            if (p != null) {
+                movimientosActuales = p.getMoveValido(tablero);
+            }
+        }
+    } else {
+        movimientosActuales = null;
+    }
+    repaint();
+}
         
             private boolean enTablero(int f, int c) {
             return f >= 0 && f < 10 && c >= 0 && c < 9;
@@ -715,8 +769,24 @@
         }
 
        private void dibujarPiezas(Graphics2D g2) {
-    for (int f = 0; f < 10; f++) {
-        for (int c = 0; c < 9; c++) {
+   for (int f = 0; f < 10; f++) {
+    for (int c = 0; c < 9; c++) {
+
+        if (ayudaActiva && movimientosActuales != null
+            && f < movimientosActuales.length
+            && c < movimientosActuales[0].length
+            && movimientosActuales[f][c]) {
+
+            int x = MARGEN + c * CELDA;
+            int y = MARGEN + f * CELDA;
+
+            g2.setColor(new Color(50,150,255,180));
+            g2.fillOval(x-12,y-12,24,24);
+
+            g2.setColor(Color.WHITE);
+            g2.fillOval(x-6,y-6,12,12);
+        }
+
             Pieza p = tablero[f][c];
             if (p == null) continue;
             int x = MARGEN + c * CELDA;
