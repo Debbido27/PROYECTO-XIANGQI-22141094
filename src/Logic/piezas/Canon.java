@@ -28,7 +28,8 @@ public class Canon extends Pieza{
     
     
     
-      private void buscarMovimientos(Pieza[][] tablero, boolean[][] movimientos,
+    
+    private void buscarMovimientos(Pieza[][] tablero, boolean[][] movimientos,
                                int f, int c, int df, int dc, boolean pantalla) {
     if (!enTablero(f, c)) return;
 
